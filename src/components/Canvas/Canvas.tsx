@@ -110,7 +110,9 @@ const Canvas = () => {
 
   // 点击空白处取消选择
   const handleStageClick = (e: any) => {
-    if (e.target === e.target.getStage()) {
+    // 点击 Stage 本身或背景 Rect
+    const clickedOnEmpty = e.target === e.target.getStage() || e.target.attrs.id === 'background-rect'
+    if (clickedOnEmpty) {
       clearSelection()
     }
   }
@@ -136,11 +138,14 @@ const Canvas = () => {
           <Layer>
             {/* 背景 */}
             <Rect
+              id="background-rect"
               x={0}
               y={0}
               width={canvasWidth}
               height={canvasHeight}
               fill={canvasBackgroundColor}
+              onClick={handleStageClick}
+              onTap={handleStageClick}
             />
 
             {/* 网格 */}
