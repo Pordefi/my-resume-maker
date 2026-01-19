@@ -1154,3 +1154,210 @@ export const TEMPLATES = {
   footer2: { name: '页脚 - 带联系方式', create: createFooter2 },
   footer3: { name: '页脚 - 极简', create: createFooter3 },
 }
+
+
+// ==================== 完整简历模板 ====================
+
+// 辅助函数：调整组件位置的偏移量
+const offsetComponents = (components: CanvasComponent[], offsetY: number): CanvasComponent[] => {
+  return components.map(comp => {
+    const newComp = { ...comp }
+    newComp.y += offsetY
+    return newComp
+  })
+}
+
+// 现代风格完整简历
+export const createModernFullResume = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  let currentY = 50
+  
+  // 1. 简历头部 - 居中
+  const header = createResumeHeader1()
+  components.push(...offsetComponents(header, currentY - header[0].y))
+  currentY += 100
+  
+  // 2. 联系信息 - 横向
+  const contact = createContactInfo1()
+  components.push(...offsetComponents(contact, currentY - contact[0].y))
+  currentY += 60
+  
+  // 3. 个人简介 - 高亮
+  const summary = createSummary2()
+  components.push(...offsetComponents(summary, currentY - summary[0].y))
+  currentY += 120
+  
+  // 4. 技能标签 - 胶囊
+  const skills = createSkillTags2()
+  components.push(...offsetComponents(skills, currentY - skills[0].y))
+  currentY += 100
+  
+  // 5. 工作经历 - 时间轴
+  const work = createWorkExperience2()
+  components.push(...offsetComponents(work, currentY - work[0].y))
+  currentY += 200
+  
+  // 6. 项目经验 - 卡片
+  const project = createProject2()
+  components.push(...offsetComponents(project, currentY - project[0].y))
+  currentY += 180
+  
+  // 7. 教育背景 - 卡片
+  const education = createEducation2()
+  components.push(...offsetComponents(education, currentY - education[0].y))
+  
+  return components
+}
+
+// 经典风格完整简历
+export const createClassicFullResume = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  let currentY = 50
+  
+  // 1. 简历头部 - 左对齐
+  const header = createResumeHeader2()
+  components.push(...offsetComponents(header, currentY - header[0].y))
+  currentY += 100
+  
+  // 2. 联系信息 - 纵向
+  const contact = createContactInfo2()
+  components.push(...offsetComponents(contact, currentY - contact[0].y))
+  currentY += 100
+  
+  // 3. 个人简介 - 标准
+  const summary = createSummary1()
+  components.push(...offsetComponents(summary, currentY - summary[0].y))
+  currentY += 120
+  
+  // 4. 技能标签 - 扁平
+  const skills = createSkillTags1()
+  components.push(...offsetComponents(skills, currentY - skills[0].y))
+  currentY += 100
+  
+  // 5. 工作经历 - 列表
+  const work = createWorkExperience3()
+  components.push(...offsetComponents(work, currentY - work[0].y))
+  currentY += 200
+  
+  // 6. 项目经验 - 标题背景
+  const project = createProject1()
+  components.push(...offsetComponents(project, currentY - project[0].y))
+  currentY += 180
+  
+  // 7. 教育背景 - 列表
+  const education = createEducation3()
+  components.push(...offsetComponents(education, currentY - education[0].y))
+  
+  return components
+}
+
+// 简约风格完整简历
+export const createMinimalFullResume = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  let currentY = 50
+  
+  // 1. 简历头部 - 居中
+  const header = createResumeHeader1()
+  components.push(...offsetComponents(header, currentY - header[0].y))
+  currentY += 100
+  
+  // 2. 联系信息 - 横向
+  const contact = createContactInfo1()
+  components.push(...offsetComponents(contact, currentY - contact[0].y))
+  currentY += 60
+  
+  // 3. 个人简介 - 标准
+  const summary = createSummary1()
+  components.push(...offsetComponents(summary, currentY - summary[0].y))
+  currentY += 120
+  
+  // 4. 技能标签 - 扁平
+  const skills = createSkillTags1()
+  components.push(...offsetComponents(skills, currentY - skills[0].y))
+  currentY += 100
+  
+  // 5. 工作经历 - 卡片
+  const work = createWorkExperience1()
+  components.push(...offsetComponents(work, currentY - work[0].y))
+  currentY += 200
+  
+  // 6. 项目经验 - 时间轴
+  const project = createProject3()
+  components.push(...offsetComponents(project, currentY - project[0].y))
+  currentY += 180
+  
+  // 7. 教育背景 - 图标
+  const education = createEducation1()
+  components.push(...offsetComponents(education, currentY - education[0].y))
+  currentY += 120
+  
+  // 8. 荣誉奖项
+  const awards = createAwards1()
+  components.push(...offsetComponents(awards, currentY - awards[0].y))
+  
+  return components
+}
+
+// 专业风格完整简历（带页眉页脚）
+export const createProfessionalFullResume = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  // 页眉
+  const headerComp = createHeader1()
+  components.push(...headerComp)
+  
+  let currentY = 80
+  
+  // 1. 简历头部 - 带背景
+  const resumeHeader = createResumeHeader3()
+  components.push(...offsetComponents(resumeHeader, currentY - resumeHeader[0].y))
+  currentY += 120
+  
+  // 2. 联系信息 - 卡片
+  const contact = createContactInfo3()
+  components.push(...offsetComponents(contact, currentY - contact[0].y))
+  currentY += 80
+  
+  // 3. 个人简介 - 高亮
+  const summary = createSummary2()
+  components.push(...offsetComponents(summary, currentY - summary[0].y))
+  currentY += 120
+  
+  // 4. 技能标签 - 进度条
+  const skills = createSkillTags3()
+  components.push(...offsetComponents(skills, currentY - skills[0].y))
+  currentY += 120
+  
+  // 5. 工作经历 - 时间轴
+  const work = createWorkExperience2()
+  components.push(...offsetComponents(work, currentY - work[0].y))
+  currentY += 200
+  
+  // 6. 项目经验 - 卡片
+  const project = createProject2()
+  components.push(...offsetComponents(project, currentY - project[0].y))
+  currentY += 180
+  
+  // 7. 教育背景 - 卡片
+  const education = createEducation2()
+  components.push(...offsetComponents(education, currentY - education[0].y))
+  currentY += 120
+  
+  // 8. 语言能力
+  const languages = createLanguages1()
+  components.push(...offsetComponents(languages, currentY - languages[0].y))
+  
+  // 页脚
+  const footer = createFooter1()
+  components.push(...footer)
+  
+  return components
+}
+
+// 导出完整模板集合
+export const FULL_TEMPLATES = {
+  modern: { name: '现代风格', description: '时尚现代，适合互联网行业', create: createModernFullResume },
+  classic: { name: '经典风格', description: '传统稳重，适合传统行业', create: createClassicFullResume },
+  minimal: { name: '简约风格', description: '简洁清爽，突出重点', create: createMinimalFullResume },
+  professional: { name: '专业风格', description: '正式专业，带页眉页脚', create: createProfessionalFullResume },
+}

@@ -9,11 +9,11 @@ import {
   createIconComponent,
 } from '@/utils/componentFactory'
 import { ShapeType } from '@/types/canvas'
-import { TEMPLATES } from '@/utils/templates'
+import { TEMPLATES, FULL_TEMPLATES } from '@/utils/templates'
 
 const ComponentLibrary = () => {
-  const { addComponent } = useCanvasStore()
-  const [activeTab, setActiveTab] = useState<'basic' | 'templates'>('basic')
+  const { addComponent, clearCanvas } = useCanvasStore()
+  const [activeTab, setActiveTab] = useState<'basic' | 'templates' | 'full'>('basic')
 
   const addText = () => {
     addComponent(createTextComponent(100, 100))
@@ -76,31 +76,54 @@ const ComponentLibrary = () => {
     }
   }
 
+  const addFullTemplate = (templateKey: keyof typeof FULL_TEMPLATES) => {
+    // 清空画布
+    if (confirm('加载完整模板将清空当前画布，是否继续？')) {
+      clearCanvas()
+      
+      const template = FULL_TEMPLATES[templateKey]
+      const newComponents = template.create()
+      
+      // 添加所有组件
+      newComponents.forEach((comp) => addComponent(comp))
+    }
+  }
+
   return (
     <div className="w-64 bg-white border-r border-gray-200 p-4 overflow-y-auto h-full">
       <h2 className="text-lg font-semibold mb-4">组件库</h2>
 
       {/* 标签切换 */}
-      <div className="flex gap-2 mb-4 border-b">
+      <div className="flex gap-1 mb-4 border-b">
         <button
           onClick={() => setActiveTab('basic')}
-          className={`flex-1 pb-2 text-sm font-medium ${
+          className={`flex-1 pb-2 text-xs font-medium ${
             activeTab === 'basic'
               ? 'border-b-2 border-blue-500 text-blue-600'
               : 'text-gray-600'
           }`}
         >
-          基础组件
+          基础
         </button>
         <button
           onClick={() => setActiveTab('templates')}
-          className={`flex-1 pb-2 text-sm font-medium ${
+          className={`flex-1 pb-2 text-xs font-medium ${
             activeTab === 'templates'
               ? 'border-b-2 border-blue-500 text-blue-600'
               : 'text-gray-600'
           }`}
         >
           模板
+        </button>
+        <button
+          onClick={() => setActiveTab('full')}
+          className={`flex-1 pb-2 text-xs font-medium ${
+            activeTab === 'full'
+              ? 'border-b-2 border-blue-500 text-blue-600'
+              : 'text-gray-600'
+          }`}
+        >
+          完整
         </button>
       </div>
 
@@ -257,7 +280,7 @@ const ComponentLibrary = () => {
             </ul>
           </div>
         </>
-      ) : (
+      ) : activeTab === 'templates' ? (
         <>
           {/* 模板库 */}
           <div className="space-y-4">
@@ -498,6 +521,106 @@ const ComponentLibrary = () => {
                 </button>
               </div>
             </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* 完整模板 */}
+          <div className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+              <p className="text-xs text-blue-800 font-medium mb-1">💡 一键生成完整简历</p>
+              <p className="text-xs text-blue-600">选择风格后将清空画布并加载完整模板</p>
+            </div>
+
+            {/* 现代风格 */}
+            <button
+              onClick={() => addFullTemplate('modern')}
+              className="w-full p-4 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-xl">🚀</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-bold text-gray-800 mb-1">现代风格</h4>
+                  <p className="text-xs text-gray-600 mb-2">时尚现代，适合互联网行业</p>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-[10px] px-2 py-0.5 bg-blue-100 text-blue-700 rounded">居中头部</span>
+                    <span className="text-[10px] px-2 py-0.5 bg-blue-100 text-blue-700 rounded">时间轴</span>
+                    <span className="text-[10px] px-2 py-0.5 bg-blue-100 text-blue-700 rounded">胶囊标签</span>
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            {/* 经典风格 */}
+            <button
+              onClick={() => addFullTemplate('classic')}
+              className="w-full p-4 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-xl">📋</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-bold text-gray-800 mb-1">经典风格</h4>
+                  <p className="text-xs text-gray-600 mb-2">传统稳重，适合传统行业</p>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-700 rounded">左对齐</span>
+                    <span className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-700 rounded">列表式</span>
+                    <span className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-700 rounded">扁平标签</span>
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            {/* 简约风格 */}
+            <button
+              onClick={() => addFullTemplate('minimal')}
+              className="w-full p-4 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-teal-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-xl">✨</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-bold text-gray-800 mb-1">简约风格</h4>
+                  <p className="text-xs text-gray-600 mb-2">简洁清爽，突出重点</p>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded">居中头部</span>
+                    <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded">卡片式</span>
+                    <span className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded">含奖项</span>
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            {/* 专业风格 */}
+            <button
+              onClick={() => addFullTemplate('professional')}
+              className="w-full p-4 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-xl">👔</span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-sm font-bold text-gray-800 mb-1">专业风格</h4>
+                  <p className="text-xs text-gray-600 mb-2">正式专业，带页眉页脚</p>
+                  <div className="flex flex-wrap gap-1">
+                    <span className="text-[10px] px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded">带背景</span>
+                    <span className="text-[10px] px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded">页眉页脚</span>
+                    <span className="text-[10px] px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded">进度条</span>
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          {/* 提示 */}
+          <div className="mt-6 p-3 bg-amber-50 rounded text-xs text-gray-600">
+            <p className="font-medium mb-1">⚠️ 注意:</p>
+            <p>加载完整模板会清空当前画布内容，请先保存当前工作</p>
           </div>
         </>
       )}
