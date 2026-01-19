@@ -197,6 +197,7 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
         <Transformer
           ref={transformerRef}
           rotateEnabled={true}
+          enabledAnchors={['top-left', 'top-center', 'top-right', 'middle-right', 'middle-left', 'bottom-left', 'bottom-center', 'bottom-right']}
           borderStroke="#0ea5e9"
           borderStrokeWidth={2}
           anchorStroke="#0ea5e9"
