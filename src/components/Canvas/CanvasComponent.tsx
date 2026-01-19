@@ -93,11 +93,13 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
     const scaleX = node.scaleX()
     const scaleY = node.scaleY()
 
+    // 重置scale
     node.scaleX(1)
     node.scaleY(1)
 
-    const newWidth = Math.max(5, node.width() * scaleX)
-    const newHeight = Math.max(5, node.height() * scaleY)
+    // 计算新的宽高
+    const newWidth = Math.max(5, component.width * scaleX)
+    const newHeight = Math.max(5, component.height * scaleY)
 
     // 对于线条组件，需要同时更新points
     if (component.type === ComponentType.LINE) {
