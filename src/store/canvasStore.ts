@@ -109,6 +109,7 @@ const initialState: CanvasState = {
 // 拖放状态（不在持久化状态中）
 let pendingComponent: CanvasComponent | null = null
 let pendingTemplateComponents: CanvasComponent[] | null = null
+let stageRef: React.RefObject<any> | null = null
 
 export const setPendingComponent = (component: CanvasComponent | null) => {
   pendingComponent = component
@@ -123,6 +124,12 @@ export const setPendingTemplate = (components: CanvasComponent[] | null) => {
 }
 
 export const getPendingTemplate = () => pendingTemplateComponents
+
+export const setStageRef = (ref: React.RefObject<any>) => {
+  stageRef = ref
+}
+
+export const getStageRef = () => stageRef
 
 // 初始化 currentPageId
 initialState.currentPageId = initialState.pages[0].id

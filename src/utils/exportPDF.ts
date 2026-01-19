@@ -1,12 +1,13 @@
 import jsPDF from 'jspdf'
 import { Page } from '@/types/canvas'
+import Konva from 'konva'
 
 // A4纸张尺寸（毫米）
 const A4_WIDTH_MM = 210
 const A4_HEIGHT_MM = 297
 
 export const exportToPDF = async (
-  canvasElement: HTMLElement,
+  stageRef: React.RefObject<Konva.Stage>,
   filename = 'resume.pdf',
   hideGuides?: () => void,
   showGuides?: () => void
@@ -18,17 +19,18 @@ export const exportToPDF = async (
     // 等待DOM更新
     await new Promise((resolve) => setTimeout(resolve, 50))
     
-    // 获取Konva Stage实例
-    const stageContainer = canvasElement.querySelector('.konvajs-content')
-    const canvas = stageContainer?.querySelector('canvas') as HTMLCanvasElement
-    
-    if (!canvas) {
-      throw new Error('未找到画布元素')
+    const stage = stageRef.current
+    if (!stage) {
+      throw new Error('未找到画布Stage')
     }
     
-    // 直接使用canvas的toDataURL，保持原始分辨率
-    // 使用高质量PNG格式，避免JPEG压缩损失
-    const imgData = canvas.toDataURL('image/png')
+    // 使用Konva Stage的toDataURL方法，保持原始分辨率
+    // pixelRatio设置为2以获得更高清晰度
+    const imgData = stage.toDataURL({
+      mimeType: 'image/png',
+      quality: 1,
+      pixelRatio: 2, // 2倍分辨率，更清晰
+    })
     
     // 创建PDF (A4尺寸)
     const pdf = new jsPDF({
@@ -58,7 +60,8 @@ export const exportToPDF = async (
 export const exportMultiPageToPDF = async (
   pages: Page[],
   selectedPageIds: string[],
-  renderPage: (page: Page) => Promise<HTMLElement>,
+  getStageRef: () => React.RefObject<Konva.Stage>,
+  renderPage: (page: Page) => Promise<void>,
   filename = 'resume.pdf',
   hideGuides?: () => void,
   showGuides?: () => void
@@ -78,22 +81,27 @@ export const exportMultiPageToPDF = async (
 
     for (let i = 0; i < pagesToExport.length; i++) {
       const page = pagesToExport[i]
-      const canvasElement = await renderPage(page)
-
-      // 等待DOM更新
-      await new Promise((resolve) => setTimeout(resolve, 100))
-
-      // 获取Konva Stage实例
-      const stageContainer = canvasElement.querySelector('.konvajs-content')
-      const canvas = stageContainer?.querySelector('canvas') as HTMLCanvasElement
       
-      if (!canvas) {
-        console.error('未找到画布元素')
+      // 切换到目标页面
+      await renderPage(page)
+
+      // 等待DOM更新和渲染完成
+      await new Promise((resolve) => setTimeout(resolve, 200))
+
+      const stageRef = getStageRef()
+      const stage = stageRef.current
+      
+      if (!stage) {
+        console.error('未找到画布Stage')
         continue
       }
 
-      // 直接使用canvas的toDataURL，保持原始分辨率
-      const imgData = canvas.toDataURL('image/png')
+      // 使用Konva Stage的toDataURL方法
+      const imgData = stage.toDataURL({
+        mimeType: 'image/png',
+        quality: 1,
+        pixelRatio: 2, // 2倍分辨率，更清晰
+      })
 
       if (i > 0) {
         pdf.addPage()
@@ -118,7 +126,7 @@ export const exportMultiPageToPDF = async (
 }
 
 export const exportToImage = async (
-  canvasElement: HTMLElement,
+  stageRef: React.RefObject<Konva.Stage>,
   filename = 'resume.png',
   hideGuides?: () => void,
   showGuides?: () => void
@@ -130,29 +138,28 @@ export const exportToImage = async (
     // 等待DOM更新
     await new Promise((resolve) => setTimeout(resolve, 50))
     
-    // 获取Konva Stage实例
-    const stageContainer = canvasElement.querySelector('.konvajs-content')
-    const canvas = stageContainer?.querySelector('canvas') as HTMLCanvasElement
-    
-    if (!canvas) {
-      throw new Error('未找到画布元素')
+    const stage = stageRef.current
+    if (!stage) {
+      throw new Error('未找到画布Stage')
     }
 
     // 根据文件扩展名决定格式
     const isPNG = filename.toLowerCase().endsWith('.png')
     const mimeType = isPNG ? 'image/png' : 'image/jpeg'
-    const quality = isPNG ? undefined : 0.98 // JPEG使用高质量
+    const quality = isPNG ? 1 : 0.98 // PNG使用最高质量
 
-    canvas.toBlob((blob) => {
-      if (!blob) throw new Error('生成图片失败')
-      
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = filename
-      link.click()
-      URL.revokeObjectURL(url)
-    }, mimeType, quality)
+    // 使用Konva Stage的toDataURL方法
+    const dataURL = stage.toDataURL({
+      mimeType: mimeType,
+      quality: quality,
+      pixelRatio: 2, // 2倍分辨率，更清晰
+    })
+
+    // 下载图片
+    const link = document.createElement('a')
+    link.href = dataURL
+    link.download = filename
+    link.click()
     
     // 恢复辅助线显示
     if (showGuides) showGuides()

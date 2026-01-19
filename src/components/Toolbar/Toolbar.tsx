@@ -32,7 +32,7 @@ import {
   Group,
   Ungroup,
 } from 'lucide-react'
-import { useCanvasStore, setPendingComponent } from '@/store/canvasStore'
+import { useCanvasStore, setPendingComponent, getStageRef } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
 import { exportToWord, exportMultiPageToWord } from '@/utils/exportWord'
 import { importFromJSON, exportFullStateToJSON, importFullStateFromJSON } from '@/utils/storage'
@@ -113,6 +113,13 @@ const Toolbar = () => {
 
   const handleExportPDF = async () => {
     const { pages, showGuides: currentShowGuides } = useCanvasStore.getState()
+    const stageRef = getStageRef()
+    
+    if (!stageRef || !stageRef.current) {
+      alert('画布未初始化，请稍后再试')
+      console.error('stageRef:', stageRef, 'stageRef.current:', stageRef?.current)
+      return
+    }
     
     // 辅助线控制函数
     const hideGuides = () => {
@@ -129,13 +136,11 @@ const Toolbar = () => {
     
     if (pages.length === 1) {
       // 单页面直接导出
-      const canvas = document.querySelector('.konvajs-content') as HTMLElement
-      if (canvas) {
-        try {
-          await exportToPDF(canvas, 'resume.pdf', hideGuides, restoreGuides)
-        } catch (error) {
-          alert('导出PDF失败')
-        }
+      try {
+        await exportToPDF(stageRef, 'resume.pdf', hideGuides, restoreGuides)
+      } catch (error) {
+        alert('导出PDF失败: ' + (error as Error).message)
+        console.error('导出错误:', error)
       }
     } else {
       // 多页面显示选择对话框
@@ -151,6 +156,12 @@ const Toolbar = () => {
 
     try {
       const { pages, switchPage, currentPageId: originalPageId, showGuides: currentShowGuides } = useCanvasStore.getState()
+      const stageRef = getStageRef()
+      
+      if (!stageRef) {
+        alert('画布未初始化')
+        return
+      }
       
       // 辅助线控制函数
       const hideGuides = () => {
@@ -166,20 +177,12 @@ const Toolbar = () => {
       }
       
       // 临时渲染函数
-      const renderPage = async (page: Page): Promise<HTMLElement> => {
+      const renderPage = async (page: Page): Promise<void> => {
         // 切换到目标页面
         switchPage(page.id)
-        
-        // 等待渲染
-        await new Promise((resolve) => setTimeout(resolve, 100))
-        
-        const canvas = document.querySelector('.konvajs-content') as HTMLElement
-        if (!canvas) throw new Error('无法找到画布元素')
-        
-        return canvas
       }
 
-      await exportMultiPageToPDF(pages, selectedPageIds, renderPage, 'resume.pdf', hideGuides, restoreGuides)
+      await exportMultiPageToPDF(pages, selectedPageIds, () => stageRef, renderPage, 'resume.pdf', hideGuides, restoreGuides)
       
       // 恢复原页面
       switchPage(originalPageId)
@@ -192,6 +195,12 @@ const Toolbar = () => {
 
   const handleExportImage = async () => {
     const { showGuides: currentShowGuides } = useCanvasStore.getState()
+    const stageRef = getStageRef()
+    
+    if (!stageRef) {
+      alert('画布未初始化')
+      return
+    }
     
     // 辅助线控制函数
     const hideGuides = () => {
@@ -206,13 +215,10 @@ const Toolbar = () => {
       }
     }
     
-    const canvas = document.querySelector('.konvajs-content') as HTMLElement
-    if (canvas) {
-      try {
-        await exportToImage(canvas, 'resume.png', hideGuides, restoreGuides)
-      } catch (error) {
-        alert('导出图片失败')
-      }
+    try {
+      await exportToImage(stageRef, 'resume.png', hideGuides, restoreGuides)
+    } catch (error) {
+      alert('导出图片失败: ' + (error as Error).message)
     }
   }
 

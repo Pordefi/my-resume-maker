@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { Stage, Layer, Rect, Line, Group } from 'react-konva'
-import { useCanvasStore, getPendingComponent, setPendingComponent, getPendingTemplate, setPendingTemplate } from '@/store/canvasStore'
+import { useCanvasStore, getPendingComponent, setPendingComponent, getPendingTemplate, setPendingTemplate, setStageRef } from '@/store/canvasStore'
 import { CANVAS_CONFIGS, ShapeType } from '@/types/canvas'
 import CanvasComponent from './CanvasComponent'
 import SelectionBox from './SelectionBox'
@@ -36,6 +36,13 @@ const Canvas = () => {
   } = useCanvasStore()
 
   const gridSize = CANVAS_CONFIGS[canvasSize].gridSize
+
+  // 将stageRef保存到store中，供导出功能使用
+  useEffect(() => {
+    if (stageRef.current) {
+      setStageRef(stageRef)
+    }
+  }, [stageRef.current])
 
   // 键盘快捷键
   useEffect(() => {
