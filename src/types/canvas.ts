@@ -135,8 +135,18 @@ export type CanvasComponent =
   | LineComponent
   | IconComponent
 
+// 页面数据
+export interface Page {
+  id: string
+  name: string
+  components: CanvasComponent[]
+  backgroundColor: string
+}
+
 // 画布状态
 export interface CanvasState {
+  pages: Page[]
+  currentPageId: string
   components: CanvasComponent[]
   selectedIds: string[]
   clipboard: CanvasComponent[]

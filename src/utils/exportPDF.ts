@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import { Page } from '@/types/canvas'
 
 export const exportToPDF = async (canvasElement: HTMLElement, filename = 'resume.pdf') => {
   try {
@@ -28,6 +29,52 @@ export const exportToPDF = async (canvasElement: HTMLElement, filename = 'resume
     return true
   } catch (error) {
     console.error('PDF导出失败:', error)
+    throw error
+  }
+}
+
+// 多页面PDF导出
+export const exportMultiPageToPDF = async (
+  pages: Page[],
+  selectedPageIds: string[],
+  renderPage: (page: Page) => Promise<HTMLElement>,
+  filename = 'resume.pdf'
+) => {
+  try {
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    })
+
+    const pdfWidth = pdf.internal.pageSize.getWidth()
+    const pdfHeight = pdf.internal.pageSize.getHeight()
+
+    const pagesToExport = pages.filter((p) => selectedPageIds.includes(p.id))
+
+    for (let i = 0; i < pagesToExport.length; i++) {
+      const page = pagesToExport[i]
+      const canvasElement = await renderPage(page)
+
+      const canvas = await html2canvas(canvasElement, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: page.backgroundColor,
+      })
+
+      const imgData = canvas.toDataURL('image/png')
+
+      if (i > 0) {
+        pdf.addPage()
+      }
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+    }
+
+    pdf.save(filename)
+    return true
+  } catch (error) {
+    console.error('多页面PDF导出失败:', error)
     throw error
   }
 }

@@ -1,7 +1,13 @@
 import { create } from 'zustand'
-import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS } from '@/types/canvas'
+import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS, Page } from '@/types/canvas'
 
 interface CanvasStore extends CanvasState {
+  // 页面操作
+  addPage: () => void
+  deletePage: (id: string) => void
+  switchPage: (id: string) => void
+  renamePage: (id: string, name: string) => void
+  duplicatePage: (id: string) => void
   // 组件操作
   addComponent: (component: CanvasComponent) => void
   updateComponent: (id: string, updates: Partial<CanvasComponent>) => void
@@ -45,7 +51,16 @@ interface CanvasStore extends CanvasState {
   clearCanvas: () => void
 }
 
+const createInitialPage = (): Page => ({
+  id: `page-${Date.now()}`,
+  name: '页面 1',
+  components: [],
+  backgroundColor: '#ffffff',
+})
+
 const initialState: CanvasState = {
+  pages: [createInitialPage()],
+  currentPageId: '',
   components: [],
   selectedIds: [],
   clipboard: [],
@@ -60,8 +75,97 @@ const initialState: CanvasState = {
   canvasBackgroundColor: '#ffffff',
 }
 
+// 初始化 currentPageId
+initialState.currentPageId = initialState.pages[0].id
+initialState.components = initialState.pages[0].components
+initialState.canvasBackgroundColor = initialState.pages[0].backgroundColor
+
 export const useCanvasStore = create<CanvasStore>((set, get) => ({
   ...initialState,
+
+  // 页面操作
+  addPage: () => {
+    set((state) => {
+      const newPage: Page = {
+        id: `page-${Date.now()}`,
+        name: `页面 ${state.pages.length + 1}`,
+        components: [],
+        backgroundColor: '#ffffff',
+      }
+      return {
+        pages: [...state.pages, newPage],
+        currentPageId: newPage.id,
+        components: [],
+        canvasBackgroundColor: newPage.backgroundColor,
+        selectedIds: [],
+      }
+    })
+  },
+
+  deletePage: (id) => {
+    set((state) => {
+      if (state.pages.length <= 1) return state
+      
+      const newPages = state.pages.filter((p) => p.id !== id)
+      const wasCurrentPage = state.currentPageId === id
+      const newCurrentPageId = wasCurrentPage ? newPages[0].id : state.currentPageId
+      const currentPage = newPages.find((p) => p.id === newCurrentPageId)!
+      
+      return {
+        pages: newPages,
+        currentPageId: newCurrentPageId,
+        components: currentPage.components,
+        canvasBackgroundColor: currentPage.backgroundColor,
+        selectedIds: [],
+      }
+    })
+  },
+
+  switchPage: (id) => {
+    set((state) => {
+      // 保存当前页面的组件
+      const updatedPages = state.pages.map((p) =>
+        p.id === state.currentPageId
+          ? { ...p, components: state.components, backgroundColor: state.canvasBackgroundColor }
+          : p
+      )
+      
+      const targetPage = updatedPages.find((p) => p.id === id)
+      if (!targetPage) return state
+      
+      return {
+        pages: updatedPages,
+        currentPageId: id,
+        components: [...targetPage.components],
+        canvasBackgroundColor: targetPage.backgroundColor,
+        selectedIds: [],
+      }
+    })
+  },
+
+  renamePage: (id, name) => {
+    set((state) => ({
+      pages: state.pages.map((p) => (p.id === id ? { ...p, name } : p)),
+    }))
+  },
+
+  duplicatePage: (id) => {
+    set((state) => {
+      const sourcePage = state.pages.find((p) => p.id === id)
+      if (!sourcePage) return state
+      
+      const newPage: Page = {
+        id: `page-${Date.now()}`,
+        name: `${sourcePage.name} (副本)`,
+        components: JSON.parse(JSON.stringify(sourcePage.components)),
+        backgroundColor: sourcePage.backgroundColor,
+      }
+      
+      return {
+        pages: [...state.pages, newPage],
+      }
+    })
+  },
 
   addComponent: (component) => {
     set((state) => {
@@ -259,7 +363,18 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     })
   },
 
-  setCanvasBackgroundColor: (color) => set({ canvasBackgroundColor: color }),
+  setCanvasBackgroundColor: (color) => {
+    set((state) => {
+      // 同时更新当前页面的背景色
+      const updatedPages = state.pages.map((p) =>
+        p.id === state.currentPageId ? { ...p, backgroundColor: color } : p
+      )
+      return {
+        canvasBackgroundColor: color,
+        pages: updatedPages,
+      }
+    })
+  },
 
   alignComponents: (type) => {
     const { components, selectedIds } = get()
@@ -395,3 +510,11 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     get().saveHistory()
   },
 }))
+
+// 在切换页面时自动保存当前页面
+useCanvasStore.subscribe((state, prevState) => {
+  if (state.currentPageId !== prevState.currentPageId) {
+    // 页面切换时保存历史
+    state.saveHistory()
+  }
+})

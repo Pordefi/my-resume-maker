@@ -3,6 +3,7 @@ import Toolbar from './components/Toolbar/Toolbar'
 import ComponentLibrary from './components/ComponentLibrary/ComponentLibrary'
 import Canvas from './components/Canvas/Canvas'
 import PropertyPanel from './components/PropertyPanel/PropertyPanel'
+import PageManager from './components/PageManager/PageManager'
 import { useCanvasStore } from './store/canvasStore'
 import { saveToLocalStorage, loadFromLocalStorage } from './utils/storage'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -32,6 +33,7 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       <Toolbar />
+      <PageManager />
       <div className="flex-1 flex overflow-hidden relative">
         {/* 左侧面板 */}
         <div

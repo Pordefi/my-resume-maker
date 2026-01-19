@@ -17,14 +17,16 @@ import {
   FileText,
 } from 'lucide-react'
 import { useCanvasStore } from '@/store/canvasStore'
-import { exportToPDF, exportToImage } from '@/utils/exportPDF'
+import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
 import { exportToJSON, importFromJSON } from '@/utils/storage'
 import { useRef, useState } from 'react'
-import { CanvasSize } from '@/types/canvas'
+import { CanvasSize, Page } from '@/types/canvas'
 
 const Toolbar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [showCanvasSettings, setShowCanvasSettings] = useState(false)
+  const [showExportDialog, setShowExportDialog] = useState(false)
+  const [selectedExportPages, setSelectedExportPages] = useState<string[]>([])
   const {
     undo,
     redo,
@@ -48,13 +50,55 @@ const Toolbar = () => {
   } = useCanvasStore()
 
   const handleExportPDF = async () => {
-    const canvas = document.querySelector('.konvajs-content') as HTMLElement
-    if (canvas) {
-      try {
-        await exportToPDF(canvas)
-      } catch (error) {
-        alert('导出PDF失败')
+    const { pages, currentPageId } = useCanvasStore.getState()
+    
+    if (pages.length === 1) {
+      // 单页面直接导出
+      const canvas = document.querySelector('.konvajs-content') as HTMLElement
+      if (canvas) {
+        try {
+          await exportToPDF(canvas)
+        } catch (error) {
+          alert('导出PDF失败')
+        }
       }
+    } else {
+      // 多页面显示选择对话框
+      setShowExportDialog(true)
+    }
+  }
+
+  const handleMultiPageExport = async (selectedPageIds: string[]) => {
+    if (selectedPageIds.length === 0) {
+      alert('请至少选择一个页面')
+      return
+    }
+
+    try {
+      const { pages, switchPage, currentPageId: originalPageId } = useCanvasStore.getState()
+      
+      // 临时渲染函数
+      const renderPage = async (page: Page): Promise<HTMLElement> => {
+        // 切换到目标页面
+        switchPage(page.id)
+        
+        // 等待渲染
+        await new Promise((resolve) => setTimeout(resolve, 100))
+        
+        const canvas = document.querySelector('.konvajs-content') as HTMLElement
+        if (!canvas) throw new Error('无法找到画布元素')
+        
+        return canvas
+      }
+
+      await exportMultiPageToPDF(pages, selectedPageIds, renderPage)
+      
+      // 恢复原页面
+      switchPage(originalPageId)
+      
+      setShowExportDialog(false)
+    } catch (error) {
+      alert('导出PDF失败: ' + (error as Error).message)
     }
   }
 
@@ -330,6 +374,75 @@ const Toolbar = () => {
       >
         <Trash2 size={18} />
       </button>
+
+      {/* 多页面导出对话框 */}
+      {showExportDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-4">选择要导出的页面</h3>
+            
+            <div className="space-y-2 mb-4">
+              {useCanvasStore.getState().pages.map((page) => (
+                <label
+                  key={page.id}
+                  className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedExportPages.includes(page.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedExportPages([...selectedExportPages, page.id])
+                      } else {
+                        setSelectedExportPages(selectedExportPages.filter((id) => id !== page.id))
+                      }
+                    }}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm">{page.name}</span>
+                </label>
+              ))}
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  const allPageIds = useCanvasStore.getState().pages.map((p) => p.id)
+                  setSelectedExportPages(allPageIds)
+                }}
+                className="flex-1 px-3 py-2 border rounded text-sm hover:bg-gray-50"
+              >
+                全选
+              </button>
+              <button
+                onClick={() => setSelectedExportPages([])}
+                className="flex-1 px-3 py-2 border rounded text-sm hover:bg-gray-50"
+              >
+                清空
+              </button>
+            </div>
+
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={() => {
+                  setShowExportDialog(false)
+                  setSelectedExportPages([])
+                }}
+                className="flex-1 px-4 py-2 border rounded hover:bg-gray-50"
+              >
+                取消
+              </button>
+              <button
+                onClick={() => handleMultiPageExport(selectedExportPages)}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                disabled={selectedExportPages.length === 0}
+              >
+                导出 ({selectedExportPages.length})
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
