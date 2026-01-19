@@ -1,9 +1,11 @@
 import { useRef, useEffect, useState } from 'react'
-import { Stage, Layer, Rect, Line } from 'react-konva'
-import { useCanvasStore } from '@/store/canvasStore'
-import { CANVAS_CONFIGS } from '@/types/canvas'
+import { Stage, Layer, Rect, Line, Group } from 'react-konva'
+import { useCanvasStore, getPendingComponent, setPendingComponent, getPendingTemplate, setPendingTemplate } from '@/store/canvasStore'
+import { CANVAS_CONFIGS, ShapeType } from '@/types/canvas'
 import CanvasComponent from './CanvasComponent'
 import SelectionBox from './SelectionBox'
+import Ruler from './Ruler'
+import { createShapeComponent } from '@/utils/componentFactory'
 
 const Canvas = () => {
   const stageRef = useRef<any>(null)
@@ -15,14 +17,16 @@ const Canvas = () => {
   } | null>(null)
   const [isSelecting, setIsSelecting] = useState(false)
   const selectionStartRef = useRef<{ x: number; y: number } | null>(null)
+  const [pendingComponentPreview, setPendingComponentPreview] = useState<{ x: number; y: number } | null>(null)
 
   const {
     components,
     selectedIds,
     zoom,
     showGrid,
+    showRuler,
     clearSelection,
-    selectComponent,
+    addComponent,
     canvasSize,
     canvasWidth,
     canvasHeight,
@@ -37,6 +41,17 @@ const Canvas = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const store = useCanvasStore.getState()
+      
+      // ESC: 取消待放置组件或模板
+      if (e.key === 'Escape') {
+        if (getPendingComponent() || getPendingTemplate()) {
+          e.preventDefault()
+          setPendingComponent(null)
+          setPendingTemplate(null)
+          setPendingComponentPreview(null)
+          return
+        }
+      }
       
       // Ctrl/Cmd + Z: 撤销
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
@@ -120,8 +135,105 @@ const Canvas = () => {
     return lines
   }
 
-  // 点击空白处取消选择
+  // 点击空白处取消选择或放置待添加组件/模板
   const handleStageClick = (e: any) => {
+    const pendingComp = getPendingComponent()
+    const pendingTemplate = getPendingTemplate()
+    
+    // 如果有待放置的单个组件
+    if (pendingComp) {
+      const stage = e.target.getStage()
+      const pointerPosition = stage.getPointerPosition()
+      
+      if (pointerPosition) {
+        const newComp = {
+          ...pendingComp,
+          id: `${pendingComp.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          x: pointerPosition.x / zoom,
+          y: pointerPosition.y / zoom,
+        }
+        addComponent(newComp)
+        setPendingComponent(null)
+        setPendingComponentPreview(null)
+      }
+      e.cancelBubble = true
+      return
+    }
+    
+    // 如果有待放置的模板（多个组件）
+    if (pendingTemplate && pendingTemplate.length > 0) {
+      const stage = e.target.getStage()
+      const pointerPosition = stage.getPointerPosition()
+      
+      if (pointerPosition) {
+        const clickX = pointerPosition.x / zoom
+        const clickY = pointerPosition.y / zoom
+        
+        // 计算模板的原始边界
+        const minX = Math.min(...pendingTemplate.map(c => c.x))
+        const minY = Math.min(...pendingTemplate.map(c => c.y))
+        const maxX = Math.max(...pendingTemplate.map(c => c.x + (c.width || 0)))
+        const maxY = Math.max(...pendingTemplate.map(c => c.y + (c.height || 0)))
+        
+        // 计算偏移量（让模板中心对齐到点击位置）
+        const templateCenterX = (minX + maxX) / 2
+        const templateCenterY = (minY + maxY) / 2
+        const offsetX = clickX - templateCenterX
+        const offsetY = clickY - templateCenterY
+        
+        // 调整所有组件位置并生成新ID
+        const adjustedComponents = pendingTemplate.map(comp => ({
+          ...comp,
+          id: `${comp.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          x: comp.x + offsetX,
+          y: comp.y + offsetY,
+        }))
+        
+        // 计算调整后的边界
+        const adjMinX = Math.min(...adjustedComponents.map(c => c.x))
+        const adjMinY = Math.min(...adjustedComponents.map(c => c.y))
+        const adjMaxX = Math.max(...adjustedComponents.map(c => c.x + (c.width || 0)))
+        const adjMaxY = Math.max(...adjustedComponents.map(c => c.y + (c.height || 0)))
+        
+        // 添加隐形背景边框
+        const padding = 20
+        const background = createShapeComponent(
+          adjMinX - padding,
+          adjMinY - padding,
+          ShapeType.RECTANGLE
+        )
+        background.width = (adjMaxX - adjMinX) + (padding * 2)
+        background.height = (adjMaxY - adjMinY) + (padding * 2)
+        background.fill = '#ffffff'
+        background.opacity = 0.01
+        background.stroke = 'transparent'
+        background.strokeWidth = 0
+        background.id = `bg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        background.zIndex = -1
+        
+        const componentsWithBg = [background, ...adjustedComponents]
+        
+        // 添加所有组件
+        componentsWithBg.forEach((comp) => addComponent(comp))
+        
+        // 自动创建组
+        setTimeout(() => {
+          const store = useCanvasStore.getState()
+          const componentIds = componentsWithBg.map((c) => c.id)
+          
+          store.clearSelection()
+          componentIds.forEach((id) => store.selectComponent(id, true))
+          store.createGroup()
+          store.clearSelection()
+        }, 50)
+        
+        setPendingTemplate(null)
+        setPendingComponentPreview(null)
+      }
+      e.cancelBubble = true
+      return
+    }
+    
     // 点击 Stage 本身或背景 Rect
     const clickedOnEmpty = e.target === e.target.getStage() || e.target.attrs.id === 'background-rect'
     if (clickedOnEmpty) {
@@ -131,6 +243,9 @@ const Canvas = () => {
 
   // 鼠标按下开始圈选
   const handleMouseDown = (e: any) => {
+    // 如果有待放置组件或模板，不启动圈选
+    if (getPendingComponent() || getPendingTemplate()) return
+    
     const clickedOnEmpty = e.target === e.target.getStage() || e.target.attrs.id === 'background-rect'
     if (!clickedOnEmpty) return
 
@@ -152,26 +267,36 @@ const Canvas = () => {
     }
   }
 
-  // 鼠标移动更新圈选框
+  // 鼠标移动更新圈选框或待放置组件/模板预览
   const handleMouseMove = (e: any) => {
-    if (!isSelecting || !selectionStartRef.current) return
-
     const stage = e.target.getStage()
     const pointerPosition = stage.getPointerPosition()
     
-    if (pointerPosition) {
-      const x = pointerPosition.x / zoom
-      const y = pointerPosition.y / zoom
-      const startX = selectionStartRef.current.x
-      const startY = selectionStartRef.current.y
-
-      setSelectionRect({
-        x: Math.min(startX, x),
-        y: Math.min(startY, y),
-        width: Math.abs(x - startX),
-        height: Math.abs(y - startY),
+    if (!pointerPosition) return
+    
+    // 更新待放置组件或模板的预览位置
+    if (getPendingComponent() || getPendingTemplate()) {
+      setPendingComponentPreview({
+        x: pointerPosition.x / zoom,
+        y: pointerPosition.y / zoom,
       })
+      return
     }
+    
+    // 更新圈选框
+    if (!isSelecting || !selectionStartRef.current) return
+
+    const x = pointerPosition.x / zoom
+    const y = pointerPosition.y / zoom
+    const startX = selectionStartRef.current.x
+    const startY = selectionStartRef.current.y
+
+    setSelectionRect({
+      x: Math.min(startX, x),
+      y: Math.min(startY, y),
+      width: Math.abs(x - startX),
+      height: Math.abs(y - startY),
+    })
   }
 
   // 鼠标松开完成圈选
@@ -220,14 +345,34 @@ const Canvas = () => {
 
   return (
     <div className="flex-1 overflow-auto bg-gray-100 p-8">
-      <div
-        className="mx-auto shadow-2xl"
-        style={{
-          width: canvasWidth * zoom,
-          height: canvasHeight * zoom,
-        }}
-      >
-        <Stage
+      <div className="mx-auto relative" style={{ 
+        width: canvasWidth * zoom + (showRuler ? 20 : 0),
+        height: canvasHeight * zoom + (showRuler ? 20 : 0),
+        cursor: (getPendingComponent() || getPendingTemplate()) ? 'crosshair' : 'default',
+      }}>
+        {/* 标尺 */}
+        {showRuler && (
+          <>
+            {/* 左上角方块 */}
+            <div className="absolute top-0 left-0 w-5 h-5 bg-gray-300 border-r border-b border-gray-400 z-10" />
+            {/* 水平标尺 */}
+            <Ruler type="horizontal" zoom={zoom} />
+            {/* 垂直标尺 */}
+            <Ruler type="vertical" zoom={zoom} />
+          </>
+        )}
+        
+        {/* 画布 */}
+        <div
+          className="shadow-2xl"
+          style={{
+            width: canvasWidth * zoom,
+            height: canvasHeight * zoom,
+            marginLeft: showRuler ? 20 : 0,
+            marginTop: showRuler ? 20 : 0,
+          }}
+        >
+          <Stage
           ref={stageRef}
           width={canvasWidth}
           height={canvasHeight}
@@ -251,7 +396,14 @@ const Canvas = () => {
               width={canvasWidth}
               height={canvasHeight}
               fill={canvasBackgroundColor}
-              onClick={handleStageClick}
+              onClick={(e) => {
+                // 优先处理待放置组件/模板
+                if (getPendingComponent() || getPendingTemplate()) {
+                  handleStageClick(e)
+                } else {
+                  handleStageClick(e)
+                }
+              }}
               onTap={handleStageClick}
             />
 
@@ -290,6 +442,49 @@ const Canvas = () => {
                 />
               ))}
 
+            {/* 待放置组件预览 */}
+            {pendingComponentPreview && getPendingComponent() && (
+              <Group opacity={0.6} listening={false}>
+                <CanvasComponent
+                  component={{
+                    ...getPendingComponent()!,
+                    x: pendingComponentPreview.x,
+                    y: pendingComponentPreview.y,
+                  }}
+                  isSelected={false}
+                />
+              </Group>
+            )}
+            
+            {/* 待放置模板预览 */}
+            {pendingComponentPreview && getPendingTemplate() && (
+              <Group opacity={0.6} listening={false}>
+                {getPendingTemplate()!.map((comp, index) => {
+                  const template = getPendingTemplate()!
+                  const minX = Math.min(...template.map(c => c.x))
+                  const minY = Math.min(...template.map(c => c.y))
+                  const maxX = Math.max(...template.map(c => c.x + (c.width || 0)))
+                  const maxY = Math.max(...template.map(c => c.y + (c.height || 0)))
+                  const centerX = (minX + maxX) / 2
+                  const centerY = (minY + maxY) / 2
+                  const offsetX = pendingComponentPreview.x - centerX
+                  const offsetY = pendingComponentPreview.y - centerY
+                  
+                  return (
+                    <CanvasComponent
+                      key={`preview-${index}`}
+                      component={{
+                        ...comp,
+                        x: comp.x + offsetX,
+                        y: comp.y + offsetY,
+                      }}
+                      isSelected={false}
+                    />
+                  )
+                })}
+              </Group>
+            )}
+
             {/* 选择框 */}
             {selectedIds.length > 0 && <SelectionBox />}
 
@@ -309,6 +504,7 @@ const Canvas = () => {
             )}
           </Layer>
         </Stage>
+        </div>
       </div>
     </div>
   )

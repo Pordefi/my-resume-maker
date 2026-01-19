@@ -1,6 +1,6 @@
 import { Type, Image, Square, Minus, Star, Layout, Briefcase, GraduationCap, Code, Phone, Award } from 'lucide-react'
 import { useState } from 'react'
-import { useCanvasStore } from '@/store/canvasStore'
+import { useCanvasStore, setPendingTemplate } from '@/store/canvasStore'
 import {
   createTextComponent,
   createImageComponent,
@@ -9,7 +9,8 @@ import {
   createIconComponent,
 } from '@/utils/componentFactory'
 import { ShapeType } from '@/types/canvas'
-import { TEMPLATES, FULL_TEMPLATES } from '@/utils/templates'
+import { TEMPLATES } from '@/utils/templates'
+import { FULL_TEMPLATES_MULTI_PAGE } from '@/utils/fullTemplates'
 
 const ComponentLibrary = () => {
   const { addComponent, clearCanvas } = useCanvasStore()
@@ -62,95 +63,30 @@ const ComponentLibrary = () => {
     const template = TEMPLATES[templateKey]
     const newComponents = template.create()
     
-    // 获取store和当前组件列表
-    const store = useCanvasStore.getState()
-    const allComponents = store.components || []
-    
-    // 计算新模板应该放置的Y坐标
-    let startY = 50 // 默认起始位置
-    
-    if (allComponents.length > 0) {
-      // 找到所有组件的最大底部位置
-      let maxBottom = 0
-      allComponents.forEach((comp) => {
-        const bottom = comp.y + (comp.height || 0)
-        if (bottom > maxBottom) {
-          maxBottom = bottom
-        }
-      })
-      // 新模板从最大底部位置 + 间距开始
-      startY = maxBottom + 40
-    }
-    
-    // 计算模板的原始起始Y坐标
-    const templateMinY = Math.min(...newComponents.map(c => c.y))
-    
-    // 计算Y轴偏移量
-    const offsetY = startY - templateMinY
-    
-    // 调整所有组件的Y坐标并重新生成ID
-    const adjustedComponents = newComponents.map(comp => {
-      const newComp = { ...comp }
-      newComp.y = comp.y + offsetY
-      // 生成唯一ID
-      newComp.id = `${comp.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-      return newComp
-    })
-    
-    // 计算调整后组件的边界框
-    const minX = Math.min(...adjustedComponents.map(c => c.x))
-    const minY = Math.min(...adjustedComponents.map(c => c.y))
-    const maxX = Math.max(...adjustedComponents.map(c => c.x + (c.width || 0)))
-    const maxY = Math.max(...adjustedComponents.map(c => c.y + (c.height || 0)))
-    
-    // 设置padding
-    const padding = 20
-    
-    // 创建隐形背景边框
-    const background = createShapeComponent(
-      minX - padding,
-      minY - padding,
-      ShapeType.RECTANGLE
-    )
-    background.width = (maxX - minX) + (padding * 2)
-    background.height = (maxY - minY) + (padding * 2)
-    background.fill = '#ffffff'
-    background.opacity = 0.01
-    background.stroke = 'transparent'
-    background.strokeWidth = 0
-    background.id = `bg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-    background.zIndex = -1
-    
-    // 将背景边框放在最前面
-    const componentsWithBg = [background, ...adjustedComponents]
-    
-    // 添加所有组件到画布
-    componentsWithBg.forEach((comp) => addComponent(comp))
-    
-    // 自动创建组
-    if (componentsWithBg.length >= 2) {
-      setTimeout(() => {
-        const store = useCanvasStore.getState()
-        const componentIds = componentsWithBg.map((c) => c.id)
-        
-        store.clearSelection()
-        componentIds.forEach((id) => store.selectComponent(id, true))
-        store.createGroup(template.name)
-        store.clearSelection()
-      }, 50)
-    }
+    // 使用拖放模式
+    setPendingTemplate(newComponents)
   }
 
-  const addFullTemplate = (templateKey: keyof typeof FULL_TEMPLATES) => {
-    // 清空画布
-    if (confirm('加载完整模板将清空当前画布，是否继续？')) {
+  const addFullTemplate = (templateKey: keyof typeof FULL_TEMPLATES_MULTI_PAGE) => {
+    if (confirm('应用完整模板将替换当前内容，是否继续？')) {
+      const template = FULL_TEMPLATES_MULTI_PAGE[templateKey]
+      const pages = template.create()
+      const store = useCanvasStore.getState()
+      
+      // 清空画布
       clearCanvas()
       
-      const template = FULL_TEMPLATES[templateKey]
-      const newComponents = template.create()
-      
-      // 添加所有组件
-      newComponents.forEach((comp) => addComponent(comp))
+      // 添加所有页面
+      pages.forEach((pageData, index) => {
+        if (index === 0) {
+          // 第一页：直接添加到当前页面
+          pageData.components.forEach((comp) => addComponent(comp))
+        } else {
+          // 后续页面：先创建新页面，再添加组件
+          store.addPage()
+          pageData.components.forEach((comp) => addComponent(comp))
+        }
+      })
     }
   }
 

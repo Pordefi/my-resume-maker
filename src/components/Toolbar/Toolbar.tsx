@@ -26,7 +26,7 @@ import {
   Minus,
   Circle,
 } from 'lucide-react'
-import { useCanvasStore } from '@/store/canvasStore'
+import { useCanvasStore, setPendingComponent } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
 import { exportToJSON, importFromJSON, exportFullStateToJSON, importFullStateFromJSON } from '@/utils/storage'
 import { useRef, useState } from 'react'
@@ -68,9 +68,9 @@ const Toolbar = () => {
     addComponent,
   } = useCanvasStore()
 
-  // 添加基础组件的函数
+  // 添加基础组件的函数 - 使用拖放模式
   const addText = () => {
-    addComponent(createTextComponent(100, 100))
+    setPendingComponent(createTextComponent(0, 0))
   }
 
   const addImage = () => {
@@ -83,7 +83,7 @@ const Toolbar = () => {
         const reader = new FileReader()
         reader.onload = (event) => {
           const src = event.target?.result as string
-          addComponent(createImageComponent(100, 100, src))
+          setPendingComponent(createImageComponent(0, 0, src))
         }
         reader.readAsDataURL(file)
       }
@@ -92,11 +92,11 @@ const Toolbar = () => {
   }
 
   const addShape = (shapeType: ShapeType) => {
-    addComponent(createShapeComponent(100, 100, shapeType))
+    setPendingComponent(createShapeComponent(0, 0, shapeType))
   }
 
   const addLine = () => {
-    addComponent(createLineComponent(100, 100, true))
+    setPendingComponent(createLineComponent(0, 0, true))
   }
 
   const handleExportPDF = async () => {

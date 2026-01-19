@@ -93,14 +93,32 @@ const initialState: CanvasState = {
   history: [[]],
   historyIndex: 0,
   zoom: 1,
-  showGrid: true,
-  showRuler: true,
+  showGrid: false,
+  showRuler: false,
   canvasSize: CanvasSize.A4,
   canvasWidth: CANVAS_CONFIGS[CanvasSize.A4].width,
   canvasHeight: CANVAS_CONFIGS[CanvasSize.A4].height,
   canvasBackgroundColor: '#ffffff',
   customComponents: [],
 }
+
+// 拖放状态（不在持久化状态中）
+let pendingComponent: CanvasComponent | null = null
+let pendingTemplateComponents: CanvasComponent[] | null = null
+
+export const setPendingComponent = (component: CanvasComponent | null) => {
+  pendingComponent = component
+  pendingTemplateComponents = null
+}
+
+export const getPendingComponent = () => pendingComponent
+
+export const setPendingTemplate = (components: CanvasComponent[] | null) => {
+  pendingTemplateComponents = components
+  pendingComponent = null
+}
+
+export const getPendingTemplate = () => pendingTemplateComponents
 
 // 初始化 currentPageId
 initialState.currentPageId = initialState.pages[0].id
