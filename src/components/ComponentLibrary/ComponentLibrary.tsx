@@ -19,6 +19,15 @@ const ComponentLibrary = () => {
     addComponent(createTextComponent(100, 100))
   }
 
+  const addTextBlock = () => {
+    const textBlock = createTextComponent(100, 100, '这是一个文本块，可以输入多行内容。\n双击编辑文本。\n适合输入段落、描述等较长内容。')
+    textBlock.width = 400
+    textBlock.height = 120
+    textBlock.fontSize = 14
+    textBlock.lineHeight = 1.8
+    addComponent(textBlock)
+  }
+
   const addImage = () => {
     const input = document.createElement('input')
     input.type = 'file'
@@ -53,15 +62,76 @@ const ComponentLibrary = () => {
     const template = TEMPLATES[templateKey]
     const newComponents = template.create()
     
+    // 计算当前画布中所有组件的最大Y坐标
+    const store = useCanvasStore.getState()
+    const allComponents = store.pages[store.currentPageIndex]?.components || []
+    
+    let maxY = 50 // 默认起始位置
+    
+    if (allComponents.length > 0) {
+      // 找到所有组件的最大底部位置
+      allComponents.forEach((comp) => {
+        const componentBottom = comp.y + (comp.height || 50)
+        if (componentBottom > maxY) {
+          maxY = componentBottom
+        }
+      })
+      // 在最下方留出间距
+      maxY += 50
+    }
+    
+    // 计算模板的原始起始Y坐标（最小Y值）
+    const templateMinY = Math.min(...newComponents.map(c => c.y))
+    
+    // 计算需要的偏移量
+    const offsetY = maxY - templateMinY
+    
+    // 创建新的组件数组，调整Y坐标
+    const adjustedComponents = newComponents.map(comp => {
+      // 创建新对象，避免修改原对象
+      const newComp = { ...comp }
+      newComp.y = comp.y + offsetY
+      // 重新生成ID确保唯一性
+      newComp.id = `${comp.type}-${Date.now()}-${Math.random()}`
+      return newComp
+    })
+    
+    // 计算组的边界框
+    const minX = Math.min(...adjustedComponents.map(c => c.x))
+    const minY = Math.min(...adjustedComponents.map(c => c.y))
+    const maxX = Math.max(...adjustedComponents.map(c => c.x + (c.width || 0)))
+    const maxYComp = Math.max(...adjustedComponents.map(c => c.y + (c.height || 0)))
+    
+    const padding = 10 // 边框内边距
+    const bgWidth = maxX - minX + padding * 2
+    const bgHeight = maxYComp - minY + padding * 2
+    
+    // 创建隐形背景边框
+    const background = createShapeComponent(
+      minX - padding,
+      minY - padding,
+      ShapeType.RECTANGLE
+    )
+    background.width = bgWidth
+    background.height = bgHeight
+    background.fill = 'transparent'
+    background.stroke = 'transparent'
+    background.strokeWidth = 0
+    background.id = `bg-${Date.now()}-${Math.random()}`
+    background.zIndex = -1 // 放到最底层
+    
+    // 将背景添加到组件数组的开头
+    const componentsWithBg = [background, ...adjustedComponents]
+    
     // 添加所有组件
-    newComponents.forEach((comp) => addComponent(comp))
+    componentsWithBg.forEach((comp) => addComponent(comp))
     
     // 自动创建组
-    if (newComponents.length >= 2) {
+    if (componentsWithBg.length >= 2) {
       // 等待组件添加完成后创建组
       setTimeout(() => {
         const store = useCanvasStore.getState()
-        const componentIds = newComponents.map((c) => c.id)
+        const componentIds = componentsWithBg.map((c) => c.id)
         
         // 选中这些组件
         store.clearSelection()
@@ -139,6 +209,18 @@ const ComponentLibrary = () => {
               >
                 <Type size={24} className="mb-1" />
                 <span className="text-xs">文本</span>
+              </button>
+
+              <button
+                onClick={addTextBlock}
+                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
+              >
+                <div className="mb-1 flex flex-col gap-0.5">
+                  <div className="w-6 h-1 bg-current rounded" />
+                  <div className="w-6 h-1 bg-current rounded" />
+                  <div className="w-6 h-1 bg-current rounded" />
+                </div>
+                <span className="text-xs">文本块</span>
               </button>
 
               <button

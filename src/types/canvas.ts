@@ -254,6 +254,15 @@ export interface CanvasState {
   canvasWidth: number
   canvasHeight: number
   canvasBackgroundColor: string
+  customComponents: CustomComponent[]
+}
+
+// 自定义组件
+export interface CustomComponent {
+  id: string
+  name: string
+  components: CanvasComponent[]
+  createdAt: number
 }
 
 // 模板

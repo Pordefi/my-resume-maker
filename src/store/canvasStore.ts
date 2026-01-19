@@ -95,6 +95,7 @@ const initialState: CanvasState = {
   canvasWidth: CANVAS_CONFIGS[CanvasSize.A4].width,
   canvasHeight: CANVAS_CONFIGS[CanvasSize.A4].height,
   canvasBackgroundColor: '#ffffff',
+  customComponents: [],
 }
 
 // 初始化 currentPageId
