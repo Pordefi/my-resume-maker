@@ -102,8 +102,16 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
     node.scaleY(1)
 
     // 计算新的宽高（基于当前实际尺寸）
-    const newWidth = Math.max(5, currentWidth * scaleX)
-    const newHeight = Math.max(5, currentHeight * scaleY)
+    let newWidth = Math.max(5, currentWidth * scaleX)
+    let newHeight = Math.max(5, currentHeight * scaleY)
+
+    // 对于文本组件，只调整宽度，高度根据内容自动计算
+    if (component.type === ComponentType.TEXT) {
+      // 估算文本实际需要的高度
+      const lines = component.text.split('\n').length
+      const estimatedHeight = component.fontSize * component.lineHeight * lines + 10
+      newHeight = Math.max(estimatedHeight, 20)
+    }
 
     // 对于线条组件，需要同时更新points
     if (component.type === ComponentType.LINE) {
