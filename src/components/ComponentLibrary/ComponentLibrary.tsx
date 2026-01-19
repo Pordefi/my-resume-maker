@@ -354,20 +354,43 @@ const ComponentLibrary = () => {
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => addTemplate('workExperience1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="2" y="3" width="36" height="18" fill="#f9fafb" stroke="#e5e7eb" rx="2"/>
+                    <rect x="5" y="6" width="14" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="5" y="10" width="10" height="1.5" fill="#9ca3af" rx="0.5"/>
+                    <rect x="5" y="14" width="28" height="1" fill="#d1d5db" rx="0.5"/>
+                    <rect x="5" y="17" width="24" height="1" fill="#d1d5db" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">卡片</div>
                 </button>
                 <button
                   onClick={() => addTemplate('workExperience2')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="6" cy="6" r="2" fill="#3b82f6"/>
+                    <line x1="6" y1="8" x2="6" y2="20" stroke="#d1d5db" strokeWidth="1.5"/>
+                    <rect x="10" y="4" width="12" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="10" y="8" width="24" height="1" fill="#d1d5db" rx="0.5"/>
+                    <circle cx="6" cy="16" r="2" fill="#3b82f6"/>
+                    <rect x="10" y="14" width="12" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="10" y="18" width="20" height="1" fill="#d1d5db" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">时间轴</div>
                 </button>
                 <button
                   onClick={() => addTemplate('workExperience3')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="2" y="4" width="14" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="2" y="8" width="10" height="1.5" fill="#9ca3af" rx="0.5"/>
+                    <rect x="2" y="12" width="32" height="1" fill="#d1d5db" rx="0.5"/>
+                    <rect x="2" y="15" width="28" height="1" fill="#d1d5db" rx="0.5"/>
+                    <rect x="2" y="18" width="24" height="1" fill="#d1d5db" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">列表</div>
                 </button>
               </div>
@@ -379,20 +402,39 @@ const ComponentLibrary = () => {
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => addTemplate('education1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="6" cy="12" r="3" fill="#dbeafe" stroke="#3b82f6"/>
+                    <path d="M 5 12 L 6 13 L 7.5 11" stroke="#3b82f6" strokeWidth="1" fill="none"/>
+                    <rect x="11" y="8" width="14" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="11" y="12" width="10" height="1.5" fill="#9ca3af" rx="0.5"/>
+                    <rect x="11" y="16" width="24" height="1" fill="#d1d5db" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">图标</div>
                 </button>
                 <button
                   onClick={() => addTemplate('education2')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="2" y="4" width="36" height="16" fill="#f9fafb" stroke="#e5e7eb" rx="2"/>
+                    <rect x="5" y="7" width="14" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="5" y="11" width="10" height="1.5" fill="#9ca3af" rx="0.5"/>
+                    <rect x="5" y="15" width="24" height="1" fill="#d1d5db" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">卡片</div>
                 </button>
                 <button
                   onClick={() => addTemplate('education3')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="2" y="5" width="14" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="2" y="9" width="10" height="1.5" fill="#9ca3af" rx="0.5"/>
+                    <rect x="2" y="13" width="14" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="2" y="17" width="10" height="1.5" fill="#9ca3af" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">列表</div>
                 </button>
               </div>
@@ -404,20 +446,41 @@ const ComponentLibrary = () => {
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => addTemplate('project1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="2" y="4" width="20" height="3" fill="#dbeafe" rx="1"/>
+                    <rect x="5" y="5.5" width="14" height="1.5" fill="#3b82f6" rx="0.5"/>
+                    <rect x="2" y="10" width="32" height="1" fill="#d1d5db" rx="0.5"/>
+                    <rect x="2" y="13" width="28" height="1" fill="#d1d5db" rx="0.5"/>
+                    <rect x="2" y="16" width="24" height="1" fill="#d1d5db" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">标题</div>
                 </button>
                 <button
                   onClick={() => addTemplate('project2')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="2" y="3" width="36" height="18" fill="#f9fafb" stroke="#e5e7eb" rx="2"/>
+                    <rect x="5" y="6" width="14" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="22" y="6" width="12" height="1.5" fill="#9ca3af" rx="0.5"/>
+                    <rect x="5" y="11" width="28" height="1" fill="#d1d5db" rx="0.5"/>
+                    <rect x="5" y="14" width="24" height="1" fill="#d1d5db" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">卡片</div>
                 </button>
                 <button
                   onClick={() => addTemplate('project3')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="6" cy="7" r="2" fill="#3b82f6"/>
+                    <line x1="6" y1="9" x2="6" y2="18" stroke="#d1d5db" strokeWidth="1.5"/>
+                    <rect x="10" y="5" width="12" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="10" y="9" width="24" height="1" fill="#d1d5db" rx="0.5"/>
+                    <circle cx="6" cy="17" r="2" fill="#3b82f6"/>
+                  </svg>
                   <div className="text-xs font-medium">时间轴</div>
                 </button>
               </div>
@@ -429,14 +492,30 @@ const ComponentLibrary = () => {
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => addTemplate('awards1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="6" cy="8" r="2.5" fill="#fef3c7" stroke="#f59e0b"/>
+                    <path d="M 6 6.5 L 6.8 8.5 L 5.2 8.5 Z" fill="#f59e0b"/>
+                    <rect x="10" y="7" width="24" height="1.5" fill="#9ca3af" rx="0.5"/>
+                    <circle cx="6" cy="16" r="2.5" fill="#fef3c7" stroke="#f59e0b"/>
+                    <path d="M 6 14.5 L 6.8 16.5 L 5.2 16.5 Z" fill="#f59e0b"/>
+                    <rect x="10" y="15" width="20" height="1.5" fill="#9ca3af" rx="0.5"/>
+                  </svg>
                   <div className="text-xs font-medium">荣誉奖项</div>
                 </button>
                 <button
                   onClick={() => addTemplate('languages1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="2" y="6" width="12" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="16" y="6" width="20" height="2" fill="#e5e7eb" rx="1"/>
+                    <rect x="16" y="6" width="14" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="2" y="12" width="12" height="2" fill="#3b82f6" rx="1"/>
+                    <rect x="16" y="12" width="20" height="2" fill="#e5e7eb" rx="1"/>
+                    <rect x="16" y="12" width="10" height="2" fill="#3b82f6" rx="1"/>
+                  </svg>
                   <div className="text-xs font-medium">语言能力</div>
                 </button>
               </div>
@@ -448,20 +527,33 @@ const ComponentLibrary = () => {
               <div className="grid grid-cols-3 gap-2">
                 <button
                   onClick={() => addTemplate('pageBorder1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="2" y="2" width="36" height="20" fill="none" stroke="#3b82f6" strokeWidth="1.5" rx="1"/>
+                  </svg>
                   <div className="text-xs font-medium">边框</div>
                 </button>
                 <button
                   onClick={() => addTemplate('header1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="0" y="0" width="40" height="6" fill="#f3f4f6"/>
+                    <rect x="4" y="2" width="12" height="2" fill="#9ca3af" rx="1"/>
+                    <line x1="0" y1="6" x2="40" y2="6" stroke="#d1d5db" strokeWidth="1"/>
+                  </svg>
                   <div className="text-xs font-medium">页眉</div>
                 </button>
                 <button
                   onClick={() => addTemplate('footer1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
                 >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <line x1="0" y1="18" x2="40" y2="18" stroke="#d1d5db" strokeWidth="1"/>
+                    <rect x="0" y="18" width="40" height="6" fill="#f3f4f6"/>
+                    <rect x="14" y="20" width="12" height="2" fill="#9ca3af" rx="1"/>
+                  </svg>
                   <div className="text-xs font-medium">页脚</div>
                 </button>
               </div>
