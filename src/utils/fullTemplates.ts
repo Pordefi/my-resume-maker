@@ -1,5 +1,5 @@
 // 完整简历模板 - 多页面版本
-import { CanvasComponent } from '@/types/canvas'
+import { CanvasComponent, LineComponent } from '@/types/canvas'
 import {
   createResumeHeader1,
   createResumeHeader2,
@@ -39,8 +39,8 @@ const offsetComponents = (components: CanvasComponent[], offsetY: number): Canva
 }
 
 // 辅助函数：创建分割线
-const createDivider = (y: number, width: number = 694): CanvasComponent => {
-  const divider = createLineComponent(50, y, true)
+const createDivider = (y: number, width: number = 694): LineComponent => {
+  const divider = createLineComponent(50, y, true) as LineComponent
   divider.width = width
   divider.stroke = '#d1d5db'
   divider.strokeWidth = 1
