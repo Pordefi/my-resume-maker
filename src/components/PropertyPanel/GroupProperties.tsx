@@ -12,6 +12,11 @@ const GroupProperties = () => {
     toggleGroupVisibility,
   } = useCanvasStore()
 
+  // 安全检查
+  if (!components || !selectedIds || !groups) {
+    return null
+  }
+
   // 检查选中的组件是否都属于同一个组
   const selectedComponents = components.filter((c) => selectedIds.includes(c.id))
   const groupIds = [...new Set(selectedComponents.map((c) => c.groupId).filter(Boolean))]
@@ -19,6 +24,11 @@ const GroupProperties = () => {
 
   // 检查是否可以创建组（至少2个组件且不都在同一个组）
   const canCreateGroup = selectedIds.length >= 2 && !currentGroup
+
+  // 如果只选中一个组件且不在组中，不显示组管理
+  if (selectedIds.length === 1 && !currentGroup) {
+    return null
+  }
 
   return (
     <div className="p-4 border-b">

@@ -10,7 +10,7 @@ import CanvasBackgroundProperties from './CanvasBackgroundProperties'
 import GroupProperties from './GroupProperties'
 
 const PropertyPanel = () => {
-  const { components, selectedIds } = useCanvasStore()
+  const { components, selectedIds, groups } = useCanvasStore()
 
   if (selectedIds.length === 0) {
     return (
@@ -28,7 +28,7 @@ const PropertyPanel = () => {
     return (
       <div className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto h-full">
         <h2 className="text-lg font-semibold mb-4">多选 ({selectedIds.length})</h2>
-        <GroupProperties />
+        {groups && <GroupProperties />}
         <CommonProperties />
       </div>
     )
@@ -41,7 +41,7 @@ const PropertyPanel = () => {
     <div className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto h-full">
       <h2 className="text-lg font-semibold mb-4">属性面板</h2>
 
-      <GroupProperties />
+      {groups && component.groupId && <GroupProperties />}
 
       <CommonProperties />
 

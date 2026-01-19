@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Stage, Layer, Rect, Line } from 'react-konva'
 import { useCanvasStore } from '@/store/canvasStore'
 import { CANVAS_CONFIGS } from '@/types/canvas'
