@@ -1,63 +1,10 @@
-import { Type, Image, Square, Minus, Star, Layout, Briefcase, GraduationCap, Code, Phone, Award } from 'lucide-react'
 import { useState } from 'react'
 import { useCanvasStore, setPendingTemplate } from '@/store/canvasStore'
-import {
-  createTextComponent,
-  createImageComponent,
-  createShapeComponent,
-  createLineComponent,
-  createIconComponent,
-} from '@/utils/componentFactory'
-import { ShapeType } from '@/types/canvas'
 import { TEMPLATES } from '@/utils/templates'
 import { FULL_TEMPLATES_MULTI_PAGE } from '@/utils/fullTemplates'
 
 const ComponentLibrary = () => {
-  const { addComponent, clearCanvas } = useCanvasStore()
   const [activeTab, setActiveTab] = useState<'templates' | 'full'>('templates')
-
-  const addText = () => {
-    addComponent(createTextComponent(100, 100))
-  }
-
-  const addTextBlock = () => {
-    const textBlock = createTextComponent(100, 100, '这是一个文本块，可以输入多行内容。\n双击编辑文本。\n适合输入段落、描述等较长内容。')
-    textBlock.width = 400
-    textBlock.height = 120
-    textBlock.fontSize = 14
-    textBlock.lineHeight = 1.8
-    addComponent(textBlock)
-  }
-
-  const addImage = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = 'image/*'
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0]
-      if (file) {
-        const reader = new FileReader()
-        reader.onload = (event) => {
-          const src = event.target?.result as string
-          addComponent(createImageComponent(100, 100, src))
-        }
-        reader.readAsDataURL(file)
-      }
-    }
-    input.click()
-  }
-
-  const addShape = (shapeType: ShapeType) => {
-    addComponent(createShapeComponent(100, 100, shapeType))
-  }
-
-  const addLine = (horizontal = true) => {
-    addComponent(createLineComponent(100, 100, horizontal))
-  }
-
-  const addIcon = () => {
-    addComponent(createIconComponent(100, 100))
-  }
 
   const addTemplate = (templateKey: keyof typeof TEMPLATES) => {
     const template = TEMPLATES[templateKey]

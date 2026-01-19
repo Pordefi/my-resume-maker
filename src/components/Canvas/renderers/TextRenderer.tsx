@@ -1,5 +1,5 @@
 import { Text, Group } from 'react-konva'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
 import { TextComponent } from '@/types/canvas'
 import { useCanvasStore } from '@/store/canvasStore'
 
@@ -9,7 +9,7 @@ interface Props {
 
 const TextRenderer = ({ component }: Props) => {
   const textRef = useRef<any>(null)
-  const [isEditing, setIsEditing] = useState(false)
+  const [, setIsEditing] = useState(false)
   const { updateComponent } = useCanvasStore()
 
   const handleDblClick = () => {

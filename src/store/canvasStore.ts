@@ -361,7 +361,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   updateComponent: (id, updates) => {
     set((state) => ({
       components: state.components.map((c) =>
-        c.id === id ? { ...c, ...updates } : c
+        c.id === id ? ({ ...c, ...updates } as CanvasComponent) : c
       ),
     }))
   },
@@ -656,7 +656,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
     set((state) => ({
       components: state.components.map((c) =>
-        updates[c.id] ? { ...c, ...updates[c.id] } : c
+        updates[c.id] ? ({ ...c, ...updates[c.id] } as CanvasComponent) : c
       ),
     }))
     get().saveHistory()
@@ -800,6 +800,30 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
   toggleShowGuides: () => {
     set((state) => ({ showGuides: !state.showGuides }))
+  },
+
+  saveAsCustomComponent: (name) => {
+    const { components, selectedIds } = get()
+    const selectedComponents = components.filter((c) => selectedIds.includes(c.id))
+    
+    if (selectedComponents.length === 0) return
+
+    const newCustomComponent = {
+      id: `custom-${Date.now()}`,
+      name,
+      components: JSON.parse(JSON.stringify(selectedComponents)),
+      createdAt: Date.now(),
+    }
+
+    set((state) => ({
+      customComponents: [...state.customComponents, newCustomComponent],
+    }))
+  },
+
+  deleteCustomComponent: (id) => {
+    set((state) => ({
+      customComponents: state.customComponents.filter((c) => c.id !== id),
+    }))
   },
 }))
 

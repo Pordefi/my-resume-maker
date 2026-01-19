@@ -28,7 +28,7 @@ import {
 } from 'lucide-react'
 import { useCanvasStore, setPendingComponent } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
-import { exportToJSON, importFromJSON, exportFullStateToJSON, importFullStateFromJSON } from '@/utils/storage'
+import { importFromJSON, exportFullStateToJSON, importFullStateFromJSON } from '@/utils/storage'
 import { useRef, useState } from 'react'
 import { CanvasSize, Page, ShapeType } from '@/types/canvas'
 import {
@@ -57,15 +57,13 @@ const Toolbar = () => {
     selectedIds,
     alignComponents,
     distributeComponents,
-    components,
     loadTemplate,
     canvasSize,
     setCanvasSize,
     canvasBackgroundColor,
     setCanvasBackgroundColor,
-    showGuides,
-    toggleShowGuides,
-    addComponent,
+    createGroup,
+    ungroupComponents,
   } = useCanvasStore()
 
   // 添加基础组件的函数 - 使用拖放模式
@@ -100,7 +98,7 @@ const Toolbar = () => {
   }
 
   const handleExportPDF = async () => {
-    const { pages, currentPageId, showGuides: currentShowGuides } = useCanvasStore.getState()
+    const { pages, showGuides: currentShowGuides } = useCanvasStore.getState()
     
     // 辅助线控制函数
     const hideGuides = () => {

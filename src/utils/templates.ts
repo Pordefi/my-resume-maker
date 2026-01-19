@@ -1,4 +1,4 @@
-import { CanvasComponent } from '@/types/canvas'
+import { CanvasComponent, LineComponent } from '@/types/canvas'
 import {
   createTextComponent,
   createShapeComponent,
@@ -1349,9 +1349,6 @@ const createSectionTitle = (y: number, title: string): CanvasComponent => {
   return titleComp
 }
 
-// 多页面模板返回类型
-type MultiPageTemplate = Array<{ components: CanvasComponent[] }>
-
 // 现代风格完整简历 - 互联网/科技行业
 export const createModernFullResume = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
@@ -1466,7 +1463,7 @@ export const createClassicFullResume = (): CanvasComponent[] => {
   currentY += 90
   
   // 粗分割线
-  const divider1 = createDivider(currentY)
+  const divider1 = createDivider(currentY) as LineComponent
   divider1.strokeWidth = 2
   divider1.stroke = '#374151'
   components.push(divider1)
@@ -1571,7 +1568,7 @@ export const createMinimalFullResume = (): CanvasComponent[] => {
   currentY += 90
   
   // 细分割线
-  const divider1 = createDivider(currentY)
+  const divider1 = createDivider(currentY) as LineComponent
   divider1.strokeWidth = 0.5
   divider1.stroke = '#9ca3af'
   components.push(divider1)
@@ -1583,7 +1580,7 @@ export const createMinimalFullResume = (): CanvasComponent[] => {
   currentY += 50
   
   // 细分割线
-  const divider2 = createDivider(currentY)
+  const divider2 = createDivider(currentY) as LineComponent
   divider2.strokeWidth = 0.5
   divider2.stroke = '#9ca3af'
   components.push(divider2)
@@ -1597,7 +1594,7 @@ export const createMinimalFullResume = (): CanvasComponent[] => {
   currentY += 90
   
   // 细分割线
-  const divider3 = createDivider(currentY)
+  const divider3 = createDivider(currentY) as LineComponent
   divider3.strokeWidth = 0.5
   divider3.stroke = '#9ca3af'
   components.push(divider3)
@@ -1611,7 +1608,7 @@ export const createMinimalFullResume = (): CanvasComponent[] => {
   currentY += 50
   
   // 细分割线
-  const divider4 = createDivider(currentY)
+  const divider4 = createDivider(currentY) as LineComponent
   divider4.strokeWidth = 0.5
   divider4.stroke = '#9ca3af'
   components.push(divider4)
@@ -1630,7 +1627,7 @@ export const createMinimalFullResume = (): CanvasComponent[] => {
   currentY += 150
   
   // 细分割线
-  const divider5 = createDivider(currentY)
+  const divider5 = createDivider(currentY) as LineComponent
   divider5.strokeWidth = 0.5
   divider5.stroke = '#9ca3af'
   components.push(divider5)
@@ -1654,7 +1651,7 @@ export const createMinimalFullResume = (): CanvasComponent[] => {
   currentY += 140
   
   // 细分割线
-  const divider6 = createDivider(currentY)
+  const divider6 = createDivider(currentY) as LineComponent
   divider6.strokeWidth = 0.5
   divider6.stroke = '#9ca3af'
   components.push(divider6)
@@ -1668,7 +1665,7 @@ export const createMinimalFullResume = (): CanvasComponent[] => {
   currentY += 100
   
   // 细分割线
-  const divider7 = createDivider(currentY)
+  const divider7 = createDivider(currentY) as LineComponent
   divider7.strokeWidth = 0.5
   divider7.stroke = '#9ca3af'
   components.push(divider7)
