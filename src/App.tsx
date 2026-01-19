@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Toolbar from './components/Toolbar/Toolbar'
 import ComponentLibrary from './components/ComponentLibrary/ComponentLibrary'
-import AssetLibrary from './components/AssetLibrary/AssetLibrary'
 import Canvas from './components/Canvas/Canvas'
 import PropertyPanel from './components/PropertyPanel/PropertyPanel'
 import PageManager from './components/PageManager/PageManager'
@@ -9,13 +8,10 @@ import { useCanvasStore } from './store/canvasStore'
 import { saveToLocalStorage, loadFromLocalStorage } from './utils/storage'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-type LeftPanelType = 'components' | 'assets'
-
 function App() {
   const { components, loadTemplate } = useCanvasStore()
   const [showLeftPanel, setShowLeftPanel] = useState(true)
   const [showRightPanel, setShowRightPanel] = useState(true)
-  const [leftPanelType, setLeftPanelType] = useState<LeftPanelType>('components')
 
   // 自动保存
   useEffect(() => {
@@ -43,40 +39,9 @@ function App() {
         <div
           className={`transition-all duration-300 ${
             showLeftPanel ? 'w-64' : 'w-0'
-          } overflow-hidden flex flex-col`}
+          } overflow-hidden`}
         >
-          {/* 面板切换标签 */}
-          {showLeftPanel && (
-            <div className="flex border-b bg-white">
-              <button
-                onClick={() => setLeftPanelType('components')}
-                className={`flex-1 py-2 text-sm font-medium ${
-                  leftPanelType === 'components'
-                    ? 'border-b-2 border-blue-500 text-blue-600'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                组件
-              </button>
-              <button
-                onClick={() => setLeftPanelType('assets')}
-                className={`flex-1 py-2 text-sm font-medium ${
-                  leftPanelType === 'assets'
-                    ? 'border-b-2 border-blue-500 text-blue-600'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                素材
-              </button>
-            </div>
-          )}
-          
-          {/* 面板内容 */}
-          {showLeftPanel && (
-            <div className="flex-1 overflow-hidden">
-              {leftPanelType === 'components' ? <ComponentLibrary /> : <AssetLibrary />}
-            </div>
-          )}
+          <ComponentLibrary />
         </div>
 
         {/* 左侧折叠按钮 */}
