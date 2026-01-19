@@ -1,6 +1,9 @@
 import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
 import { Page } from '@/types/canvas'
+
+// A4纸张尺寸（毫米）
+const A4_WIDTH_MM = 210
+const A4_HEIGHT_MM = 297
 
 export const exportToPDF = async (
   canvasElement: HTMLElement,
@@ -15,32 +18,28 @@ export const exportToPDF = async (
     // 等待DOM更新
     await new Promise((resolve) => setTimeout(resolve, 50))
     
-    // 使用html2canvas捕获画布 - 优化参数
-    const canvas = await html2canvas(canvasElement, {
-      scale: 3, // 提高到3倍以获得更清晰的输出
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      logging: false,
-      imageTimeout: 0,
-      removeContainer: true,
-    })
-
-    // 转换为JPEG格式并压缩（质量0.95）
-    const imgData = canvas.toDataURL('image/jpeg', 0.95)
+    // 获取Konva Stage实例
+    const stageContainer = canvasElement.querySelector('.konvajs-content')
+    const canvas = stageContainer?.querySelector('canvas') as HTMLCanvasElement
+    
+    if (!canvas) {
+      throw new Error('未找到画布元素')
+    }
+    
+    // 直接使用canvas的toDataURL，保持原始分辨率
+    // 使用高质量PNG格式，避免JPEG压缩损失
+    const imgData = canvas.toDataURL('image/png')
     
     // 创建PDF (A4尺寸)
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
-      compress: true, // 启用PDF压缩
+      compress: false, // 禁用压缩以保持清晰度
     })
 
-    const pdfWidth = pdf.internal.pageSize.getWidth()
-    const pdfHeight = pdf.internal.pageSize.getHeight()
-
-    // 使用JPEG格式添加图片
-    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST')
+    // 使用PNG格式添加图片，保持原始质量
+    pdf.addImage(imgData, 'PNG', 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM, undefined, 'NONE')
     pdf.save(filename)
     
     // 恢复辅助线显示
@@ -72,11 +71,8 @@ export const exportMultiPageToPDF = async (
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
-      compress: true, // 启用PDF压缩
+      compress: false, // 禁用压缩以保持清晰度
     })
-
-    const pdfWidth = pdf.internal.pageSize.getWidth()
-    const pdfHeight = pdf.internal.pageSize.getHeight()
 
     const pagesToExport = pages.filter((p) => selectedPageIds.includes(p.id))
 
@@ -85,26 +81,26 @@ export const exportMultiPageToPDF = async (
       const canvasElement = await renderPage(page)
 
       // 等待DOM更新
-      await new Promise((resolve) => setTimeout(resolve, 50))
+      await new Promise((resolve) => setTimeout(resolve, 100))
 
-      const canvas = await html2canvas(canvasElement, {
-        scale: 3, // 提高到3倍以获得更清晰的输出
-        useCORS: true,
-        backgroundColor: page.backgroundColor,
-        logging: false,
-        imageTimeout: 0,
-        removeContainer: true,
-      })
+      // 获取Konva Stage实例
+      const stageContainer = canvasElement.querySelector('.konvajs-content')
+      const canvas = stageContainer?.querySelector('canvas') as HTMLCanvasElement
+      
+      if (!canvas) {
+        console.error('未找到画布元素')
+        continue
+      }
 
-      // 转换为JPEG格式并压缩（质量0.95）
-      const imgData = canvas.toDataURL('image/jpeg', 0.95)
+      // 直接使用canvas的toDataURL，保持原始分辨率
+      const imgData = canvas.toDataURL('image/png')
 
       if (i > 0) {
         pdf.addPage()
       }
 
-      // 使用JPEG格式添加图片
-      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST')
+      // 使用PNG格式添加图片，保持原始质量
+      pdf.addImage(imgData, 'PNG', 0, 0, A4_WIDTH_MM, A4_HEIGHT_MM, undefined, 'NONE')
     }
 
     pdf.save(filename)
@@ -134,19 +130,18 @@ export const exportToImage = async (
     // 等待DOM更新
     await new Promise((resolve) => setTimeout(resolve, 50))
     
-    const canvas = await html2canvas(canvasElement, {
-      scale: 3, // 提高分辨率
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      logging: false,
-      imageTimeout: 0,
-      removeContainer: true,
-    })
+    // 获取Konva Stage实例
+    const stageContainer = canvasElement.querySelector('.konvajs-content')
+    const canvas = stageContainer?.querySelector('canvas') as HTMLCanvasElement
+    
+    if (!canvas) {
+      throw new Error('未找到画布元素')
+    }
 
     // 根据文件扩展名决定格式
     const isPNG = filename.toLowerCase().endsWith('.png')
     const mimeType = isPNG ? 'image/png' : 'image/jpeg'
-    const quality = isPNG ? undefined : 0.95
+    const quality = isPNG ? undefined : 0.98 // JPEG使用高质量
 
     canvas.toBlob((blob) => {
       if (!blob) throw new Error('生成图片失败')
