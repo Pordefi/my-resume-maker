@@ -13,6 +13,9 @@ import {
   AlignCenter,
   AlignRight,
   AlignVerticalJustifyCenter,
+  AlignHorizontalJustifyCenter,
+  AlignStartVertical,
+  AlignEndVertical,
   Maximize,
   FileText,
   Users,
@@ -306,7 +309,7 @@ const Toolbar = () => {
         </button>
       </div>
 
-      {/* 对齐 */}
+      {/* 对齐与分散 */}
       {selectedIds.length >= 2 && (
         <div className="flex gap-1 border-r pr-2">
           <button
@@ -331,11 +334,45 @@ const Toolbar = () => {
             <AlignRight size={18} />
           </button>
           <button
+            onClick={() => alignComponents('top')}
+            className="p-2 hover:bg-gray-100 rounded"
+            title="顶部对齐"
+          >
+            <AlignStartVertical size={18} />
+          </button>
+          <button
             onClick={() => alignComponents('middle')}
             className="p-2 hover:bg-gray-100 rounded"
             title="垂直居中"
           >
             <AlignVerticalJustifyCenter size={18} />
+          </button>
+          <button
+            onClick={() => alignComponents('bottom')}
+            className="p-2 hover:bg-gray-100 rounded"
+            title="底部对齐"
+          >
+            <AlignEndVertical size={18} />
+          </button>
+        </div>
+      )}
+
+      {/* 分散 */}
+      {selectedIds.length >= 3 && (
+        <div className="flex gap-1 border-r pr-2">
+          <button
+            onClick={() => distributeComponents('horizontal')}
+            className="p-2 hover:bg-gray-100 rounded"
+            title="水平分散"
+          >
+            <AlignHorizontalJustifyCenter size={18} />
+          </button>
+          <button
+            onClick={() => distributeComponents('vertical')}
+            className="p-2 hover:bg-gray-100 rounded"
+            title="垂直分散"
+          >
+            <AlignVerticalJustifyCenter size={18} className="rotate-90" />
           </button>
         </div>
       )}
