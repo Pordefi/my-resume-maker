@@ -1733,7 +1733,7 @@ export const createColorfulTags = (): CanvasComponent[] => {
     tagBg.text = tag
     tagBg.fontSize = 13
     tagBg.textColor = color.text
-    tagBg.fontWeight = '500'
+    tagBg.fontWeight = 'bold'
     components.push(tagBg)
     x += 90
   })
