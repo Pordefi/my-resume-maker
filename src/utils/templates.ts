@@ -327,86 +327,120 @@ export const createSkillTags3 = (): CanvasComponent[] => {
   return components
 }
 
-// 样式4: 逗号分隔式
+// 样式4: 逗号分隔式（整体文本框）
 export const createSkillTags4 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const startX = 50
   const startY = 350
   
-  const label = createTextComponent(startX, startY, '技能：')
+  // 背景框
+  const bg = createShapeComponent(startX, startY, ShapeType.RECTANGLE)
+  bg.width = 694
+  bg.height = 60
+  bg.fill = '#ffffff'
+  bg.stroke = '#d1d5db'
+  bg.strokeWidth = 1
+  bg.borderRadius = 6
+  components.push(bg)
+  
+  // 标签标题
+  const label = createTextComponent(startX + 15, startY + 10, '技能：')
   label.fontSize = 14
   label.color = '#1f2937'
   label.fontWeight = 'bold'
+  label.width = 50
   components.push(label)
   
-  const skills = createTextComponent(startX + 50, startY, 'React, Vue, TypeScript, Node.js, Python, Docker, MySQL, Git')
+  // 技能内容
+  const skills = createTextComponent(startX + 70, startY + 10, 'React, Vue, TypeScript, Node.js, Python, Docker, MySQL, Git')
   skills.fontSize = 14
   skills.color = '#4b5563'
   skills.fontWeight = 'normal'
+  skills.width = 600
   components.push(skills)
   
   return components
 }
 
-// 样式5: 竖线分隔式
+// 样式5: 竖线分隔式（整体文本框）
 export const createSkillTags5 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const startX = 50
   const startY = 350
   
-  const skills = createTextComponent(startX, startY, 'React  |  Vue  |  TypeScript  |  Node.js  |  Python  |  Docker')
+  // 背景框
+  const bg = createShapeComponent(startX, startY, ShapeType.RECTANGLE)
+  bg.width = 694
+  bg.height = 50
+  bg.fill = '#f9fafb'
+  bg.stroke = '#e5e7eb'
+  bg.strokeWidth = 1
+  bg.borderRadius = 6
+  components.push(bg)
+  
+  // 技能内容
+  const skills = createTextComponent(startX + 15, startY + 15, 'React  |  Vue  |  TypeScript  |  Node.js  |  Python  |  Docker')
   skills.fontSize = 14
   skills.color = '#1f2937'
   skills.fontWeight = 'normal'
+  skills.width = 660
   components.push(skills)
   
   return components
 }
 
-// 样式6: 项目符号列表式
+// 样式6: 项目符号列表式（整体文本框）
 export const createSkillTags6 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const startX = 50
   const startY = 350
   
-  const line1 = createTextComponent(startX, startY, '• React  • Vue  • TypeScript  • Node.js')
-  line1.fontSize = 14
-  line1.color = '#1f2937'
-  line1.fontWeight = 'normal'
-  components.push(line1)
+  // 背景框
+  const bg = createShapeComponent(startX, startY, ShapeType.RECTANGLE)
+  bg.width = 694
+  bg.height = 70
+  bg.fill = '#ffffff'
+  bg.stroke = '#d1d5db'
+  bg.strokeWidth = 1
+  bg.borderRadius = 6
+  components.push(bg)
   
-  const line2 = createTextComponent(startX, startY + 25, '• Python  • Docker  • MySQL  • Git')
-  line2.fontSize = 14
-  line2.color = '#1f2937'
-  line2.fontWeight = 'normal'
-  components.push(line2)
+  // 技能内容（多行）
+  const skills = createTextComponent(startX + 15, startY + 12, '• React  • Vue  • TypeScript  • Node.js\n• Python  • Docker  • MySQL  • Git')
+  skills.fontSize = 14
+  skills.color = '#1f2937'
+  skills.fontWeight = 'normal'
+  skills.width = 660
+  skills.lineHeight = 1.8
+  components.push(skills)
   
   return components
 }
 
-// 样式7: 多行列表式
+// 样式7: 多行列表式（整体文本框）
 export const createSkillTags7 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const startX = 50
   const startY = 350
   
-  const line1 = createTextComponent(startX, startY, '• React、Vue、Angular 等前端框架')
-  line1.fontSize = 14
-  line1.color = '#1f2937'
-  line1.fontWeight = 'normal'
-  components.push(line1)
+  // 背景框
+  const bg = createShapeComponent(startX, startY, ShapeType.RECTANGLE)
+  bg.width = 694
+  bg.height = 100
+  bg.fill = '#f9fafb'
+  bg.stroke = '#e5e7eb'
+  bg.strokeWidth = 1
+  bg.borderRadius = 6
+  components.push(bg)
   
-  const line2 = createTextComponent(startX, startY + 25, '• TypeScript、JavaScript、Python 等编程语言')
-  line2.fontSize = 14
-  line2.color = '#1f2937'
-  line2.fontWeight = 'normal'
-  components.push(line2)
-  
-  const line3 = createTextComponent(startX, startY + 50, '• Docker、Kubernetes 等容器技术')
-  line3.fontSize = 14
-  line3.color = '#1f2937'
-  line3.fontWeight = 'normal'
-  components.push(line3)
+  // 技能内容（多行分类）
+  const skills = createTextComponent(startX + 15, startY + 12, '• React、Vue、Angular 等前端框架\n• TypeScript、JavaScript、Python 等编程语言\n• Docker、Kubernetes 等容器技术')
+  skills.fontSize = 14
+  skills.color = '#1f2937'
+  skills.fontWeight = 'normal'
+  skills.width = 660
+  skills.lineHeight = 1.8
+  components.push(skills)
   
   return components
 }

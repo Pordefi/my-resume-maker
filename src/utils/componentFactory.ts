@@ -11,31 +11,61 @@ import {
 
 const generateId = (type: string) => `${type}-${Date.now()}-${Math.random()}`
 
+// 辅助函数：根据文本内容估算宽度
+const estimateTextWidth = (text: string, fontSize: number): number => {
+  // 中文字符约为fontSize的1倍宽度，英文字符约为fontSize的0.6倍
+  let width = 0
+  for (const char of text) {
+    if (/[\u4e00-\u9fa5]/.test(char)) {
+      // 中文字符
+      width += fontSize
+    } else {
+      // 英文字符和其他
+      width += fontSize * 0.6
+    }
+  }
+  // 添加一些padding，最小宽度50，最大宽度600
+  return Math.min(Math.max(width + 20, 50), 600)
+}
+
+// 辅助函数：根据文本内容估算高度
+const estimateTextHeight = (text: string, fontSize: number, lineHeight: number): number => {
+  const lines = text.split('\n').length
+  return fontSize * lineHeight * lines + 10
+}
+
 export const createTextComponent = (
   x: number,
   y: number,
   text = '文本内容'
-): TextComponent => ({
-  id: generateId('text'),
-  type: ComponentType.TEXT,
-  x,
-  y,
-  width: 200,
-  height: 40,
-  rotation: 0,
-  zIndex: 0,
-  locked: false,
-  visible: true,
-  text,
-  fontSize: 16,
-  fontFamily: 'Arial, sans-serif',
-  fontWeight: 'normal',
-  fontStyle: 'normal',
-  textAlign: 'left',
-  color: '#000000',
-  lineHeight: 1.5,
-  letterSpacing: 0,
-})
+): TextComponent => {
+  const fontSize = 16
+  const lineHeight = 1.5
+  const width = estimateTextWidth(text, fontSize)
+  const height = estimateTextHeight(text, fontSize, lineHeight)
+  
+  return {
+    id: generateId('text'),
+    type: ComponentType.TEXT,
+    x,
+    y,
+    width,
+    height,
+    rotation: 0,
+    zIndex: 0,
+    locked: false,
+    visible: true,
+    text,
+    fontSize,
+    fontFamily: 'Arial, sans-serif',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    textAlign: 'left',
+    color: '#000000',
+    lineHeight,
+    letterSpacing: 0,
+  }
+}
 
 export const createImageComponent = (
   x: number,

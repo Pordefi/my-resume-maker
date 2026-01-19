@@ -113,10 +113,10 @@ const TextRenderer = ({ component }: Props) => {
         fill={component.color}
         align={component.textAlign}
         width={component.width}
-        height={component.height}
         lineHeight={component.lineHeight}
         letterSpacing={component.letterSpacing}
         wrap="word"
+        ellipsis={false}
         onDblClick={handleDblClick}
         onDblTap={handleDblClick}
       />
