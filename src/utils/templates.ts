@@ -13,19 +13,15 @@ import { ShapeType } from '@/types/canvas'
 export const createResumeHeader1 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   
-  const name = createTextComponent(297, 50, '张三')
-  name.fontSize = 36
+  const name = createTextComponent(297, 50, '张三', 36)
   name.fontWeight = 'bold'
   name.color = '#1f2937'
   name.textAlign = 'center'
-  name.width = 200
   components.push(name)
   
-  const title = createTextComponent(297, 100, '高级前端工程师')
-  title.fontSize = 18
+  const title = createTextComponent(297, 100, '高级前端工程师', 18)
   title.color = '#6b7280'
   title.textAlign = 'center'
-  title.width = 200
   components.push(title)
   
   const line = createLineComponent(247, 140, true)
@@ -50,19 +46,13 @@ export const createResumeHeader2 = (): CanvasComponent[] => {
   accent.borderRadius = 3
   components.push(accent)
   
-  const name = createTextComponent(70, 45, '张三')
-  name.fontSize = 32
+  const name = createTextComponent(70, 45, '张三', 32)
   name.fontWeight = 'bold'
   name.color = '#1f2937'
-  name.width = 300  // 设置足够的宽度避免文字竖排
-  name.textAlign = 'left'
   components.push(name)
   
-  const title = createTextComponent(70, 90, '高级前端工程师')
-  title.fontSize = 16
+  const title = createTextComponent(70, 90, '高级前端工程师', 16)
   title.color = '#6b7280'
-  title.width = 300  // 设置足够的宽度
-  title.textAlign = 'left'
   components.push(title)
   
   return components
@@ -79,14 +69,12 @@ export const createResumeHeader3 = (): CanvasComponent[] => {
   bg.stroke = 'transparent'
   components.push(bg)
   
-  const name = createTextComponent(50, 30, '张三')
-  name.fontSize = 36
+  const name = createTextComponent(50, 30, '张三', 36)
   name.fontWeight = 'bold'
   name.color = '#ffffff'
   components.push(name)
   
-  const title = createTextComponent(50, 75, '高级前端工程师')
-  title.fontSize = 18
+  const title = createTextComponent(50, 75, '高级前端工程师', 18)
   title.color = '#d1d5db'
   components.push(title)
   

@@ -37,9 +37,9 @@ const estimateTextHeight = (text: string, fontSize: number, lineHeight: number):
 export const createTextComponent = (
   x: number,
   y: number,
-  text = '文本内容'
+  text = '文本内容',
+  fontSize = 16
 ): TextComponent => {
-  const fontSize = 16
   const lineHeight = 1.5
   const width = estimateTextWidth(text, fontSize)
   const height = estimateTextHeight(text, fontSize, lineHeight)
