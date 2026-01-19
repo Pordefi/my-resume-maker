@@ -70,39 +70,35 @@ const ComponentLibrary = () => {
   const addFullTemplate = (templateKey: keyof typeof FULL_TEMPLATES_MULTI_PAGE) => {
     if (confirm('应用完整模板将替换当前内容，是否继续？')) {
       const template = FULL_TEMPLATES_MULTI_PAGE[templateKey]
-      const pages = template.create()
-      const store = useCanvasStore.getState()
+      const templatePages = template.create()
       
-      // 1. 删除所有页面（除了第一页）
-      const allPages = [...store.pages]
-      for (let i = allPages.length - 1; i > 0; i--) {
-        store.deletePage(allPages[i].id)
-      }
+      // 直接使用 set 方法重建整个状态，避免页面切换导致的数据丢失
+      useCanvasStore.setState((state) => {
+        // 为所有组件生成唯一ID
+        const newPages = templatePages.map((pageData, index) => ({
+          id: index === 0 ? state.pages[0]?.id || `page-${Date.now()}` : `page-${Date.now()}-${index}`,
+          name: `页面 ${index + 1}`,
+          components: pageData.components.map((comp) => ({
+            ...comp,
+            id: `${comp.type}-${Date.now()}-${Math.random()}`,
+          })),
+          backgroundColor: '#ffffff',
+        }))
+        
+        const firstPageId = newPages[0].id
+        
+        return {
+          pages: newPages,
+          currentPageId: firstPageId,
+          components: [...newPages[0].components],
+          canvasBackgroundColor: newPages[0].backgroundColor,
+          selectedIds: [],
+          clipboard: [],
+        }
+      })
       
-      // 2. 切换到第一页并清空
-      const firstPageId = store.pages[0].id
-      store.switchPage(firstPageId)
-      clearCanvas()
-      
-      // 3. 添加第一页的内容
-      if (pages[0]) {
-        pages[0].components.forEach((comp) => {
-          const newComp = { ...comp, id: `${comp.type}-${Date.now()}-${Math.random()}` }
-          addComponent(newComp)
-        })
-      }
-      
-      // 4. 添加后续页面
-      for (let i = 1; i < pages.length; i++) {
-        store.addPage() // 创建新页面并自动切换到新页面
-        pages[i].components.forEach((comp) => {
-          const newComp = { ...comp, id: `${comp.type}-${Date.now()}-${Math.random()}` }
-          addComponent(newComp)
-        })
-      }
-      
-      // 5. 最后切换回第一页
-      store.switchPage(firstPageId)
+      // 保存历史记录
+      useCanvasStore.getState().saveHistory()
     }
   }
 
