@@ -15,6 +15,7 @@ import {
   AlignVerticalJustifyCenter,
   Maximize,
   FileText,
+  Users,
 } from 'lucide-react'
 import { useCanvasStore } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
