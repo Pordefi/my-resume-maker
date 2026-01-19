@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS, Page, ComponentGroup, GuideLine, GUIDE_LINE_LAYOUTS } from '@/types/canvas'
+import { ExportData } from '@/utils/storage'
 
 interface CanvasStore extends CanvasState {
   // 页面操作
@@ -65,6 +66,7 @@ interface CanvasStore extends CanvasState {
   
   // 导入导出
   loadTemplate: (components: CanvasComponent[]) => void
+  loadFullState: (data: ExportData) => void
   clearCanvas: () => void
 }
 
@@ -696,6 +698,26 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       components: [],
       selectedIds: [],
       clipboard: [],
+    })
+    get().saveHistory()
+  },
+
+  loadFullState: (data) => {
+    set({
+      pages: data.pages,
+      currentPageId: data.currentPageId,
+      components: data.pages.find((p) => p.id === data.currentPageId)?.components || [],
+      groups: data.groups,
+      guides: data.guides,
+      showGuides: data.showGuides,
+      canvasSize: data.canvasSize as CanvasSize,
+      canvasWidth: data.canvasWidth,
+      canvasHeight: data.canvasHeight,
+      canvasBackgroundColor: data.pages.find((p) => p.id === data.currentPageId)?.backgroundColor || '#ffffff',
+      selectedIds: [],
+      clipboard: [],
+      history: [[]],
+      historyIndex: 0,
     })
     get().saveHistory()
   },

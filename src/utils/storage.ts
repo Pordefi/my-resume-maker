@@ -1,9 +1,28 @@
-import { CanvasComponent, Template } from '@/types/canvas'
+import { CanvasComponent, Template, CanvasState, Page, ComponentGroup, GuideLine } from '@/types/canvas'
 
 const STORAGE_KEYS = {
   AUTOSAVE: 'resume_designer_autosave',
   TEMPLATES: 'resume_designer_templates',
 } as const
+
+// 完整状态导出数据结构
+export interface ExportData {
+  version: string
+  exportDate: number
+  pages: Page[]
+  currentPageId: string
+  groups: ComponentGroup[]
+  guides: GuideLine[]
+  showGuides: boolean
+  canvasSize: string
+  canvasWidth: number
+  canvasHeight: number
+  metadata?: {
+    title?: string
+    description?: string
+    author?: string
+  }
+}
 
 // 自动保存
 export const saveToLocalStorage = (components: CanvasComponent[]) => {
@@ -74,7 +93,63 @@ export const deleteTemplate = (id: string) => {
   }
 }
 
-// 导入导出JSON
+// 导出完整状态到JSON
+export const exportFullStateToJSON = (state: Partial<CanvasState>, metadata?: ExportData['metadata']) => {
+  const exportData: ExportData = {
+    version: '1.0.0',
+    exportDate: Date.now(),
+    pages: state.pages || [],
+    currentPageId: state.currentPageId || '',
+    groups: state.groups || [],
+    guides: state.guides || [],
+    showGuides: state.showGuides ?? true,
+    canvasSize: state.canvasSize || 'a4',
+    canvasWidth: state.canvasWidth || 794,
+    canvasHeight: state.canvasHeight || 1123,
+    metadata: metadata || {
+      title: '简历设计',
+      description: '使用简历设计工具创建',
+      author: '',
+    },
+  }
+  
+  const data = JSON.stringify(exportData, null, 2)
+  const blob = new Blob([data], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `resume-design-${Date.now()}.json`
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
+// 导入完整状态从JSON
+export const importFullStateFromJSON = (file: File): Promise<ExportData> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target?.result as string) as ExportData
+        
+        // 验证数据格式
+        if (!data.pages || !Array.isArray(data.pages)) {
+          reject(new Error('无效的JSON格式：缺少pages字段'))
+          return
+        }
+        
+        resolve(data)
+      } catch (error) {
+        reject(new Error('JSON格式错误'))
+      }
+    }
+    
+    reader.onerror = () => reject(new Error('文件读取失败'))
+    reader.readAsText(file)
+  })
+}
+
+// 兼容旧版本：导出组件列表（仅当前页面）
 export const exportToJSON = (components: CanvasComponent[]) => {
   const data = JSON.stringify(components, null, 2)
   const blob = new Blob([data], { type: 'application/json' })
@@ -86,6 +161,7 @@ export const exportToJSON = (components: CanvasComponent[]) => {
   URL.revokeObjectURL(url)
 }
 
+// 兼容旧版本：导入组件列表
 export const importFromJSON = (file: File): Promise<CanvasComponent[]> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()

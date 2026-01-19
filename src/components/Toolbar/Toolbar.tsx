@@ -23,7 +23,7 @@ import {
 } from 'lucide-react'
 import { useCanvasStore } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
-import { exportToJSON, importFromJSON } from '@/utils/storage'
+import { exportToJSON, importFromJSON, exportFullStateToJSON, importFullStateFromJSON } from '@/utils/storage'
 import { useRef, useState } from 'react'
 import { CanvasSize, Page } from '@/types/canvas'
 
@@ -162,7 +162,18 @@ const Toolbar = () => {
   }
 
   const handleExportJSON = () => {
-    exportToJSON(components)
+    const state = useCanvasStore.getState()
+    // 导出完整状态
+    exportFullStateToJSON({
+      pages: state.pages,
+      currentPageId: state.currentPageId,
+      groups: state.groups,
+      guides: state.guides,
+      showGuides: state.showGuides,
+      canvasSize: state.canvasSize,
+      canvasWidth: state.canvasWidth,
+      canvasHeight: state.canvasHeight,
+    })
   }
 
   const handleImportJSON = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,14 +181,24 @@ const Toolbar = () => {
     if (!file) return
 
     try {
-      const data = await importFromJSON(file)
-      loadTemplate(data)
+      // 尝试导入完整状态
+      const data = await importFullStateFromJSON(file)
+      const { loadFullState } = useCanvasStore.getState()
+      loadFullState(data)
     } catch (error) {
-      alert('导入失败: ' + (error as Error).message)
+      // 如果失败，尝试作为旧版本组件列表导入
+      try {
+        const components = await importFromJSON(file)
+        loadTemplate(components)
+      } catch (legacyError) {
+        alert('导入失败: ' + (error as Error).message)
+      }
     }
 
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
+    }
+  }
     }
   }
 
