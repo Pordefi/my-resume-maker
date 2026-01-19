@@ -140,12 +140,15 @@ const Canvas = () => {
     const pendingComp = getPendingComponent()
     const pendingTemplate = getPendingTemplate()
     
-    // 如果有待放置的单个组件
-    if (pendingComp) {
+    // 如果有待放置的组件或模板，不管点击什么都要放置
+    if (pendingComp || pendingTemplate) {
       const stage = e.target.getStage()
       const pointerPosition = stage.getPointerPosition()
       
-      if (pointerPosition) {
+      if (!pointerPosition) return
+      
+      // 如果有待放置的单个组件
+      if (pendingComp) {
         const newComp = {
           ...pendingComp,
           id: `${pendingComp.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -155,17 +158,12 @@ const Canvas = () => {
         addComponent(newComp)
         setPendingComponent(null)
         setPendingComponentPreview(null)
+        e.cancelBubble = true
+        return
       }
-      e.cancelBubble = true
-      return
-    }
-    
-    // 如果有待放置的模板（多个组件）
-    if (pendingTemplate && pendingTemplate.length > 0) {
-      const stage = e.target.getStage()
-      const pointerPosition = stage.getPointerPosition()
       
-      if (pointerPosition) {
+      // 如果有待放置的模板（多个组件）
+      if (pendingTemplate && pendingTemplate.length > 0) {
         const clickX = pointerPosition.x / zoom
         const clickY = pointerPosition.y / zoom
         
@@ -229,12 +227,12 @@ const Canvas = () => {
         
         setPendingTemplate(null)
         setPendingComponentPreview(null)
+        e.cancelBubble = true
+        return
       }
-      e.cancelBubble = true
-      return
     }
     
-    // 点击 Stage 本身或背景 Rect
+    // 没有待放置组件时，点击空白处取消选择
     const clickedOnEmpty = e.target === e.target.getStage() || e.target.attrs.id === 'background-rect'
     if (clickedOnEmpty) {
       clearSelection()

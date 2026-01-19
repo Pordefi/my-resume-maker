@@ -1,6 +1,6 @@
 import { Group, Transformer } from 'react-konva'
 import { useRef, useEffect } from 'react'
-import { useCanvasStore } from '@/store/canvasStore'
+import { useCanvasStore, getPendingComponent, getPendingTemplate } from '@/store/canvasStore'
 import { CanvasComponent as CanvasComponentType, ComponentType } from '@/types/canvas'
 import TextRenderer from './renderers/TextRenderer'
 import ImageRenderer from './renderers/ImageRenderer'
@@ -106,6 +106,11 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
   }
 
   const handleClick = (e: any) => {
+    // 如果有待放置的组件或模板，不拦截点击事件，让它冒泡到Stage
+    if (getPendingComponent() || getPendingTemplate()) {
+      return
+    }
+    
     e.cancelBubble = true
     selectComponent(component.id, e.evt.shiftKey || e.evt.ctrlKey || e.evt.metaKey)
   }
