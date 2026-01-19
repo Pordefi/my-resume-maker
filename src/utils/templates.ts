@@ -335,24 +335,6 @@ export const createWorkExperience1 = (): CanvasComponent[] => {
   const x = 50
   const y = 500
   
-  // 外框（带阴影）
-  const card = createShapeComponent(x, y, ShapeType.RECTANGLE)
-  card.width = 694
-  card.height = 160
-  card.fill = '#ffffff'
-  card.stroke = '#e5e7eb'
-  card.strokeWidth = 1
-  card.borderRadius = 8
-  card.shadow = {
-    enabled: true,
-    color: '#000000',
-    blur: 10,
-    offsetX: 0,
-    offsetY: 2,
-    opacity: 0.1,
-  }
-  components.push(card)
-  
   const company = createTextComponent(x + 20, y + 20, '某某科技有限公司')
   company.fontSize = 18
   company.fontWeight = 'bold'
@@ -393,16 +375,6 @@ export const createWorkExperience2 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 80
   const y = 500
-  
-  // 外框
-  const border = createShapeComponent(x - 30, y - 20, ShapeType.RECTANGLE)
-  border.width = 664
-  border.height = 160
-  border.fill = 'transparent'
-  border.stroke = '#e5e7eb'
-  border.strokeWidth = 1
-  border.borderRadius = 8
-  components.push(border)
   
   const timeline = createLineComponent(x, y, false)
   timeline.height = 120
@@ -453,16 +425,6 @@ export const createWorkExperience3 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 50
   const y = 500
-  
-  // 外框
-  const border = createShapeComponent(x - 10, y - 10, ShapeType.RECTANGLE)
-  border.width = 714
-  border.height = 160
-  border.fill = 'transparent'
-  border.stroke = '#d1d5db'
-  border.strokeWidth = 2
-  border.borderRadius = 6
-  components.push(border)
   
   const header = createShapeComponent(x, y, ShapeType.RECTANGLE)
   header.width = 694
@@ -559,16 +521,6 @@ export const createEducation1 = (): CanvasComponent[] => {
   const x = 50
   const y = 700
   
-  // 外框
-  const border = createShapeComponent(x - 10, y - 10, ShapeType.RECTANGLE)
-  border.width = 714
-  border.height = 90
-  border.fill = 'transparent'
-  border.stroke = '#e5e7eb'
-  border.strokeWidth = 1
-  border.borderRadius = 8
-  components.push(border)
-  
   const icon = createShapeComponent(x, y, ShapeType.CIRCLE)
   icon.width = 50
   icon.height = 50
@@ -605,24 +557,6 @@ export const createEducation2 = (): CanvasComponent[] => {
   const x = 50
   const y = 700
   
-  // 外框（带阴影）
-  const card = createShapeComponent(x, y, ShapeType.RECTANGLE)
-  card.width = 694
-  card.height = 120
-  card.fill = '#f9fafb'
-  card.stroke = '#e5e7eb'
-  card.strokeWidth = 1
-  card.borderRadius = 8
-  card.shadow = {
-    enabled: true,
-    color: '#000000',
-    blur: 8,
-    offsetX: 0,
-    offsetY: 2,
-    opacity: 0.08,
-  }
-  components.push(card)
-  
   const school = createTextComponent(x + 20, y + 20, '某某大学')
   school.fontSize = 18
   school.fontWeight = 'bold'
@@ -655,16 +589,6 @@ export const createEducation3 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 50
   const y = 700
-  
-  // 外框
-  const border = createShapeComponent(x - 10, y - 10, ShapeType.RECTANGLE)
-  border.width = 714
-  border.height = 90
-  border.fill = 'transparent'
-  border.stroke = '#d1d5db'
-  border.strokeWidth = 1
-  border.borderRadius = 6
-  components.push(border)
   
   const school = createTextComponent(x, y, '某某大学')
   school.fontSize = 16
@@ -700,16 +624,6 @@ export const createProject1 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 50
   const y = 800
-  
-  // 外框
-  const border = createShapeComponent(x - 10, y - 10, ShapeType.RECTANGLE)
-  border.width = 714
-  border.height = 160
-  border.fill = 'transparent'
-  border.stroke = '#d1d5db'
-  border.strokeWidth = 1
-  border.borderRadius = 8
-  components.push(border)
   
   const titleBg = createShapeComponent(x, y, ShapeType.RECTANGLE)
   titleBg.width = 694
@@ -757,24 +671,6 @@ export const createProject2 = (): CanvasComponent[] => {
   const x = 50
   const y = 800
   
-  // 外框（带阴影）
-  const card = createShapeComponent(x, y, ShapeType.RECTANGLE)
-  card.width = 694
-  card.height = 160
-  card.fill = '#ffffff'
-  card.stroke = '#e5e7eb'
-  card.strokeWidth = 1
-  card.borderRadius = 8
-  card.shadow = {
-    enabled: true,
-    color: '#000000',
-    blur: 10,
-    offsetX: 0,
-    offsetY: 2,
-    opacity: 0.1,
-  }
-  components.push(card)
-  
   const title = createTextComponent(x + 20, y + 20, '企业级管理系统')
   title.fontSize = 16
   title.fontWeight = 'bold'
@@ -814,16 +710,6 @@ export const createProject3 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 80
   const y = 800
-  
-  // 外框
-  const border = createShapeComponent(x - 30, y - 20, ShapeType.RECTANGLE)
-  border.width = 664
-  border.height = 160
-  border.fill = 'transparent'
-  border.stroke = '#e5e7eb'
-  border.strokeWidth = 1
-  border.borderRadius = 8
-  components.push(border)
   
   const timeline = createLineComponent(x, y, false)
   timeline.height = 120
