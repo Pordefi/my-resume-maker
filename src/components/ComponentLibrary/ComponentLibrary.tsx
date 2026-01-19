@@ -775,6 +775,119 @@ const ComponentLibrary = () => {
                   </svg>
                   <div className="text-xs font-medium">带点分隔线</div>
                 </button>
+                <button
+                  onClick={() => addTemplate('titleUnderline')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="8" width="20" height="3" fill="#1f2937" rx="1"/>
+                    <rect x="8" y="14" width="12" height="2" fill="#3b82f6" rx="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">标题下划线</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('titleWithIcon')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="10" cy="12" r="3" fill="#3b82f6"/>
+                    <rect x="16" y="10" width="16" height="4" fill="#1f2937" rx="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">带图标标题</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('titleWithBackground')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="8" width="24" height="8" fill="#eff6ff" rx="2"/>
+                    <rect x="12" y="10" width="16" height="4" fill="#1e40af" rx="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">带背景标题</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('infoCardWithShadow')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="6" y="5" width="28" height="14" fill="#ffffff" stroke="#e5e7eb" rx="2"/>
+                    <rect x="8" y="7" width="12" height="2" fill="#1f2937" rx="1"/>
+                    <rect x="8" y="11" width="20" height="1.5" fill="#9ca3af" rx="0.5"/>
+                    <rect x="8" y="14" width="16" height="1.5" fill="#9ca3af" rx="0.5"/>
+                  </svg>
+                  <div className="text-xs font-medium">阴影卡片</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('timelineNode')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <line x1="10" y1="4" x2="10" y2="20" stroke="#d1d5db" strokeWidth="2"/>
+                    <circle cx="10" cy="12" r="3" fill="#3b82f6"/>
+                    <rect x="16" y="10" width="16" height="2" fill="#1f2937" rx="1"/>
+                    <rect x="16" y="14" width="12" height="1.5" fill="#9ca3af" rx="0.5"/>
+                  </svg>
+                  <div className="text-xs font-medium">时间线节点</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('quoteBox')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="6" y="6" width="28" height="12" fill="#f9fafb" rx="2"/>
+                    <rect x="6" y="6" width="2" height="12" fill="#3b82f6" rx="1"/>
+                    <rect x="10" y="10" width="20" height="1.5" fill="#6b7280" rx="0.5"/>
+                    <rect x="10" y="13" width="16" height="1.5" fill="#6b7280" rx="0.5"/>
+                  </svg>
+                  <div className="text-xs font-medium">引用框</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('colorfulTags')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="4" y="9" width="8" height="6" fill="#dbeafe" stroke="#3b82f6" rx="3"/>
+                    <rect x="13" y="9" width="8" height="6" fill="#dcfce7" stroke="#22c55e" rx="3"/>
+                    <rect x="22" y="9" width="8" height="6" fill="#fef3c7" stroke="#f59e0b" rx="3"/>
+                    <rect x="31" y="9" width="6" height="6" fill="#fce7f3" stroke="#ec4899" rx="3"/>
+                  </svg>
+                  <div className="text-xs font-medium">彩色标签组</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('circularProgress')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="20" cy="12" r="7" fill="none" stroke="#e5e7eb" strokeWidth="2"/>
+                    <circle cx="20" cy="12" r="7" fill="none" stroke="#3b82f6" strokeWidth="2" strokeDasharray="22 22" strokeDashoffset="5.5"/>
+                    <text x="20" y="14" fontSize="6" fill="#1f2937" textAnchor="middle">85%</text>
+                  </svg>
+                  <div className="text-xs font-medium">圆形进度</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('stepIndicator')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="8" cy="12" r="4" fill="#3b82f6"/>
+                    <line x1="12" y1="12" x2="16" y2="12" stroke="#d1d5db" strokeWidth="2"/>
+                    <circle cx="20" cy="12" r="4" fill="#e5e7eb"/>
+                    <line x1="24" y1="12" x2="28" y2="12" stroke="#d1d5db" strokeWidth="2"/>
+                    <circle cx="32" cy="12" r="4" fill="#e5e7eb"/>
+                  </svg>
+                  <div className="text-xs font-medium">步骤指示器</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('badgeDecor')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="12" cy="12" r="6" fill="#fef3c7" stroke="#f59e0b" strokeWidth="1.5"/>
+                    <path d="M 12 9 L 13 11 L 15 11 L 13.5 12.5 L 14 14.5 L 12 13 L 10 14.5 L 10.5 12.5 L 9 11 L 11 11 Z" fill="#f59e0b"/>
+                    <rect x="20" y="10" width="12" height="4" fill="#92400e" rx="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">徽章标记</div>
+                </button>
               </div>
             </div>
           </div>

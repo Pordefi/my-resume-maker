@@ -1556,6 +1556,293 @@ export const createDividerWithDots = (): CanvasComponent[] => {
   return components
 }
 
+// 标题装饰 - 下划线强调
+export const createTitleUnderline = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const title = createTextComponent(50, 100, '章节标题', 20)
+  title.fontWeight = 'bold'
+  title.color = '#1f2937'
+  components.push(title)
+  
+  const underline = createLineComponent(50, 130, true)
+  underline.width = 80
+  underline.stroke = '#3b82f6'
+  underline.strokeWidth = 3
+  components.push(underline)
+  
+  return components
+}
+
+// 标题装饰 - 带图标
+export const createTitleWithIcon = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const icon = createIconComponent(50, 100, 'star')
+  icon.width = 24
+  icon.height = 24
+  icon.color = '#3b82f6'
+  components.push(icon)
+  
+  const title = createTextComponent(80, 102, '章节标题', 18)
+  title.fontWeight = 'bold'
+  title.color = '#1f2937'
+  components.push(title)
+  
+  return components
+}
+
+// 标题装饰 - 带背景色块
+export const createTitleWithBackground = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const bg = createShapeComponent(50, 100, ShapeType.RECTANGLE)
+  bg.width = 150
+  bg.height = 35
+  bg.fill = '#eff6ff'
+  bg.stroke = 'transparent'
+  bg.borderRadius = 4
+  components.push(bg)
+  
+  const title = createTextComponent(60, 108, '章节标题', 18)
+  title.fontWeight = 'bold'
+  title.color = '#1e40af'
+  components.push(title)
+  
+  return components
+}
+
+// 信息卡片 - 带阴影
+export const createInfoCardWithShadow = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const card = createShapeComponent(50, 100, ShapeType.RECTANGLE)
+  card.width = 300
+  card.height = 120
+  card.fill = '#ffffff'
+  card.stroke = '#e5e7eb'
+  card.strokeWidth = 1
+  card.borderRadius = 8
+  card.shadow = {
+    enabled: true,
+    color: '#000000',
+    blur: 10,
+    offsetX: 0,
+    offsetY: 4,
+    opacity: 0.1
+  }
+  components.push(card)
+  
+  const title = createTextComponent(65, 115, '信息标题', 16)
+  title.fontWeight = 'bold'
+  title.color = '#1f2937'
+  components.push(title)
+  
+  const content = createTextComponent(65, 145, '这里是卡片内容描述文字', 14)
+  content.color = '#6b7280'
+  components.push(content)
+  
+  return components
+}
+
+// 时间线节点 - 带连接线
+export const createTimelineNode = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  // 垂直连接线
+  const line = createLineComponent(60, 100, false)
+  line.height = 100
+  line.stroke = '#d1d5db'
+  line.strokeWidth = 2
+  components.push(line)
+  
+  // 节点圆圈
+  const node = createShapeComponent(54, 140, ShapeType.CIRCLE)
+  node.width = 12
+  node.height = 12
+  node.fill = '#3b82f6'
+  node.stroke = '#ffffff'
+  node.strokeWidth = 2
+  components.push(node)
+  
+  // 内容文本
+  const title = createTextComponent(75, 138, '时间节点标题', 16)
+  title.fontWeight = 'bold'
+  title.color = '#1f2937'
+  components.push(title)
+  
+  const desc = createTextComponent(75, 160, '节点描述信息', 14)
+  desc.color = '#6b7280'
+  components.push(desc)
+  
+  return components
+}
+
+// 引用框 - 左侧彩条
+export const createQuoteBox = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  // 背景
+  const bg = createShapeComponent(50, 100, ShapeType.RECTANGLE)
+  bg.width = 400
+  bg.height = 80
+  bg.fill = '#f9fafb'
+  bg.stroke = 'transparent'
+  bg.borderRadius = 4
+  components.push(bg)
+  
+  // 左侧彩条
+  const accent = createShapeComponent(50, 100, ShapeType.RECTANGLE)
+  accent.width = 4
+  accent.height = 80
+  accent.fill = '#3b82f6'
+  accent.stroke = 'transparent'
+  components.push(accent)
+  
+  // 引用文本
+  const quote = createTextComponent(65, 120, '"这是一段引用文字或重要说明"', 14)
+  quote.color = '#4b5563'
+  quote.fontStyle = 'italic'
+  components.push(quote)
+  
+  return components
+}
+
+// 标签组 - 彩色标签
+export const createColorfulTags = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const colors = [
+    { bg: '#dbeafe', text: '#1e40af', border: '#3b82f6' },
+    { bg: '#dcfce7', text: '#166534', border: '#22c55e' },
+    { bg: '#fef3c7', text: '#92400e', border: '#f59e0b' },
+    { bg: '#fce7f3', text: '#9f1239', border: '#ec4899' }
+  ]
+  
+  let x = 50
+  const tags = ['标签1', '标签2', '标签3', '标签4']
+  
+  tags.forEach((tag, index) => {
+    const color = colors[index]
+    const tagBg = createShapeComponent(x, 100, ShapeType.RECTANGLE, tag)
+    tagBg.width = 80
+    tagBg.height = 28
+    tagBg.fill = color.bg
+    tagBg.stroke = color.border
+    tagBg.strokeWidth = 1
+    tagBg.borderRadius = 14
+    tagBg.text = tag
+    tagBg.fontSize = 13
+    tagBg.textColor = color.text
+    tagBg.fontWeight = '500'
+    components.push(tagBg)
+    x += 90
+  })
+  
+  return components
+}
+
+// 进度指示器 - 圆形进度
+export const createCircularProgress = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  // 外圈
+  const outer = createShapeComponent(50, 100, ShapeType.CIRCLE)
+  outer.width = 60
+  outer.height = 60
+  outer.fill = 'transparent'
+  outer.stroke = '#e5e7eb'
+  outer.strokeWidth = 6
+  components.push(outer)
+  
+  // 进度圈（用部分圆表示，这里用实心圆模拟）
+  const progress = createShapeComponent(53, 103, ShapeType.CIRCLE)
+  progress.width = 54
+  progress.height = 54
+  progress.fill = 'transparent'
+  progress.stroke = '#3b82f6'
+  progress.strokeWidth = 6
+  components.push(progress)
+  
+  // 中心文字
+  const percent = createTextComponent(65, 118, '85%', 16)
+  percent.fontWeight = 'bold'
+  percent.color = '#1f2937'
+  percent.textAlign = 'center'
+  components.push(percent)
+  
+  return components
+}
+
+// 步骤指示器 - 横向步骤
+export const createStepIndicator = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const steps = ['步骤1', '步骤2', '步骤3']
+  let x = 50
+  
+  steps.forEach((step, index) => {
+    // 步骤圆圈
+    const circle = createShapeComponent(x, 100, ShapeType.CIRCLE)
+    circle.width = 32
+    circle.height = 32
+    circle.fill = index === 0 ? '#3b82f6' : '#e5e7eb'
+    circle.stroke = 'transparent'
+    components.push(circle)
+    
+    // 步骤编号
+    const number = createTextComponent(x + 10, 108, `${index + 1}`, 14)
+    number.fontWeight = 'bold'
+    number.color = index === 0 ? '#ffffff' : '#9ca3af'
+    components.push(number)
+    
+    // 步骤文字
+    const label = createTextComponent(x - 10, 140, step, 12)
+    label.color = '#6b7280'
+    components.push(label)
+    
+    // 连接线（除了最后一个）
+    if (index < steps.length - 1) {
+      const line = createLineComponent(x + 32, 116, true)
+      line.width = 80
+      line.stroke = '#d1d5db'
+      line.strokeWidth = 2
+      components.push(line)
+    }
+    
+    x += 120
+  })
+  
+  return components
+}
+
+// 徽章装饰 - 认证标记
+export const createBadgeDecor = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  // 徽章背景
+  const badge = createShapeComponent(50, 100, ShapeType.CIRCLE)
+  badge.width = 50
+  badge.height = 50
+  badge.fill = '#fef3c7'
+  badge.stroke = '#f59e0b'
+  badge.strokeWidth = 2
+  components.push(badge)
+  
+  // 徽章图标
+  const icon = createIconComponent(63, 113, 'award')
+  icon.width = 24
+  icon.height = 24
+  icon.color = '#f59e0b'
+  components.push(icon)
+  
+  // 徽章文字
+  const label = createTextComponent(110, 118, '认证标记', 14)
+  label.fontWeight = 'bold'
+  label.color = '#92400e'
+  components.push(label)
+  
+  return components
+}
+
 
 // ==================== 导出所有模板 ====================
 
@@ -1648,6 +1935,16 @@ export const TEMPLATES = {
   cornerDecorBottomRight: { name: '装饰 - 右下角标', create: createCornerDecorBottomRight },
   titleAccentBar: { name: '装饰 - 标题彩条', create: createTitleAccentBar },
   dividerWithDots: { name: '装饰 - 带点分隔线', create: createDividerWithDots },
+  titleUnderline: { name: '装饰 - 标题下划线', create: createTitleUnderline },
+  titleWithIcon: { name: '装饰 - 带图标标题', create: createTitleWithIcon },
+  titleWithBackground: { name: '装饰 - 带背景标题', create: createTitleWithBackground },
+  infoCardWithShadow: { name: '装饰 - 阴影卡片', create: createInfoCardWithShadow },
+  timelineNode: { name: '装饰 - 时间线节点', create: createTimelineNode },
+  quoteBox: { name: '装饰 - 引用框', create: createQuoteBox },
+  colorfulTags: { name: '装饰 - 彩色标签组', create: createColorfulTags },
+  circularProgress: { name: '装饰 - 圆形进度', create: createCircularProgress },
+  stepIndicator: { name: '装饰 - 步骤指示器', create: createStepIndicator },
+  badgeDecor: { name: '装饰 - 徽章标记', create: createBadgeDecor },
 }
 
 
