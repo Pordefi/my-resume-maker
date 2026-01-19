@@ -54,11 +54,15 @@ export const createResumeHeader2 = (): CanvasComponent[] => {
   name.fontSize = 32
   name.fontWeight = 'bold'
   name.color = '#1f2937'
+  name.width = 300  // 设置足够的宽度避免文字竖排
+  name.textAlign = 'left'
   components.push(name)
   
   const title = createTextComponent(70, 90, '高级前端工程师')
   title.fontSize = 16
   title.color = '#6b7280'
+  title.width = 300  // 设置足够的宽度
+  title.textAlign = 'left'
   components.push(title)
   
   return components
