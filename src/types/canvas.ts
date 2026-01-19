@@ -1,0 +1,126 @@
+// 画布配置
+export const CANVAS_CONFIG = {
+  width: 794, // A4宽度 210mm 转像素 (210mm * 3.7795px/mm)
+  height: 1123, // A4高度 297mm 转像素
+  backgroundColor: '#ffffff',
+  gridSize: 10,
+} as const
+
+// 组件类型
+export enum ComponentType {
+  TEXT = 'text',
+  IMAGE = 'image',
+  SHAPE = 'shape',
+  LINE = 'line',
+  ICON = 'icon',
+}
+
+// 形状类型
+export enum ShapeType {
+  RECTANGLE = 'rectangle',
+  CIRCLE = 'circle',
+  ELLIPSE = 'ellipse',
+}
+
+// 对齐方式
+export enum AlignType {
+  LEFT = 'left',
+  CENTER = 'center',
+  RIGHT = 'right',
+  TOP = 'top',
+  MIDDLE = 'middle',
+  BOTTOM = 'bottom',
+}
+
+// 基础组件属性
+export interface BaseComponent {
+  id: string
+  type: ComponentType
+  x: number
+  y: number
+  width: number
+  height: number
+  rotation: number
+  zIndex: number
+  locked: boolean
+  visible: boolean
+}
+
+// 文本组件
+export interface TextComponent extends BaseComponent {
+  type: ComponentType.TEXT
+  text: string
+  fontSize: number
+  fontFamily: string
+  fontWeight: 'normal' | 'bold'
+  fontStyle: 'normal' | 'italic'
+  textAlign: 'left' | 'center' | 'right'
+  color: string
+  lineHeight: number
+  letterSpacing: number
+}
+
+// 图片组件
+export interface ImageComponent extends BaseComponent {
+  type: ComponentType.IMAGE
+  src: string
+  opacity: number
+  borderRadius: number
+}
+
+// 形状组件
+export interface ShapeComponent extends BaseComponent {
+  type: ComponentType.SHAPE
+  shapeType: ShapeType
+  fill: string
+  stroke: string
+  strokeWidth: number
+  opacity: number
+  borderRadius: number
+}
+
+// 线条组件
+export interface LineComponent extends BaseComponent {
+  type: ComponentType.LINE
+  points: number[]
+  stroke: string
+  strokeWidth: number
+  dash: number[]
+}
+
+// 图标组件
+export interface IconComponent extends BaseComponent {
+  type: ComponentType.ICON
+  iconName: string
+  color: string
+}
+
+// 联合类型
+export type CanvasComponent =
+  | TextComponent
+  | ImageComponent
+  | ShapeComponent
+  | LineComponent
+  | IconComponent
+
+// 画布状态
+export interface CanvasState {
+  components: CanvasComponent[]
+  selectedIds: string[]
+  clipboard: CanvasComponent[]
+  history: CanvasComponent[][]
+  historyIndex: number
+  zoom: number
+  showGrid: boolean
+  showRuler: boolean
+}
+
+// 模板
+export interface Template {
+  id: string
+  name: string
+  thumbnail: string
+  components: CanvasComponent[]
+  createdAt: number
+  updatedAt: number
+}
