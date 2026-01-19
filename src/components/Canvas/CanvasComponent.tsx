@@ -96,13 +96,42 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
     node.scaleX(1)
     node.scaleY(1)
 
-    updateComponent(component.id, {
-      x: node.x(),
-      y: node.y(),
-      width: Math.max(5, node.width() * scaleX),
-      height: Math.max(5, node.height() * scaleY),
-      rotation: node.rotation(),
-    })
+    const newWidth = Math.max(5, node.width() * scaleX)
+    const newHeight = Math.max(5, node.height() * scaleY)
+
+    // 对于线条组件，需要同时更新points
+    if (component.type === ComponentType.LINE) {
+      // 根据新的宽高重新计算points
+      let newPoints: number[]
+      
+      // 判断是水平线还是垂直线
+      const isHorizontal = component.width > component.height
+      
+      if (isHorizontal) {
+        // 水平线：更新X坐标
+        newPoints = [0, 0, newWidth, 0]
+      } else {
+        // 垂直线：更新Y坐标
+        newPoints = [0, 0, 0, newHeight]
+      }
+      
+      updateComponent(component.id, {
+        x: node.x(),
+        y: node.y(),
+        width: newWidth,
+        height: newHeight,
+        rotation: node.rotation(),
+        points: newPoints,
+      })
+    } else {
+      updateComponent(component.id, {
+        x: node.x(),
+        y: node.y(),
+        width: newWidth,
+        height: newHeight,
+        rotation: node.rotation(),
+      })
+    }
   }
 
   const handleClick = (e: any) => {
