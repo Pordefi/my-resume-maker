@@ -295,6 +295,30 @@ const Toolbar = () => {
         </div>
       )}
 
+      {/* 组操作 */}
+      {selectedIds.length >= 2 && (
+        <div className="flex gap-1 border-r pr-2">
+          <button
+            onClick={() => {
+              const { components, selectedIds, groups } = useCanvasStore.getState()
+              const selectedComponents = components.filter((c) => selectedIds.includes(c.id))
+              const groupIds = [...new Set(selectedComponents.map((c) => c.groupId).filter(Boolean))]
+              const currentGroup = groupIds.length === 1 ? groups.find((g) => g.id === groupIds[0]) : undefined
+              
+              if (currentGroup) {
+                ungroupComponents(currentGroup.id)
+              } else {
+                createGroup()
+              }
+            }}
+            className="p-2 hover:bg-gray-100 rounded"
+            title="创建组/解散组"
+          >
+            <Users size={18} />
+          </button>
+        </div>
+      )}
+
       {/* 视图 */}
       <div className="flex gap-1 border-r pr-2">
         <button

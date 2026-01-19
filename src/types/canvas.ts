@@ -60,6 +60,7 @@ export interface BaseComponent {
   zIndex: number
   locked: boolean
   visible: boolean
+  groupId?: string // 所属组ID
   // 通用样式
   shadow?: {
     enabled: boolean
@@ -143,11 +144,21 @@ export interface Page {
   backgroundColor: string
 }
 
+// 组件组
+export interface ComponentGroup {
+  id: string
+  name: string
+  componentIds: string[]
+  locked: boolean
+  visible: boolean
+}
+
 // 画布状态
 export interface CanvasState {
   pages: Page[]
   currentPageId: string
   components: CanvasComponent[]
+  groups: ComponentGroup[]
   selectedIds: string[]
   clipboard: CanvasComponent[]
   history: CanvasComponent[][]

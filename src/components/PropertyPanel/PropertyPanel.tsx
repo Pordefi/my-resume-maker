@@ -7,6 +7,7 @@ import LineProperties from './LineProperties'
 import CommonProperties from './CommonProperties'
 import ShadowProperties from './ShadowProperties'
 import CanvasBackgroundProperties from './CanvasBackgroundProperties'
+import GroupProperties from './GroupProperties'
 
 const PropertyPanel = () => {
   const { components, selectedIds } = useCanvasStore()
@@ -25,8 +26,9 @@ const PropertyPanel = () => {
 
   if (selectedIds.length > 1) {
     return (
-      <div className="w-80 bg-white border-l border-gray-200 p-4">
+      <div className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto h-full">
         <h2 className="text-lg font-semibold mb-4">多选 ({selectedIds.length})</h2>
+        <GroupProperties />
         <CommonProperties />
       </div>
     )
@@ -36,8 +38,10 @@ const PropertyPanel = () => {
   if (!component) return null
 
   return (
-    <div className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto">
+    <div className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto h-full">
       <h2 className="text-lg font-semibold mb-4">属性面板</h2>
+
+      <GroupProperties />
 
       <CommonProperties />
 

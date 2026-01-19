@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS, Page } from '@/types/canvas'
+import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS, Page, ComponentGroup } from '@/types/canvas'
 
 interface CanvasStore extends CanvasState {
   // 页面操作
@@ -8,6 +8,15 @@ interface CanvasStore extends CanvasState {
   switchPage: (id: string) => void
   renamePage: (id: string, name: string) => void
   duplicatePage: (id: string) => void
+  
+  // 组操作
+  createGroup: (name?: string) => void
+  ungroupComponents: (groupId: string) => void
+  addToGroup: (groupId: string, componentIds: string[]) => void
+  removeFromGroup: (componentIds: string[]) => void
+  toggleGroupLock: (groupId: string) => void
+  toggleGroupVisibility: (groupId: string) => void
+  getComponentGroup: (componentId: string) => ComponentGroup | undefined
   // 组件操作
   addComponent: (component: CanvasComponent) => void
   updateComponent: (id: string, updates: Partial<CanvasComponent>) => void
@@ -62,6 +71,7 @@ const initialState: CanvasState = {
   pages: [createInitialPage()],
   currentPageId: '',
   components: [],
+  groups: [],
   selectedIds: [],
   clipboard: [],
   history: [[]],
@@ -167,6 +177,144 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     })
   },
 
+  // 组操作
+  createGroup: (name) => {
+    set((state) => {
+      const { selectedIds } = state
+      if (selectedIds.length < 2) return state
+
+      const groupId = `group-${Date.now()}`
+      const groupName = name || `组 ${state.groups.length + 1}`
+
+      const newGroup: ComponentGroup = {
+        id: groupId,
+        name: groupName,
+        componentIds: [...selectedIds],
+        locked: false,
+        visible: true,
+      }
+
+      // 更新组件的 groupId
+      const updatedComponents = state.components.map((c) =>
+        selectedIds.includes(c.id) ? { ...c, groupId } : c
+      )
+
+      return {
+        groups: [...state.groups, newGroup],
+        components: updatedComponents,
+      }
+    })
+    get().saveHistory()
+  },
+
+  ungroupComponents: (groupId) => {
+    set((state) => {
+      const group = state.groups.find((g) => g.id === groupId)
+      if (!group) return state
+
+      // 移除组件的 groupId
+      const updatedComponents = state.components.map((c) =>
+        group.componentIds.includes(c.id) ? { ...c, groupId: undefined } : c
+      )
+
+      return {
+        groups: state.groups.filter((g) => g.id !== groupId),
+        components: updatedComponents,
+      }
+    })
+    get().saveHistory()
+  },
+
+  addToGroup: (groupId, componentIds) => {
+    set((state) => {
+      const group = state.groups.find((g) => g.id === groupId)
+      if (!group) return state
+
+      const updatedGroup = {
+        ...group,
+        componentIds: [...new Set([...group.componentIds, ...componentIds])],
+      }
+
+      const updatedComponents = state.components.map((c) =>
+        componentIds.includes(c.id) ? { ...c, groupId } : c
+      )
+
+      return {
+        groups: state.groups.map((g) => (g.id === groupId ? updatedGroup : g)),
+        components: updatedComponents,
+      }
+    })
+  },
+
+  removeFromGroup: (componentIds) => {
+    set((state) => {
+      const updatedComponents = state.components.map((c) =>
+        componentIds.includes(c.id) ? { ...c, groupId: undefined } : c
+      )
+
+      const updatedGroups = state.groups
+        .map((g) => ({
+          ...g,
+          componentIds: g.componentIds.filter((id) => !componentIds.includes(id)),
+        }))
+        .filter((g) => g.componentIds.length >= 2) // 移除少于2个组件的组
+
+      return {
+        groups: updatedGroups,
+        components: updatedComponents,
+      }
+    })
+  },
+
+  toggleGroupLock: (groupId) => {
+    set((state) => {
+      const group = state.groups.find((g) => g.id === groupId)
+      if (!group) return state
+
+      const newLocked = !group.locked
+
+      // 更新组和组内所有组件的锁定状态
+      const updatedComponents = state.components.map((c) =>
+        group.componentIds.includes(c.id) ? { ...c, locked: newLocked } : c
+      )
+
+      return {
+        groups: state.groups.map((g) =>
+          g.id === groupId ? { ...g, locked: newLocked } : g
+        ),
+        components: updatedComponents,
+      }
+    })
+  },
+
+  toggleGroupVisibility: (groupId) => {
+    set((state) => {
+      const group = state.groups.find((g) => g.id === groupId)
+      if (!group) return state
+
+      const newVisible = !group.visible
+
+      // 更新组和组内所有组件的可见性
+      const updatedComponents = state.components.map((c) =>
+        group.componentIds.includes(c.id) ? { ...c, visible: newVisible } : c
+      )
+
+      return {
+        groups: state.groups.map((g) =>
+          g.id === groupId ? { ...g, visible: newVisible } : g
+        ),
+        components: updatedComponents,
+      }
+    })
+  },
+
+  getComponentGroup: (componentId) => {
+    const state = get()
+    const component = state.components.find((c) => c.id === componentId)
+    if (!component?.groupId) return undefined
+    return state.groups.find((g) => g.id === component.groupId)
+  },
+
   addComponent: (component) => {
     set((state) => {
       const newComponents = [...state.components, component]
@@ -202,6 +350,38 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
   selectComponent: (id, multi = false) => {
     set((state) => {
+      const component = state.components.find((c) => c.id === id)
+      if (!component) return state
+
+      // 如果组件属于某个组，选择整个组
+      if (component.groupId) {
+        const group = state.groups.find((g) => g.id === component.groupId)
+        if (group) {
+          if (multi) {
+            const allSelected = group.componentIds.every((cid) =>
+              state.selectedIds.includes(cid)
+            )
+            if (allSelected) {
+              // 取消选择整个组
+              return {
+                selectedIds: state.selectedIds.filter(
+                  (sid) => !group.componentIds.includes(sid)
+                ),
+              }
+            } else {
+              // 选择整个组
+              return {
+                selectedIds: [...new Set([...state.selectedIds, ...group.componentIds])],
+              }
+            }
+          } else {
+            // 选择整个组
+            return { selectedIds: [...group.componentIds] }
+          }
+        }
+      }
+
+      // 普通选择逻辑
       if (multi) {
         const isSelected = state.selectedIds.includes(id)
         return {

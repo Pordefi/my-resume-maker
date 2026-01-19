@@ -188,88 +188,256 @@ const ComponentLibrary = () => {
         <>
           {/* 模板库 */}
           <div className="space-y-3">
-            <button
-              onClick={() => addTemplate('resumeHeader')}
-              className="w-full p-3 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <Layout size={18} className="text-blue-600" />
-                <span className="text-sm font-medium">简历头部</span>
+            {/* 简历头部 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">简历头部</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('resumeHeader1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">居中式</span>
+                  <p className="text-gray-500 text-[10px]">经典居中布局</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('resumeHeader2')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">左对齐</span>
+                  <p className="text-gray-500 text-[10px]">带装饰线</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('resumeHeader3')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">带背景</span>
+                  <p className="text-gray-500 text-[10px]">深色背景</p>
+                </button>
               </div>
-              <p className="text-xs text-gray-500">姓名 + 职位 + 分隔线</p>
-            </button>
+            </div>
 
-            <button
-              onClick={() => addTemplate('contactInfo')}
-              className="w-full p-3 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <Phone size={18} className="text-green-600" />
-                <span className="text-sm font-medium">联系信息</span>
+            {/* 联系信息 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">联系信息</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('contactInfo1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">横向排列</span>
+                  <p className="text-gray-500 text-[10px]">图标+文本</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('contactInfo2')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">纵向列表</span>
+                  <p className="text-gray-500 text-[10px]">标签+内容</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('contactInfo3')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">卡片式</span>
+                  <p className="text-gray-500 text-[10px]">卡片布局</p>
+                </button>
               </div>
-              <p className="text-xs text-gray-500">电话、邮箱、地址等</p>
-            </button>
+            </div>
 
-            <button
-              onClick={() => addTemplate('skillTags')}
-              className="w-full p-3 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <Code size={18} className="text-purple-600" />
-                <span className="text-sm font-medium">技能标签</span>
+            {/* 技能标签 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">技能标签</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('skillTags1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">扁平风格</span>
+                  <p className="text-gray-500 text-[10px]">现代扁平设计</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('skillTags2')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">胶囊风格</span>
+                  <p className="text-gray-500 text-[10px]">圆角胶囊标签</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('skillTags3')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">进度条</span>
+                  <p className="text-gray-500 text-[10px]">带熟练度显示</p>
+                </button>
               </div>
-              <p className="text-xs text-gray-500">技能标签网格布局</p>
-            </button>
+            </div>
 
-            <button
-              onClick={() => addTemplate('workExperience')}
-              className="w-full p-3 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <Briefcase size={18} className="text-orange-600" />
-                <span className="text-sm font-medium">工作经历</span>
+            {/* 工作经历 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">工作经历</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('workExperience1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">卡片式</span>
+                  <p className="text-gray-500 text-[10px]">带边框卡片</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('workExperience2')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">时间轴</span>
+                  <p className="text-gray-500 text-[10px]">垂直时间线</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('workExperience3')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">简洁列表</span>
+                  <p className="text-gray-500 text-[10px]">极简风格</p>
+                </button>
               </div>
-              <p className="text-xs text-gray-500">工作经历卡片模板</p>
-            </button>
+            </div>
 
-            <button
-              onClick={() => addTemplate('education')}
-              className="w-full p-3 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <GraduationCap size={18} className="text-indigo-600" />
-                <span className="text-sm font-medium">教育背景</span>
+            {/* 教育背景 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">教育背景</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('education1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">带图标</span>
+                  <p className="text-gray-500 text-[10px]">图标+信息</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('education2')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">卡片式</span>
+                  <p className="text-gray-500 text-[10px]">背景卡片</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('education3')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">简洁列表</span>
+                  <p className="text-gray-500 text-[10px]">极简风格</p>
+                </button>
               </div>
-              <p className="text-xs text-gray-500">学校、专业、时间</p>
-            </button>
+            </div>
 
-            <button
-              onClick={() => addTemplate('project')}
-              className="w-full p-3 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <Award size={18} className="text-red-600" />
-                <span className="text-sm font-medium">项目经验</span>
+            {/* 项目经验 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">项目经验</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('project1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">标题背景</span>
+                  <p className="text-gray-500 text-[10px]">带链接</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('project2')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">卡片式</span>
+                  <p className="text-gray-500 text-[10px]">角色+时间</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('project3')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">时间轴</span>
+                  <p className="text-gray-500 text-[10px]">带链接</p>
+                </button>
               </div>
-              <p className="text-xs text-gray-500">项目卡片模板</p>
-            </button>
+            </div>
 
-            <button
-              onClick={() => addTemplate('twoColumn')}
-              className="w-full p-3 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <Layout size={18} className="text-gray-600" />
-                <span className="text-sm font-medium">双栏布局</span>
+            {/* 个人简介 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">个人简介</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('summary1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">标准样式</span>
+                  <p className="text-gray-500 text-[10px]">标题+内容</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('summary2')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">高亮样式</span>
+                  <p className="text-gray-500 text-[10px]">带背景色</p>
+                </button>
               </div>
-              <p className="text-xs text-gray-500">左右分栏背景</p>
-            </button>
+            </div>
+
+            {/* 荣誉奖项 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">荣誉奖项</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('awards1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">列表样式</span>
+                  <p className="text-gray-500 text-[10px]">图标+奖项</p>
+                </button>
+              </div>
+            </div>
+
+            {/* 语言能力 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">语言能力</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('languages1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">列表样式</span>
+                  <p className="text-gray-500 text-[10px]">语言+等级</p>
+                </button>
+              </div>
+            </div>
+
+            {/* 双栏布局 */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">双栏布局</h4>
+              <div className="space-y-2">
+                <button
+                  onClick={() => addTemplate('twoColumnLayout1')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">左侧深色</span>
+                  <p className="text-gray-500 text-[10px]">左栏深色背景</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('twoColumnLayout2')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">左侧浅色</span>
+                  <p className="text-gray-500 text-[10px]">左栏浅色背景</p>
+                </button>
+                <button
+                  onClick={() => addTemplate('twoColumnLayout3')}
+                  className="w-full p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-left text-xs"
+                >
+                  <span className="font-medium">右侧深色</span>
+                  <p className="text-gray-500 text-[10px]">右栏深色背景</p>
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* 提示 */}
           <div className="mt-6 p-3 bg-amber-50 rounded text-xs text-gray-600">
             <p className="font-medium mb-1">💡 提示:</p>
-            <p>点击模板快速添加预设组件，可自由编辑和调整</p>
+            <p>每个模板都有多种样式可选，点击即可添加到画布</p>
           </div>
         </>
       )}

@@ -7,12 +7,22 @@ import SelectionBox from './SelectionBox'
 
 const Canvas = () => {
   const stageRef = useRef<any>(null)
+  const [selectionRect, setSelectionRect] = useState<{
+    x: number
+    y: number
+    width: number
+    height: number
+  } | null>(null)
+  const [isSelecting, setIsSelecting] = useState(false)
+  const selectionStartRef = useRef<{ x: number; y: number } | null>(null)
+
   const {
     components,
     selectedIds,
     zoom,
     showGrid,
     clearSelection,
+    selectComponent,
     canvasSize,
     canvasWidth,
     canvasHeight,
@@ -117,6 +127,95 @@ const Canvas = () => {
     }
   }
 
+  // 鼠标按下开始圈选
+  const handleMouseDown = (e: any) => {
+    const clickedOnEmpty = e.target === e.target.getStage() || e.target.attrs.id === 'background-rect'
+    if (!clickedOnEmpty) return
+
+    const stage = e.target.getStage()
+    const pointerPosition = stage.getPointerPosition()
+    
+    if (pointerPosition) {
+      setIsSelecting(true)
+      selectionStartRef.current = {
+        x: pointerPosition.x / zoom,
+        y: pointerPosition.y / zoom,
+      }
+      setSelectionRect({
+        x: pointerPosition.x / zoom,
+        y: pointerPosition.y / zoom,
+        width: 0,
+        height: 0,
+      })
+    }
+  }
+
+  // 鼠标移动更新圈选框
+  const handleMouseMove = (e: any) => {
+    if (!isSelecting || !selectionStartRef.current) return
+
+    const stage = e.target.getStage()
+    const pointerPosition = stage.getPointerPosition()
+    
+    if (pointerPosition) {
+      const x = pointerPosition.x / zoom
+      const y = pointerPosition.y / zoom
+      const startX = selectionStartRef.current.x
+      const startY = selectionStartRef.current.y
+
+      setSelectionRect({
+        x: Math.min(startX, x),
+        y: Math.min(startY, y),
+        width: Math.abs(x - startX),
+        height: Math.abs(y - startY),
+      })
+    }
+  }
+
+  // 鼠标松开完成圈选
+  const handleMouseUp = () => {
+    if (!isSelecting || !selectionRect) {
+      setIsSelecting(false)
+      setSelectionRect(null)
+      selectionStartRef.current = null
+      return
+    }
+
+    // 查找在圈选框内的组件
+    const selectedComponents = components.filter((component) => {
+      const compX = component.x
+      const compY = component.y
+      const compRight = component.x + component.width
+      const compBottom = component.y + component.height
+
+      const rectX = selectionRect.x
+      const rectY = selectionRect.y
+      const rectRight = selectionRect.x + selectionRect.width
+      const rectBottom = selectionRect.y + selectionRect.height
+
+      // 检查组件是否与圈选框相交
+      return (
+        compX < rectRight &&
+        compRight > rectX &&
+        compY < rectBottom &&
+        compBottom > rectY
+      )
+    })
+
+    // 选中这些组件
+    if (selectedComponents.length > 0) {
+      const store = useCanvasStore.getState()
+      store.clearSelection()
+      selectedComponents.forEach((comp) => {
+        store.selectComponent(comp.id, true)
+      })
+    }
+
+    setIsSelecting(false)
+    setSelectionRect(null)
+    selectionStartRef.current = null
+  }
+
   return (
     <div className="flex-1 overflow-auto bg-gray-100 p-8">
       <div
@@ -134,6 +233,12 @@ const Canvas = () => {
           scaleY={zoom}
           onClick={handleStageClick}
           onTap={handleStageClick}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onTouchStart={handleMouseDown}
+          onTouchMove={handleMouseMove}
+          onTouchEnd={handleMouseUp}
         >
           <Layer>
             {/* 背景 */}
@@ -165,6 +270,21 @@ const Canvas = () => {
 
             {/* 选择框 */}
             {selectedIds.length > 0 && <SelectionBox />}
+
+            {/* 圈选框 */}
+            {isSelecting && selectionRect && (
+              <Rect
+                x={selectionRect.x}
+                y={selectionRect.y}
+                width={selectionRect.width}
+                height={selectionRect.height}
+                stroke="#0ea5e9"
+                strokeWidth={2}
+                dash={[5, 5]}
+                fill="rgba(14, 165, 233, 0.1)"
+                listening={false}
+              />
+            )}
           </Layer>
         </Stage>
       </div>
