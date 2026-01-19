@@ -19,7 +19,6 @@ import {
   AlignEndVertical,
   Maximize,
   FileText,
-  Users,
   Ruler,
   Type,
   Image,
@@ -27,6 +26,11 @@ import {
   Minus,
   Circle,
   X,
+  Palette,
+  ArrowUpToLine,
+  ArrowDownToLine,
+  Group,
+  Ungroup,
 } from 'lucide-react'
 import { useCanvasStore, setPendingComponent } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
@@ -40,10 +44,12 @@ import {
   createShapeComponent,
   createLineComponent,
 } from '@/utils/componentFactory'
+import { COLOR_THEMES } from '@/utils/colorThemes'
 
 const Toolbar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [showCanvasSettings, setShowCanvasSettings] = useState(false)
+  const [showColorThemePanel, setShowColorThemePanel] = useState(false)
   const [showExportDialog, setShowExportDialog] = useState(false)
   const [showWordExportDialog, setShowWordExportDialog] = useState(false)
   const [selectedExportPages, setSelectedExportPages] = useState<string[]>([])
@@ -69,6 +75,9 @@ const Toolbar = () => {
     setCanvasBackgroundColor,
     createGroup,
     ungroupComponents,
+    applyColorTheme,
+    bringToFront,
+    sendToBack,
   } = useCanvasStore()
 
   // 添加基础组件的函数 - 使用拖放模式
@@ -297,6 +306,15 @@ const Toolbar = () => {
         >
           <Maximize size={18} />
         </button>
+        <button
+          onClick={() => setShowColorThemePanel(!showColorThemePanel)}
+          className={`p-2 hover:bg-gray-100 rounded ${
+            showColorThemePanel ? 'bg-purple-50 text-purple-600' : ''
+          }`}
+          title="配色方案"
+        >
+          <Palette size={18} />
+        </button>
       </div>
 
       {/* 基础组件 */}
@@ -400,6 +418,53 @@ const Toolbar = () => {
         </div>
       )}
 
+      {/* 配色方案面板 */}
+      {showColorThemePanel && (
+        <div className="absolute top-12 left-20 bg-white border rounded-lg shadow-lg p-4 z-50 w-80 max-h-[600px] overflow-y-auto">
+          <h3 className="text-sm font-semibold mb-2">配色方案</h3>
+          <p className="text-xs text-gray-500 mb-4">一键切换简历配色风格</p>
+          
+          <div className="grid grid-cols-2 gap-3">
+            {COLOR_THEMES.map((theme) => (
+              <button
+                key={theme.id}
+                onClick={() => {
+                  applyColorTheme(theme)
+                  setShowColorThemePanel(false)
+                }}
+                className="border rounded-lg p-3 hover:border-blue-500 hover:shadow-md transition-all text-left"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex gap-1">
+                    <div
+                      className="w-4 h-4 rounded"
+                      style={{ backgroundColor: theme.colors.primary }}
+                    />
+                    <div
+                      className="w-4 h-4 rounded"
+                      style={{ backgroundColor: theme.colors.secondary }}
+                    />
+                    <div
+                      className="w-4 h-4 rounded"
+                      style={{ backgroundColor: theme.colors.text.heading }}
+                    />
+                  </div>
+                </div>
+                <div className="text-sm font-medium mb-1">{theme.name}</div>
+                <div className="text-xs text-gray-500">{theme.description}</div>
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setShowColorThemePanel(false)}
+            className="mt-4 w-full px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm"
+          >
+            关闭
+          </button>
+        </div>
+      )}
+
       {/* 历史操作 */}
       <div className="flex gap-1 border-r pr-2">
         <button
@@ -455,6 +520,78 @@ const Toolbar = () => {
           删除
         </button>
       </div>
+
+      {/* 层级操作 */}
+      {selectedIds.length > 0 && (
+        <div className="flex gap-1 border-r pr-2">
+          <button
+            onClick={() => {
+              selectedIds.forEach((id) => bringToFront(id))
+            }}
+            className="px-3 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium flex items-center gap-1 border border-indigo-200"
+            title="置于顶层"
+          >
+            <ArrowUpToLine size={16} />
+            置顶
+          </button>
+          <button
+            onClick={() => {
+              selectedIds.forEach((id) => sendToBack(id))
+            }}
+            className="px-3 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded text-sm font-medium flex items-center gap-1 border border-indigo-200"
+            title="置于底层"
+          >
+            <ArrowDownToLine size={16} />
+            置底
+          </button>
+        </div>
+      )}
+
+      {/* 分组操作 */}
+      {selectedIds.length >= 2 && (
+        <div className="flex gap-1 border-r pr-2">
+          <button
+            onClick={() => {
+              const { components, selectedIds, groups } = useCanvasStore.getState()
+              const selectedComponents = components.filter((c) => selectedIds.includes(c.id))
+              const groupIds = [...new Set(selectedComponents.map((c) => c.groupId).filter(Boolean))]
+              const currentGroup = groupIds.length === 1 ? groups.find((g) => g.id === groupIds[0]) : undefined
+              
+              if (currentGroup) {
+                ungroupComponents(currentGroup.id)
+              } else {
+                createGroup()
+              }
+            }}
+            className="px-3 py-2 bg-teal-50 text-teal-600 hover:bg-teal-100 rounded text-sm font-medium flex items-center gap-1 border border-teal-200"
+            title={(() => {
+              const { components, selectedIds, groups } = useCanvasStore.getState()
+              const selectedComponents = components.filter((c) => selectedIds.includes(c.id))
+              const groupIds = [...new Set(selectedComponents.map((c) => c.groupId).filter(Boolean))]
+              const currentGroup = groupIds.length === 1 ? groups.find((g) => g.id === groupIds[0]) : undefined
+              return currentGroup ? '解除分组' : '创建分组'
+            })()}
+          >
+            {(() => {
+              const { components, selectedIds, groups } = useCanvasStore.getState()
+              const selectedComponents = components.filter((c) => selectedIds.includes(c.id))
+              const groupIds = [...new Set(selectedComponents.map((c) => c.groupId).filter(Boolean))]
+              const currentGroup = groupIds.length === 1 ? groups.find((g) => g.id === groupIds[0]) : undefined
+              return currentGroup ? (
+                <>
+                  <Ungroup size={16} />
+                  解除分组
+                </>
+              ) : (
+                <>
+                  <Group size={16} />
+                  分组
+                </>
+              )
+            })()}
+          </button>
+        </div>
+      )}
 
       {/* 对齐与分散 */}
       {selectedIds.length >= 2 && (
@@ -520,30 +657,6 @@ const Toolbar = () => {
             title="垂直分散"
           >
             <AlignVerticalJustifyCenter size={18} className="rotate-90" />
-          </button>
-        </div>
-      )}
-
-      {/* 组操作 */}
-      {selectedIds.length >= 2 && (
-        <div className="flex gap-1 border-r pr-2">
-          <button
-            onClick={() => {
-              const { components, selectedIds, groups } = useCanvasStore.getState()
-              const selectedComponents = components.filter((c) => selectedIds.includes(c.id))
-              const groupIds = [...new Set(selectedComponents.map((c) => c.groupId).filter(Boolean))]
-              const currentGroup = groupIds.length === 1 ? groups.find((g) => g.id === groupIds[0]) : undefined
-              
-              if (currentGroup) {
-                ungroupComponents(currentGroup.id)
-              } else {
-                createGroup()
-              }
-            }}
-            className="p-2 hover:bg-gray-100 rounded"
-            title="创建组/解散组"
-          >
-            <Users size={18} />
           </button>
         </div>
       )}

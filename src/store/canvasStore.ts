@@ -1,6 +1,7 @@
 import { create } from 'zustand'
-import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS, Page, ComponentGroup, GuideLine, GUIDE_LINE_LAYOUTS } from '@/types/canvas'
+import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS, Page, ComponentGroup, GuideLine, GUIDE_LINE_LAYOUTS, ComponentType, TextComponent, ShapeComponent, LineComponent } from '@/types/canvas'
 import { ExportData } from '@/utils/storage'
+import { ColorTheme, applyThemeToColor } from '@/utils/colorThemes'
 
 interface CanvasStore extends CanvasState {
   // 页面操作
@@ -63,6 +64,9 @@ interface CanvasStore extends CanvasState {
   // 自定义组件操作
   saveAsCustomComponent: (name: string) => void
   deleteCustomComponent: (id: string) => void
+  
+  // 配色方案
+  applyColorTheme: (theme: ColorTheme) => void
   
   // 批量操作
   alignComponents: (type: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') => void
@@ -840,6 +844,57 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     set((state) => ({
       customComponents: state.customComponents.filter((c) => c.id !== id),
     }))
+  },
+
+  applyColorTheme: (theme) => {
+    set((state) => {
+      // 应用配色到当前页面的所有组件
+      const updatedComponents = state.components.map((component) => {
+        // 处理文本组件
+        if (component.type === ComponentType.TEXT) {
+          const textComp = component as TextComponent
+          return {
+            ...textComp,
+            color: applyThemeToColor(textComp.color, theme),
+          } as CanvasComponent
+        }
+        
+        // 处理形状组件
+        if (component.type === ComponentType.SHAPE) {
+          const shapeComp = component as ShapeComponent
+          return {
+            ...shapeComp,
+            fill: applyThemeToColor(shapeComp.fill, theme),
+            stroke: applyThemeToColor(shapeComp.stroke, theme),
+            textColor: shapeComp.textColor ? applyThemeToColor(shapeComp.textColor, theme) : shapeComp.textColor,
+          } as CanvasComponent
+        }
+        
+        // 处理线条组件
+        if (component.type === ComponentType.LINE) {
+          const lineComp = component as LineComponent
+          return {
+            ...lineComp,
+            stroke: applyThemeToColor(lineComp.stroke, theme),
+          } as CanvasComponent
+        }
+        
+        return component
+      })
+      
+      // 同时更新pages数组中当前页面的组件
+      const updatedPages = state.pages.map((p) =>
+        p.id === state.currentPageId
+          ? { ...p, components: updatedComponents }
+          : p
+      )
+      
+      return {
+        components: updatedComponents,
+        pages: updatedPages,
+      }
+    })
+    get().saveHistory()
   },
 }))
 
