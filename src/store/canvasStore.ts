@@ -736,23 +736,39 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   },
 
   loadFullState: (data) => {
+    // 验证数据
+    if (!data.pages || data.pages.length === 0) {
+      console.error('导入失败：没有页面数据')
+      return
+    }
+
+    // 确保currentPageId有效
+    let currentPageId = data.currentPageId
+    const currentPage = data.pages.find((p) => p.id === currentPageId)
+    
+    if (!currentPage) {
+      // 如果currentPageId无效，使用第一个页面
+      currentPageId = data.pages[0].id
+    }
+
+    const targetPage = data.pages.find((p) => p.id === currentPageId)!
+
     set({
       pages: data.pages,
-      currentPageId: data.currentPageId,
-      components: data.pages.find((p) => p.id === data.currentPageId)?.components || [],
-      groups: data.groups,
-      guides: data.guides,
-      showGuides: data.showGuides,
-      canvasSize: data.canvasSize as CanvasSize,
-      canvasWidth: data.canvasWidth,
-      canvasHeight: data.canvasHeight,
-      canvasBackgroundColor: data.pages.find((p) => p.id === data.currentPageId)?.backgroundColor || '#ffffff',
+      currentPageId: currentPageId,
+      components: [...targetPage.components],
+      groups: data.groups || [],
+      guides: data.guides || [],
+      showGuides: data.showGuides ?? true,
+      canvasSize: (data.canvasSize as CanvasSize) || CanvasSize.A4,
+      canvasWidth: data.canvasWidth || CANVAS_CONFIGS[CanvasSize.A4].width,
+      canvasHeight: data.canvasHeight || CANVAS_CONFIGS[CanvasSize.A4].height,
+      canvasBackgroundColor: targetPage.backgroundColor || '#ffffff',
       selectedIds: [],
       clipboard: [],
-      history: [[]],
+      history: [[...targetPage.components]],
       historyIndex: 0,
     })
-    get().saveHistory()
   },
 
   // 辅助线操作

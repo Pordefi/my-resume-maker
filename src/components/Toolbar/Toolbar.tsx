@@ -28,6 +28,7 @@ import {
 } from 'lucide-react'
 import { useCanvasStore, setPendingComponent } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
+import { exportToWord, exportMultiPageToWord } from '@/utils/exportWord'
 import { importFromJSON, exportFullStateToJSON, importFullStateFromJSON } from '@/utils/storage'
 import { useRef, useState } from 'react'
 import { CanvasSize, Page, ShapeType } from '@/types/canvas'
@@ -42,7 +43,9 @@ const Toolbar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [showCanvasSettings, setShowCanvasSettings] = useState(false)
   const [showExportDialog, setShowExportDialog] = useState(false)
+  const [showWordExportDialog, setShowWordExportDialog] = useState(false)
   const [selectedExportPages, setSelectedExportPages] = useState<string[]>([])
+  const [selectedWordExportPages, setSelectedWordExportPages] = useState<string[]>([])
   const {
     undo,
     redo,
@@ -199,6 +202,38 @@ const Toolbar = () => {
       } catch (error) {
         alert('导出图片失败')
       }
+    }
+  }
+
+  const handleExportWord = async () => {
+    const { pages } = useCanvasStore.getState()
+    
+    if (pages.length === 1) {
+      // 单页面直接导出
+      try {
+        await exportToWord(pages[0], 'resume.docx')
+      } catch (error) {
+        alert('导出Word失败: ' + (error as Error).message)
+      }
+    } else {
+      // 多页面显示选择对话框
+      setShowWordExportDialog(true)
+    }
+  }
+
+  const handleMultiPageWordExport = async (selectedPageIds: string[]) => {
+    if (selectedPageIds.length === 0) {
+      alert('请至少选择一个页面')
+      return
+    }
+
+    try {
+      const { pages } = useCanvasStore.getState()
+      await exportMultiPageToWord(pages, selectedPageIds, 'resume.docx')
+      setShowWordExportDialog(false)
+      setSelectedWordExportPages([])
+    } catch (error) {
+      alert('导出Word失败: ' + (error as Error).message)
     }
   }
 
@@ -571,6 +606,14 @@ const Toolbar = () => {
           PDF
         </button>
         <button
+          onClick={handleExportWord}
+          className="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm"
+          title="导出Word"
+        >
+          <Download size={18} className="inline mr-1" />
+          Word
+        </button>
+        <button
           onClick={handleExportImage}
           className="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
           title="导出图片"
@@ -652,6 +695,75 @@ const Toolbar = () => {
                 disabled={selectedExportPages.length === 0}
               >
                 导出 ({selectedExportPages.length})
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Word导出对话框 */}
+      {showWordExportDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-96 max-h-[80vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-4">选择要导出的页面</h3>
+            
+            <div className="space-y-2 mb-4">
+              {useCanvasStore.getState().pages.map((page) => (
+                <label
+                  key={page.id}
+                  className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedWordExportPages.includes(page.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedWordExportPages([...selectedWordExportPages, page.id])
+                      } else {
+                        setSelectedWordExportPages(selectedWordExportPages.filter((id) => id !== page.id))
+                      }
+                    }}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-sm">{page.name}</span>
+                </label>
+              ))}
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  const allPageIds = useCanvasStore.getState().pages.map((p) => p.id)
+                  setSelectedWordExportPages(allPageIds)
+                }}
+                className="flex-1 px-3 py-2 border rounded text-sm hover:bg-gray-50"
+              >
+                全选
+              </button>
+              <button
+                onClick={() => setSelectedWordExportPages([])}
+                className="flex-1 px-3 py-2 border rounded text-sm hover:bg-gray-50"
+              >
+                清空
+              </button>
+            </div>
+
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={() => {
+                  setShowWordExportDialog(false)
+                  setSelectedWordExportPages([])
+                }}
+                className="flex-1 px-4 py-2 border rounded hover:bg-gray-50"
+              >
+                取消
+              </button>
+              <button
+                onClick={() => handleMultiPageWordExport(selectedWordExportPages)}
+                className="flex-1 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                disabled={selectedWordExportPages.length === 0}
+              >
+                导出 ({selectedWordExportPages.length})
               </button>
             </div>
           </div>
