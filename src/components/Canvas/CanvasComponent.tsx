@@ -107,28 +107,35 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
 
     // 对于文本组件，根据新宽度重新计算高度
     if (component.type === ComponentType.TEXT) {
-      // 估算每行能容纳的字符数（中文按1个字符，英文按0.6个字符计算）
-      const avgCharWidth = component.fontSize * 0.8 // 平均字符宽度
-      const charsPerLine = Math.floor(newWidth / avgCharWidth)
+      // 使用更精确的计算方式
+      // 估算每行平均字符数（考虑中英文混合）
+      const avgCharWidth = component.fontSize * 0.7 // 调整为0.7以获得更准确的估算
+      const charsPerLine = Math.max(1, Math.floor(newWidth / avgCharWidth))
       
-      if (charsPerLine > 0) {
-        // 计算文本总字符数（中文算1个，英文算0.6个）
-        let totalChars = 0
-        for (const char of component.text) {
-          if (/[\u4e00-\u9fa5]/.test(char)) {
-            totalChars += 1
-          } else if (char === '\n') {
-            totalChars += charsPerLine // 换行符强制换行
-          } else {
-            totalChars += 0.6
+      // 计算文本总字符数（考虑换行符）
+      const lines = component.text.split('\n')
+      let totalLines = 0
+      
+      for (const line of lines) {
+        if (line.length === 0) {
+          totalLines += 1 // 空行也占一行
+        } else {
+          // 计算这一行的字符宽度
+          let lineWidth = 0
+          for (const char of line) {
+            if (/[\u4e00-\u9fa5]/.test(char)) {
+              lineWidth += 1 // 中文字符
+            } else {
+              lineWidth += 0.6 // 英文字符
+            }
           }
+          // 计算这一行需要多少行来显示
+          totalLines += Math.ceil(lineWidth / charsPerLine)
         }
-        
-        // 计算实际需要的行数
-        const actualLines = Math.ceil(totalChars / charsPerLine)
-        // 根据行数计算高度
-        newHeight = Math.max(actualLines * component.fontSize * component.lineHeight + 20, component.fontSize * 2)
       }
+      
+      // 根据总行数计算高度，添加适当的padding
+      newHeight = Math.max(totalLines * component.fontSize * component.lineHeight + 20, component.fontSize * 2)
     }
 
     // 对于线条组件，需要同时更新points
