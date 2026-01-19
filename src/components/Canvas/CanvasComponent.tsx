@@ -238,7 +238,7 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
           rotateEnabled={true}
           keepRatio={false}
           enabledAnchors={['top-left', 'top-center', 'top-right', 'middle-right', 'middle-left', 'bottom-left', 'bottom-center', 'bottom-right']}
-          boundBoxFunc={(oldBox, newBox) => {
+          boundBoxFunc={(_oldBox, newBox) => {
             // 确保最小尺寸
             if (newBox.width < 5) {
               newBox.width = 5
