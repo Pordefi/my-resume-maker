@@ -493,6 +493,214 @@ const ComponentLibrary = () => {
                 </button>
               </div>
             </div>
+
+            {/* 装饰组件 - 线条类 */}
+            <div>
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">装饰 - 线条</h4>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => addTemplate('accentLineVertical')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="4" width="4" height="16" fill="#3b82f6" rx="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">彩色竖线</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('accentLineHorizontal')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="10" width="24" height="3" fill="#3b82f6" rx="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">彩色横线</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('doubleLine')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="9" width="24" height="2" fill="#3b82f6" rx="0.5"/>
+                    <rect x="8" y="13" width="24" height="2" fill="#3b82f6" rx="0.5"/>
+                  </svg>
+                  <div className="text-xs font-medium">双线</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('dashedLine')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <line x1="8" y1="12" x2="32" y2="12" stroke="#6b7280" strokeWidth="2" strokeDasharray="4 4"/>
+                  </svg>
+                  <div className="text-xs font-medium">虚线</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('gradientLineVertical')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="12" y="4" width="3" height="16" fill="#3b82f6" rx="1"/>
+                    <rect x="16" y="4" width="3" height="16" fill="#60a5fa" rx="1"/>
+                    <rect x="20" y="4" width="3" height="16" fill="#93c5fd" rx="1"/>
+                    <rect x="24" y="4" width="3" height="16" fill="#dbeafe" rx="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">渐变线</div>
+                </button>
+              </div>
+            </div>
+
+            {/* 装饰组件 - 形状类 */}
+            <div>
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">装饰 - 形状</h4>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => addTemplate('roundedRectDecor')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="6" width="24" height="12" fill="#eff6ff" stroke="#3b82f6" strokeWidth="1.5" rx="3"/>
+                  </svg>
+                  <div className="text-xs font-medium">圆角矩形</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('circleDecor')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="20" cy="12" r="5" fill="#3b82f6"/>
+                  </svg>
+                  <div className="text-xs font-medium">圆形点</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('triangleDecor')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <polygon points="20,6 26,18 14,18" fill="#3b82f6"/>
+                  </svg>
+                  <div className="text-xs font-medium">三角形</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('semiCircleLeft')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="12" cy="12" r="6" fill="#dbeafe" stroke="#3b82f6" strokeWidth="1.5"/>
+                  </svg>
+                  <div className="text-xs font-medium">半圆</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('waveLine')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="8" cy="12" r="2" fill="#3b82f6"/>
+                    <circle cx="14" cy="9" r="2" fill="#3b82f6"/>
+                    <circle cx="20" cy="12" r="2" fill="#3b82f6"/>
+                    <circle cx="26" cy="9" r="2" fill="#3b82f6"/>
+                    <circle cx="32" cy="12" r="2" fill="#3b82f6"/>
+                  </svg>
+                  <div className="text-xs font-medium">波浪线</div>
+                </button>
+              </div>
+            </div>
+
+            {/* 装饰组件 - 图案类 */}
+            <div>
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">装饰 - 图案</h4>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => addTemplate('gridPattern')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="4" width="24" height="16" fill="#f9fafb" stroke="#e5e7eb" strokeWidth="1"/>
+                    <line x1="16" y1="4" x2="16" y2="20" stroke="#e5e7eb" strokeWidth="1"/>
+                    <line x1="24" y1="4" x2="24" y2="20" stroke="#e5e7eb" strokeWidth="1"/>
+                    <line x1="8" y1="12" x2="32" y2="12" stroke="#e5e7eb" strokeWidth="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">网格</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('dotPattern')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="12" cy="8" r="1.5" fill="#d1d5db"/>
+                    <circle cx="20" cy="8" r="1.5" fill="#d1d5db"/>
+                    <circle cx="28" cy="8" r="1.5" fill="#d1d5db"/>
+                    <circle cx="12" cy="12" r="1.5" fill="#d1d5db"/>
+                    <circle cx="20" cy="12" r="1.5" fill="#d1d5db"/>
+                    <circle cx="28" cy="12" r="1.5" fill="#d1d5db"/>
+                    <circle cx="12" cy="16" r="1.5" fill="#d1d5db"/>
+                    <circle cx="20" cy="16" r="1.5" fill="#d1d5db"/>
+                    <circle cx="28" cy="16" r="1.5" fill="#d1d5db"/>
+                  </svg>
+                  <div className="text-xs font-medium">点阵</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('diagonalLines')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="4" width="24" height="16" fill="#f9fafb"/>
+                    <line x1="8" y1="4" x2="20" y2="20" stroke="#e5e7eb" strokeWidth="1"/>
+                    <line x1="16" y1="4" x2="28" y2="20" stroke="#e5e7eb" strokeWidth="1"/>
+                    <line x1="24" y1="4" x2="32" y2="16" stroke="#e5e7eb" strokeWidth="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">对角线</div>
+                </button>
+              </div>
+            </div>
+
+            {/* 装饰组件 - 组合类 */}
+            <div>
+              <h4 className="text-xs font-semibold text-gray-700 mb-2">装饰 - 组合</h4>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={() => addTemplate('cornerDecorTopLeft')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <line x1="8" y1="6" x2="16" y2="6" stroke="#3b82f6" strokeWidth="2"/>
+                    <line x1="8" y1="6" x2="8" y2="14" stroke="#3b82f6" strokeWidth="2"/>
+                  </svg>
+                  <div className="text-xs font-medium">左上角标</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('cornerDecorBottomRight')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <line x1="24" y1="18" x2="32" y2="18" stroke="#3b82f6" strokeWidth="2"/>
+                    <line x1="32" y1="10" x2="32" y2="18" stroke="#3b82f6" strokeWidth="2"/>
+                  </svg>
+                  <div className="text-xs font-medium">右下角标</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('titleAccentBar')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <rect x="8" y="8" width="2" height="8" fill="#3b82f6" rx="1"/>
+                    <rect x="12" y="10" width="16" height="4" fill="#1f2937" rx="1"/>
+                  </svg>
+                  <div className="text-xs font-medium">标题彩条</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('dividerWithDots')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <circle cx="8" cy="12" r="2" fill="#3b82f6"/>
+                    <line x1="10" y1="12" x2="30" y2="12" stroke="#d1d5db" strokeWidth="1"/>
+                    <circle cx="32" cy="12" r="2" fill="#3b82f6"/>
+                  </svg>
+                  <div className="text-xs font-medium">带点分隔线</div>
+                </button>
+              </div>
+            </div>
           </div>
         </>
       ) : (

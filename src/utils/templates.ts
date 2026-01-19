@@ -1250,6 +1250,286 @@ export const createFooter3 = (): CanvasComponent[] => {
   return components
 }
 
+// ==================== 装饰组件 ====================
+
+// 彩色竖线 - 左侧强调线
+export const createAccentLineVertical = (): CanvasComponent[] => {
+  const line = createLineComponent(30, 100, false)
+  line.width = 4
+  line.height = 150
+  line.stroke = '#3b82f6'
+  line.strokeWidth = 4
+  return [line]
+}
+
+// 彩色横线 - 顶部装饰线
+export const createAccentLineHorizontal = (): CanvasComponent[] => {
+  const line = createLineComponent(50, 50, true)
+  line.width = 200
+  line.stroke = '#3b82f6'
+  line.strokeWidth = 3
+  return [line]
+}
+
+// 双线装饰 - 平行线
+export const createDoubleLine = (): CanvasComponent[] => {
+  const line1 = createLineComponent(50, 100, true)
+  line1.width = 150
+  line1.stroke = '#3b82f6'
+  line1.strokeWidth = 2
+  
+  const line2 = createLineComponent(50, 106, true)
+  line2.width = 150
+  line2.stroke = '#3b82f6'
+  line2.strokeWidth = 2
+  
+  return [line1, line2]
+}
+
+// 虚线装饰
+export const createDashedLine = (): CanvasComponent[] => {
+  const line = createLineComponent(50, 100, true)
+  line.width = 200
+  line.stroke = '#6b7280'
+  line.strokeWidth = 2
+  line.dash = [5, 5]
+  return [line]
+}
+
+// 渐变竖线（使用多个不同透明度的线模拟）
+export const createGradientLineVertical = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const colors = ['#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe']
+  
+  colors.forEach((color, index) => {
+    const line = createLineComponent(50 + index * 3, 100, false)
+    line.width = 3
+    line.height = 120
+    line.stroke = color
+    line.strokeWidth = 3
+    components.push(line)
+  })
+  
+  return components
+}
+
+// 圆角矩形背景装饰
+export const createRoundedRectDecor = (): CanvasComponent[] => {
+  const rect = createShapeComponent(50, 100, ShapeType.RECTANGLE)
+  rect.width = 200
+  rect.height = 80
+  rect.fill = '#eff6ff'
+  rect.stroke = '#3b82f6'
+  rect.strokeWidth = 2
+  rect.cornerRadius = 12
+  return [rect]
+}
+
+// 圆形装饰点
+export const createCircleDecor = (): CanvasComponent[] => {
+  const circle = createShapeComponent(50, 100, ShapeType.CIRCLE)
+  circle.width = 12
+  circle.height = 12
+  circle.fill = '#3b82f6'
+  circle.stroke = 'transparent'
+  return [circle]
+}
+
+// 三角形标记
+export const createTriangleDecor = (): CanvasComponent[] => {
+  const triangle = createShapeComponent(50, 100, ShapeType.TRIANGLE)
+  triangle.width = 16
+  triangle.height = 16
+  triangle.fill = '#3b82f6'
+  triangle.stroke = 'transparent'
+  return [triangle]
+}
+
+// 半圆装饰（左侧）
+export const createSemiCircleLeft = (): CanvasComponent[] => {
+  const circle = createShapeComponent(30, 100, ShapeType.CIRCLE)
+  circle.width = 40
+  circle.height = 40
+  circle.fill = '#dbeafe'
+  circle.stroke = '#3b82f6'
+  circle.strokeWidth = 2
+  return [circle]
+}
+
+// 波浪线装饰（使用多个小圆模拟）
+export const createWaveLine = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  for (let i = 0; i < 8; i++) {
+    const circle = createShapeComponent(50 + i * 25, 100 + (i % 2 === 0 ? 0 : 10), ShapeType.CIRCLE)
+    circle.width = 6
+    circle.height = 6
+    circle.fill = '#3b82f6'
+    circle.stroke = 'transparent'
+    components.push(circle)
+  }
+  
+  return components
+}
+
+// 网格背景装饰
+export const createGridPattern = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const rect = createShapeComponent(50, 100, ShapeType.RECTANGLE)
+  rect.width = 200
+  rect.height = 150
+  rect.fill = '#f9fafb'
+  rect.stroke = '#e5e7eb'
+  rect.strokeWidth = 1
+  components.push(rect)
+  
+  // 添加网格线
+  for (let i = 1; i < 4; i++) {
+    const vLine = createLineComponent(50 + i * 50, 100, false)
+    vLine.height = 150
+    vLine.stroke = '#e5e7eb'
+    vLine.strokeWidth = 1
+    components.push(vLine)
+  }
+  
+  for (let i = 1; i < 3; i++) {
+    const hLine = createLineComponent(50, 100 + i * 50, true)
+    hLine.width = 200
+    hLine.stroke = '#e5e7eb'
+    hLine.strokeWidth = 1
+    components.push(hLine)
+  }
+  
+  return components
+}
+
+// 点阵图案
+export const createDotPattern = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  for (let row = 0; row < 5; row++) {
+    for (let col = 0; col < 8; col++) {
+      const dot = createShapeComponent(50 + col * 25, 100 + row * 25, ShapeType.CIRCLE)
+      dot.width = 4
+      dot.height = 4
+      dot.fill = '#d1d5db'
+      dot.stroke = 'transparent'
+      components.push(dot)
+    }
+  }
+  
+  return components
+}
+
+// 对角线纹理
+export const createDiagonalLines = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const rect = createShapeComponent(50, 100, ShapeType.RECTANGLE)
+  rect.width = 200
+  rect.height = 150
+  rect.fill = '#f9fafb'
+  rect.stroke = 'transparent'
+  components.push(rect)
+  
+  // 添加对角线
+  for (let i = 0; i < 6; i++) {
+    const line = createLineComponent(50 + i * 40, 100, false)
+    line.width = 2
+    line.height = 150
+    line.stroke = '#e5e7eb'
+    line.strokeWidth = 1
+    line.rotation = 45
+    components.push(line)
+  }
+  
+  return components
+}
+
+// 角标装饰 - 左上角
+export const createCornerDecorTopLeft = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const hLine = createLineComponent(30, 30, true)
+  hLine.width = 40
+  hLine.stroke = '#3b82f6'
+  hLine.strokeWidth = 3
+  components.push(hLine)
+  
+  const vLine = createLineComponent(30, 30, false)
+  vLine.height = 40
+  vLine.stroke = '#3b82f6'
+  vLine.strokeWidth = 3
+  components.push(vLine)
+  
+  return components
+}
+
+// 角标装饰 - 右下角
+export const createCornerDecorBottomRight = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const hLine = createLineComponent(710, 1130, true)
+  hLine.width = 40
+  hLine.stroke = '#3b82f6'
+  hLine.strokeWidth = 3
+  components.push(hLine)
+  
+  const vLine = createLineComponent(750, 1090, false)
+  vLine.height = 40
+  vLine.stroke = '#3b82f6'
+  vLine.strokeWidth = 3
+  components.push(vLine)
+  
+  return components
+}
+
+// 标题装饰条 - 左侧彩条
+export const createTitleAccentBar = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const bar = createShapeComponent(50, 100, ShapeType.RECTANGLE)
+  bar.width = 5
+  bar.height = 30
+  bar.fill = '#3b82f6'
+  bar.stroke = 'transparent'
+  components.push(bar)
+  
+  const title = createTextComponent(65, 100, '章节标题')
+  title.fontSize = 18
+  title.fontWeight = 'bold'
+  title.color = '#1f2937'
+  components.push(title)
+  
+  return components
+}
+
+// 分隔装饰 - 带圆点的线
+export const createDividerWithDots = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const line = createLineComponent(50, 100, true)
+  line.width = 694
+  line.stroke = '#d1d5db'
+  line.strokeWidth = 1
+  components.push(line)
+  
+  const leftDot = createShapeComponent(45, 97, ShapeType.CIRCLE)
+  leftDot.width = 6
+  leftDot.height = 6
+  leftDot.fill = '#3b82f6'
+  leftDot.stroke = 'transparent'
+  components.push(leftDot)
+  
+  const rightDot = createShapeComponent(744, 97, ShapeType.CIRCLE)
+  rightDot.width = 6
+  rightDot.height = 6
+  rightDot.fill = '#3b82f6'
+  rightDot.stroke = 'transparent'
+  components.push(rightDot)
+  
+  return components
+}
+
 
 // ==================== 导出所有模板 ====================
 
@@ -1317,6 +1597,31 @@ export const TEMPLATES = {
   footer1: { name: '页脚 - 简洁', create: createFooter1 },
   footer2: { name: '页脚 - 带联系方式', create: createFooter2 },
   footer3: { name: '页脚 - 极简', create: createFooter3 },
+  
+  // 装饰组件 - 线条类
+  accentLineVertical: { name: '装饰 - 彩色竖线', create: createAccentLineVertical },
+  accentLineHorizontal: { name: '装饰 - 彩色横线', create: createAccentLineHorizontal },
+  doubleLine: { name: '装饰 - 双线', create: createDoubleLine },
+  dashedLine: { name: '装饰 - 虚线', create: createDashedLine },
+  gradientLineVertical: { name: '装饰 - 渐变竖线', create: createGradientLineVertical },
+  
+  // 装饰组件 - 形状类
+  roundedRectDecor: { name: '装饰 - 圆角矩形', create: createRoundedRectDecor },
+  circleDecor: { name: '装饰 - 圆形点', create: createCircleDecor },
+  triangleDecor: { name: '装饰 - 三角形', create: createTriangleDecor },
+  semiCircleLeft: { name: '装饰 - 半圆', create: createSemiCircleLeft },
+  waveLine: { name: '装饰 - 波浪线', create: createWaveLine },
+  
+  // 装饰组件 - 图案类
+  gridPattern: { name: '装饰 - 网格背景', create: createGridPattern },
+  dotPattern: { name: '装饰 - 点阵图案', create: createDotPattern },
+  diagonalLines: { name: '装饰 - 对角线纹理', create: createDiagonalLines },
+  
+  // 装饰组件 - 组合类
+  cornerDecorTopLeft: { name: '装饰 - 左上角标', create: createCornerDecorTopLeft },
+  cornerDecorBottomRight: { name: '装饰 - 右下角标', create: createCornerDecorBottomRight },
+  titleAccentBar: { name: '装饰 - 标题彩条', create: createTitleAccentBar },
+  dividerWithDots: { name: '装饰 - 带点分隔线', create: createDividerWithDots },
 }
 
 
