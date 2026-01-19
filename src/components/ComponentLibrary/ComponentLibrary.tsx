@@ -73,10 +73,19 @@ const ComponentLibrary = () => {
       const pages = template.create()
       const store = useCanvasStore.getState()
       
-      // 清空画布
+      // 1. 先保存当前页面状态
+      store.switchPage(store.currentPageId)
+      
+      // 2. 删除所有页面（除了第一页）
+      const allPages = [...store.pages]
+      for (let i = allPages.length - 1; i > 0; i--) {
+        store.deletePage(allPages[i].id)
+      }
+      
+      // 3. 清空第一页
       clearCanvas()
       
-      // 添加所有页面
+      // 4. 添加所有页面的内容
       pages.forEach((pageData, index) => {
         if (index === 0) {
           // 第一页：直接添加到当前页面
@@ -87,6 +96,9 @@ const ComponentLibrary = () => {
           pageData.components.forEach((comp) => addComponent(comp))
         }
       })
+      
+      // 5. 切换回第一页
+      store.switchPage(store.pages[0].id)
     }
   }
 

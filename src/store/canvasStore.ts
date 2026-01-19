@@ -717,10 +717,20 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   },
 
   clearCanvas: () => {
-    set({
-      components: [],
-      selectedIds: [],
-      clipboard: [],
+    set((state) => {
+      // 保存当前页面的组件到pages数组
+      const updatedPages = state.pages.map((p) =>
+        p.id === state.currentPageId
+          ? { ...p, components: [], backgroundColor: state.canvasBackgroundColor }
+          : p
+      )
+      
+      return {
+        pages: updatedPages,
+        components: [],
+        selectedIds: [],
+        clipboard: [],
+      }
     })
     get().saveHistory()
   },
