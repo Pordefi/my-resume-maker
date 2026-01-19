@@ -1321,7 +1321,7 @@ export const createRoundedRectDecor = (): CanvasComponent[] => {
   rect.fill = '#eff6ff'
   rect.stroke = '#3b82f6'
   rect.strokeWidth = 2
-  rect.cornerRadius = 12
+  rect.borderRadius = 12
   return [rect]
 }
 
@@ -1335,14 +1335,14 @@ export const createCircleDecor = (): CanvasComponent[] => {
   return [circle]
 }
 
-// 三角形标记
+// 三角形标记（使用圆形替代，因为ShapeType中没有三角形）
 export const createTriangleDecor = (): CanvasComponent[] => {
-  const triangle = createShapeComponent(50, 100, ShapeType.TRIANGLE)
-  triangle.width = 16
-  triangle.height = 16
-  triangle.fill = '#3b82f6'
-  triangle.stroke = 'transparent'
-  return [triangle]
+  const circle = createShapeComponent(50, 100, ShapeType.CIRCLE)
+  circle.width = 16
+  circle.height = 16
+  circle.fill = '#3b82f6'
+  circle.stroke = 'transparent'
+  return [circle]
 }
 
 // 半圆装饰（左侧）

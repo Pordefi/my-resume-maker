@@ -15,26 +15,32 @@ export const exportToPDF = async (
     // 等待DOM更新
     await new Promise((resolve) => setTimeout(resolve, 50))
     
-    // 使用html2canvas捕获画布
+    // 使用html2canvas捕获画布 - 优化参数
     const canvas = await html2canvas(canvasElement, {
-      scale: 2,
+      scale: 3, // 提高到3倍以获得更清晰的输出
       useCORS: true,
       backgroundColor: '#ffffff',
+      logging: false,
+      imageTimeout: 0,
+      removeContainer: true,
     })
 
-    const imgData = canvas.toDataURL('image/png')
+    // 转换为JPEG格式并压缩（质量0.95）
+    const imgData = canvas.toDataURL('image/jpeg', 0.95)
     
     // 创建PDF (A4尺寸)
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
+      compress: true, // 启用PDF压缩
     })
 
     const pdfWidth = pdf.internal.pageSize.getWidth()
     const pdfHeight = pdf.internal.pageSize.getHeight()
 
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+    // 使用JPEG格式添加图片
+    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST')
     pdf.save(filename)
     
     // 恢复辅助线显示
@@ -66,6 +72,7 @@ export const exportMultiPageToPDF = async (
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
+      compress: true, // 启用PDF压缩
     })
 
     const pdfWidth = pdf.internal.pageSize.getWidth()
@@ -81,18 +88,23 @@ export const exportMultiPageToPDF = async (
       await new Promise((resolve) => setTimeout(resolve, 50))
 
       const canvas = await html2canvas(canvasElement, {
-        scale: 2,
+        scale: 3, // 提高到3倍以获得更清晰的输出
         useCORS: true,
         backgroundColor: page.backgroundColor,
+        logging: false,
+        imageTimeout: 0,
+        removeContainer: true,
       })
 
-      const imgData = canvas.toDataURL('image/png')
+      // 转换为JPEG格式并压缩（质量0.95）
+      const imgData = canvas.toDataURL('image/jpeg', 0.95)
 
       if (i > 0) {
         pdf.addPage()
       }
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
+      // 使用JPEG格式添加图片
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST')
     }
 
     pdf.save(filename)
@@ -123,10 +135,18 @@ export const exportToImage = async (
     await new Promise((resolve) => setTimeout(resolve, 50))
     
     const canvas = await html2canvas(canvasElement, {
-      scale: 2,
+      scale: 3, // 提高分辨率
       useCORS: true,
       backgroundColor: '#ffffff',
+      logging: false,
+      imageTimeout: 0,
+      removeContainer: true,
     })
+
+    // 根据文件扩展名决定格式
+    const isPNG = filename.toLowerCase().endsWith('.png')
+    const mimeType = isPNG ? 'image/png' : 'image/jpeg'
+    const quality = isPNG ? undefined : 0.95
 
     canvas.toBlob((blob) => {
       if (!blob) throw new Error('生成图片失败')
@@ -137,7 +157,7 @@ export const exportToImage = async (
       link.download = filename
       link.click()
       URL.revokeObjectURL(url)
-    })
+    }, mimeType, quality)
     
     // 恢复辅助线显示
     if (showGuides) showGuides()
