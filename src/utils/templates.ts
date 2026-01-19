@@ -335,13 +335,22 @@ export const createWorkExperience1 = (): CanvasComponent[] => {
   const x = 50
   const y = 500
   
+  // 外框（带阴影）
   const card = createShapeComponent(x, y, ShapeType.RECTANGLE)
   card.width = 694
-  card.height = 140
+  card.height = 160
   card.fill = '#ffffff'
   card.stroke = '#e5e7eb'
   card.strokeWidth = 1
   card.borderRadius = 8
+  card.shadow = {
+    enabled: true,
+    color: '#000000',
+    blur: 10,
+    offsetX: 0,
+    offsetY: 2,
+    opacity: 0.1,
+  }
   components.push(card)
   
   const company = createTextComponent(x + 20, y + 20, '某某科技有限公司')
@@ -361,11 +370,19 @@ export const createWorkExperience1 = (): CanvasComponent[] => {
   time.color = '#6b7280'
   components.push(time)
   
-  const desc = createTextComponent(x + 20, y + 80, '• 负责公司核心产品的前端开发\n• 参与技术选型和架构设计')
+  // 分割线
+  const divider = createLineComponent(x + 20, y + 80, true)
+  divider.width = 654
+  divider.points = [0, 0, 654, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const desc = createTextComponent(x + 20, y + 95, '• 负责公司核心产品的前端开发\n• 参与技术选型和架构设计')
   desc.fontSize = 13
   desc.color = '#4b5563'
   desc.width = 654
-  desc.lineHeight = 1.6
+  desc.lineHeight = 1.8
   components.push(desc)
   
   return components
@@ -376,6 +393,16 @@ export const createWorkExperience2 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 80
   const y = 500
+  
+  // 外框
+  const border = createShapeComponent(x - 30, y - 20, ShapeType.RECTANGLE)
+  border.width = 664
+  border.height = 160
+  border.fill = 'transparent'
+  border.stroke = '#e5e7eb'
+  border.strokeWidth = 1
+  border.borderRadius = 8
+  components.push(border)
   
   const timeline = createLineComponent(x, y, false)
   timeline.height = 120
@@ -403,11 +430,19 @@ export const createWorkExperience2 = (): CanvasComponent[] => {
   position.color = '#6b7280'
   components.push(position)
   
-  const desc = createTextComponent(x + 20, y + 55, '• 负责公司核心产品的前端开发\n• 参与技术选型和架构设计')
+  // 分割线
+  const divider = createLineComponent(x + 20, y + 50, true)
+  divider.width = 580
+  divider.points = [0, 0, 580, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const desc = createTextComponent(x + 20, y + 65, '• 负责公司核心产品的前端开发\n• 参与技术选型和架构设计')
   desc.fontSize = 12
   desc.color = '#4b5563'
-  desc.width = 600
-  desc.lineHeight = 1.6
+  desc.width = 580
+  desc.lineHeight = 1.8
   components.push(desc)
   
   return components
@@ -418,6 +453,16 @@ export const createWorkExperience3 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 50
   const y = 500
+  
+  // 外框
+  const border = createShapeComponent(x - 10, y - 10, ShapeType.RECTANGLE)
+  border.width = 714
+  border.height = 160
+  border.fill = 'transparent'
+  border.stroke = '#d1d5db'
+  border.strokeWidth = 2
+  border.borderRadius = 6
+  components.push(border)
   
   const header = createShapeComponent(x, y, ShapeType.RECTANGLE)
   header.width = 694
@@ -444,11 +489,19 @@ export const createWorkExperience3 = (): CanvasComponent[] => {
   position.fontWeight = 'bold'
   components.push(position)
   
-  const desc = createTextComponent(x, y + 85, '• 负责公司核心产品的前端开发\n• 参与技术选型和架构设计')
+  // 分割线
+  const divider = createLineComponent(x, y + 80, true)
+  divider.width = 694
+  divider.points = [0, 0, 694, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const desc = createTextComponent(x, y + 95, '• 负责公司核心产品的前端开发\n• 参与技术选型和架构设计')
   desc.fontSize = 12
   desc.color = '#4b5563'
   desc.width = 694
-  desc.lineHeight = 1.6
+  desc.lineHeight = 1.8
   components.push(desc)
   
   return components
@@ -506,6 +559,16 @@ export const createEducation1 = (): CanvasComponent[] => {
   const x = 50
   const y = 700
   
+  // 外框
+  const border = createShapeComponent(x - 10, y - 10, ShapeType.RECTANGLE)
+  border.width = 714
+  border.height = 90
+  border.fill = 'transparent'
+  border.stroke = '#e5e7eb'
+  border.strokeWidth = 1
+  border.borderRadius = 8
+  components.push(border)
+  
   const icon = createShapeComponent(x, y, ShapeType.CIRCLE)
   icon.width = 50
   icon.height = 50
@@ -520,7 +583,15 @@ export const createEducation1 = (): CanvasComponent[] => {
   school.color = '#1f2937'
   components.push(school)
   
-  const major = createTextComponent(x + 70, y + 30, '计算机科学与技术 | 本科 | 2016-2020')
+  // 分割线
+  const divider = createLineComponent(x + 70, y + 35, true)
+  divider.width = 614
+  divider.points = [0, 0, 614, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const major = createTextComponent(x + 70, y + 45, '计算机科学与技术 | 本科 | 2016-2020')
   major.fontSize = 13
   major.color = '#6b7280'
   components.push(major)
@@ -534,13 +605,22 @@ export const createEducation2 = (): CanvasComponent[] => {
   const x = 50
   const y = 700
   
+  // 外框（带阴影）
   const card = createShapeComponent(x, y, ShapeType.RECTANGLE)
   card.width = 694
-  card.height = 100
+  card.height = 120
   card.fill = '#f9fafb'
   card.stroke = '#e5e7eb'
   card.strokeWidth = 1
   card.borderRadius = 8
+  card.shadow = {
+    enabled: true,
+    color: '#000000',
+    blur: 8,
+    offsetX: 0,
+    offsetY: 2,
+    opacity: 0.08,
+  }
   components.push(card)
   
   const school = createTextComponent(x + 20, y + 20, '某某大学')
@@ -549,12 +629,20 @@ export const createEducation2 = (): CanvasComponent[] => {
   school.color = '#1f2937'
   components.push(school)
   
-  const major = createTextComponent(x + 20, y + 50, '计算机科学与技术')
+  // 分割线
+  const divider = createLineComponent(x + 20, y + 55, true)
+  divider.width = 654
+  divider.points = [0, 0, 654, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const major = createTextComponent(x + 20, y + 70, '计算机科学与技术')
   major.fontSize = 14
   major.color = '#3b82f6'
   components.push(major)
   
-  const time = createTextComponent(x + 550, y + 50, '2016.09 - 2020.06')
+  const time = createTextComponent(x + 550, y + 70, '2016.09 - 2020.06')
   time.fontSize = 13
   time.color = '#6b7280'
   components.push(time)
@@ -568,6 +656,16 @@ export const createEducation3 = (): CanvasComponent[] => {
   const x = 50
   const y = 700
   
+  // 外框
+  const border = createShapeComponent(x - 10, y - 10, ShapeType.RECTANGLE)
+  border.width = 714
+  border.height = 90
+  border.fill = 'transparent'
+  border.stroke = '#d1d5db'
+  border.strokeWidth = 1
+  border.borderRadius = 6
+  components.push(border)
+  
   const school = createTextComponent(x, y, '某某大学')
   school.fontSize = 16
   school.fontWeight = 'bold'
@@ -579,7 +677,15 @@ export const createEducation3 = (): CanvasComponent[] => {
   time.color = '#6b7280'
   components.push(time)
   
-  const major = createTextComponent(x, y + 30, '计算机科学与技术 · 本科 · GPA 3.8/4.0')
+  // 分割线
+  const divider = createLineComponent(x, y + 30, true)
+  divider.width = 694
+  divider.points = [0, 0, 694, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const major = createTextComponent(x, y + 45, '计算机科学与技术 · 本科 · GPA 3.8/4.0')
   major.fontSize = 13
   major.color = '#4b5563'
   components.push(major)
@@ -594,6 +700,16 @@ export const createProject1 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 50
   const y = 800
+  
+  // 外框
+  const border = createShapeComponent(x - 10, y - 10, ShapeType.RECTANGLE)
+  border.width = 714
+  border.height = 160
+  border.fill = 'transparent'
+  border.stroke = '#d1d5db'
+  border.strokeWidth = 1
+  border.borderRadius = 8
+  components.push(border)
   
   const titleBg = createShapeComponent(x, y, ShapeType.RECTANGLE)
   titleBg.width = 694
@@ -612,13 +728,21 @@ export const createProject1 = (): CanvasComponent[] => {
   desc.width = 694
   components.push(desc)
   
-  const tech = createTextComponent(x, y + 80, '技术栈：React, TypeScript, Ant Design, Redux')
+  // 分割线
+  const divider = createLineComponent(x, y + 80, true)
+  divider.width = 694
+  divider.points = [0, 0, 694, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const tech = createTextComponent(x, y + 90, '技术栈：React, TypeScript, Ant Design, Redux')
   tech.fontSize = 12
   tech.color = '#6b7280'
   tech.width = 694
   components.push(tech)
   
-  const link = createTextComponent(x, y + 105, '🔗 github.com/username/project')
+  const link = createTextComponent(x, y + 115, '🔗 github.com/username/project')
   link.fontSize = 12
   link.color = '#3b82f6'
   link.width = 694
@@ -633,13 +757,22 @@ export const createProject2 = (): CanvasComponent[] => {
   const x = 50
   const y = 800
   
+  // 外框（带阴影）
   const card = createShapeComponent(x, y, ShapeType.RECTANGLE)
   card.width = 694
-  card.height = 140
+  card.height = 160
   card.fill = '#ffffff'
   card.stroke = '#e5e7eb'
   card.strokeWidth = 1
   card.borderRadius = 8
+  card.shadow = {
+    enabled: true,
+    color: '#000000',
+    blur: 10,
+    offsetX: 0,
+    offsetY: 2,
+    opacity: 0.1,
+  }
   components.push(card)
   
   const title = createTextComponent(x + 20, y + 20, '企业级管理系统')
@@ -658,11 +791,19 @@ export const createProject2 = (): CanvasComponent[] => {
   time.color = '#6b7280'
   components.push(time)
   
-  const desc = createTextComponent(x + 20, y + 80, '• 负责前端架构设计和核心功能开发\n• 优化性能，首屏加载时间减少40%')
+  // 分割线
+  const divider = createLineComponent(x + 20, y + 80, true)
+  divider.width = 654
+  divider.points = [0, 0, 654, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const desc = createTextComponent(x + 20, y + 95, '• 负责前端架构设计和核心功能开发\n• 优化性能，首屏加载时间减少40%')
   desc.fontSize = 12
   desc.color = '#4b5563'
   desc.width = 654
-  desc.lineHeight = 1.6
+  desc.lineHeight = 1.8
   components.push(desc)
   
   return components
@@ -673,6 +814,16 @@ export const createProject3 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   const x = 80
   const y = 800
+  
+  // 外框
+  const border = createShapeComponent(x - 30, y - 20, ShapeType.RECTANGLE)
+  border.width = 664
+  border.height = 160
+  border.fill = 'transparent'
+  border.stroke = '#e5e7eb'
+  border.strokeWidth = 1
+  border.borderRadius = 8
+  components.push(border)
   
   const timeline = createLineComponent(x, y, false)
   timeline.height = 120
@@ -700,14 +851,22 @@ export const createProject3 = (): CanvasComponent[] => {
   tech.color = '#6b7280'
   components.push(tech)
   
-  const desc = createTextComponent(x + 20, y + 50, '负责前端架构设计，实现用户管理、权限控制等核心功能')
+  // 分割线
+  const divider = createLineComponent(x + 20, y + 50, true)
+  divider.width = 580
+  divider.points = [0, 0, 580, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const desc = createTextComponent(x + 20, y + 65, '负责前端架构设计，实现用户管理、权限控制等核心功能')
   desc.fontSize = 12
   desc.color = '#4b5563'
-  desc.width = 600
-  desc.lineHeight = 1.5
+  desc.width = 580
+  desc.lineHeight = 1.8
   components.push(desc)
   
-  const link = createTextComponent(x + 20, y + 85, '🔗 项目链接: github.com/username/project')
+  const link = createTextComponent(x + 20, y + 105, '🔗 项目链接: github.com/username/project')
   link.fontSize = 11
   link.color = '#3b82f6'
   components.push(link)

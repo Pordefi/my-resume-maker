@@ -158,9 +158,9 @@ const ComponentLibrary = () => {
             </div>
           </div>
 
-          {/* 线条 */}
+          {/* 线条与分割线 */}
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">线条</h3>
+            <h3 className="text-sm font-medium text-gray-700 mb-2">线条与分割线</h3>
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => addLine(true)}
@@ -176,6 +176,52 @@ const ComponentLibrary = () => {
               >
                 <Minus size={24} className="mb-1 rotate-90" />
                 <span className="text-xs">垂直线</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  const divider = createLineComponent(100, 100, true)
+                  divider.width = 300
+                  divider.points = [0, 0, 300, 0]
+                  divider.stroke = '#e5e7eb'
+                  divider.strokeWidth = 1
+                  addComponent(divider)
+                }}
+                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
+              >
+                <div className="w-full h-px bg-gray-300 mb-1" />
+                <span className="text-xs">细分割线</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  const divider = createLineComponent(100, 100, true)
+                  divider.width = 300
+                  divider.points = [0, 0, 300, 0]
+                  divider.stroke = '#3b82f6'
+                  divider.strokeWidth = 2
+                  addComponent(divider)
+                }}
+                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
+              >
+                <div className="w-full h-0.5 bg-blue-500 mb-1" />
+                <span className="text-xs">粗分割线</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  const divider = createLineComponent(100, 100, true)
+                  divider.width = 300
+                  divider.points = [0, 0, 300, 0]
+                  divider.stroke = '#d1d5db'
+                  divider.strokeWidth = 1
+                  divider.dash = [5, 5]
+                  addComponent(divider)
+                }}
+                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
+              >
+                <div className="w-full h-px border-t border-dashed border-gray-400 mb-1" />
+                <span className="text-xs">虚线</span>
               </button>
             </div>
           </div>
