@@ -93,13 +93,17 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
     const scaleX = node.scaleX()
     const scaleY = node.scaleY()
 
+    // 获取当前实际的宽高（缩放前的）
+    const currentWidth = node.width()
+    const currentHeight = node.height()
+
     // 重置scale
     node.scaleX(1)
     node.scaleY(1)
 
-    // 计算新的宽高
-    const newWidth = Math.max(5, component.width * scaleX)
-    const newHeight = Math.max(5, component.height * scaleY)
+    // 计算新的宽高（基于当前实际尺寸）
+    const newWidth = Math.max(5, currentWidth * scaleX)
+    const newHeight = Math.max(5, currentHeight * scaleY)
 
     // 对于线条组件，需要同时更新points
     if (component.type === ComponentType.LINE) {
@@ -107,7 +111,7 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
       let newPoints: number[]
       
       // 判断是水平线还是垂直线
-      const isHorizontal = component.width > component.height
+      const isHorizontal = newWidth > newHeight
       
       if (isHorizontal) {
         // 水平线：更新X坐标
@@ -201,6 +205,16 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
           rotateEnabled={true}
           keepRatio={false}
           enabledAnchors={['top-left', 'top-center', 'top-right', 'middle-right', 'middle-left', 'bottom-left', 'bottom-center', 'bottom-right']}
+          boundBoxFunc={(oldBox, newBox) => {
+            // 确保最小尺寸
+            if (newBox.width < 5) {
+              newBox.width = 5
+            }
+            if (newBox.height < 5) {
+              newBox.height = 5
+            }
+            return newBox
+          }}
           borderStroke="#0ea5e9"
           borderStrokeWidth={2}
           anchorStroke="#0ea5e9"
