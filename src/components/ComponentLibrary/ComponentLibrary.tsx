@@ -13,7 +13,7 @@ import { TEMPLATES, FULL_TEMPLATES } from '@/utils/templates'
 
 const ComponentLibrary = () => {
   const { addComponent, clearCanvas } = useCanvasStore()
-  const [activeTab, setActiveTab] = useState<'basic' | 'templates' | 'full'>('templates')
+  const [activeTab, setActiveTab] = useState<'templates' | 'full'>('templates')
 
   const addText = () => {
     addComponent(createTextComponent(100, 100))
@@ -161,16 +161,6 @@ const ComponentLibrary = () => {
       {/* 标签切换 */}
       <div className="flex gap-1 mb-4 border-b">
         <button
-          onClick={() => setActiveTab('basic')}
-          className={`flex-1 pb-2 text-xs font-medium ${
-            activeTab === 'basic'
-              ? 'border-b-2 border-blue-500 text-blue-600'
-              : 'text-gray-600'
-          }`}
-        >
-          基础
-        </button>
-        <button
           onClick={() => setActiveTab('templates')}
           className={`flex-1 pb-2 text-xs font-medium ${
             activeTab === 'templates'
@@ -192,172 +182,7 @@ const ComponentLibrary = () => {
         </button>
       </div>
 
-      {activeTab === 'basic' ? (
-        <>
-          {/* 基础组件 */}
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">基础组件</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={addText}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <Type size={24} className="mb-1" />
-                <span className="text-xs">文本</span>
-              </button>
-
-              <button
-                onClick={addTextBlock}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <div className="mb-1 flex flex-col gap-0.5">
-                  <div className="w-6 h-1 bg-current rounded" />
-                  <div className="w-6 h-1 bg-current rounded" />
-                  <div className="w-6 h-1 bg-current rounded" />
-                </div>
-                <span className="text-xs">文本块</span>
-              </button>
-
-              <button
-                onClick={addImage}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <Image size={24} className="mb-1" />
-                <span className="text-xs">图片</span>
-              </button>
-            </div>
-          </div>
-
-          {/* 形状 */}
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">形状</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => addShape(ShapeType.RECTANGLE)}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <Square size={24} className="mb-1" />
-                <span className="text-xs">矩形</span>
-              </button>
-
-              <button
-                onClick={() => addShape(ShapeType.CIRCLE)}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <div className="w-6 h-6 rounded-full border-2 border-current mb-1" />
-                <span className="text-xs">圆形</span>
-              </button>
-
-              <button
-                onClick={() => addShape(ShapeType.ELLIPSE)}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <div className="w-8 h-5 rounded-full border-2 border-current mb-1" />
-                <span className="text-xs">椭圆</span>
-              </button>
-            </div>
-          </div>
-
-          {/* 线条与分割线 */}
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">线条与分割线</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => addLine(true)}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <Minus size={24} className="mb-1" />
-                <span className="text-xs">水平线</span>
-              </button>
-
-              <button
-                onClick={() => addLine(false)}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <Minus size={24} className="mb-1 rotate-90" />
-                <span className="text-xs">垂直线</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  const { canvasWidth } = useCanvasStore.getState()
-                  const dividerWidth = Math.floor(canvasWidth * 0.8)
-                  const divider = createLineComponent(100, 100, true)
-                  divider.width = dividerWidth
-                  divider.points = [0, 0, dividerWidth, 0]
-                  divider.stroke = '#e5e7eb'
-                  divider.strokeWidth = 1
-                  addComponent(divider)
-                }}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <div className="w-full h-px bg-gray-300 mb-1" />
-                <span className="text-xs">细分割线</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  const { canvasWidth } = useCanvasStore.getState()
-                  const dividerWidth = Math.floor(canvasWidth * 0.8)
-                  const divider = createLineComponent(100, 100, true)
-                  divider.width = dividerWidth
-                  divider.points = [0, 0, dividerWidth, 0]
-                  divider.stroke = '#3b82f6'
-                  divider.strokeWidth = 2
-                  addComponent(divider)
-                }}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <div className="w-full h-0.5 bg-blue-500 mb-1" />
-                <span className="text-xs">粗分割线</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  const { canvasWidth } = useCanvasStore.getState()
-                  const dividerWidth = Math.floor(canvasWidth * 0.8)
-                  const divider = createLineComponent(100, 100, true)
-                  divider.width = dividerWidth
-                  divider.points = [0, 0, dividerWidth, 0]
-                  divider.stroke = '#d1d5db'
-                  divider.strokeWidth = 1
-                  divider.dash = [5, 5]
-                  addComponent(divider)
-                }}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <div className="w-full h-px border-t border-dashed border-gray-400 mb-1" />
-                <span className="text-xs">虚线</span>
-              </button>
-            </div>
-          </div>
-
-          {/* 图标 */}
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">图标</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={addIcon}
-                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors"
-              >
-                <Star size={24} className="mb-1" />
-                <span className="text-xs">图标</span>
-              </button>
-            </div>
-          </div>
-
-          {/* 提示 */}
-          <div className="mt-8 p-3 bg-blue-50 rounded text-xs text-gray-600">
-            <p className="font-medium mb-1">快捷键:</p>
-            <ul className="space-y-1">
-              <li>双击文本编辑</li>
-              <li>Ctrl+Z: 撤销</li>
-              <li>Ctrl+C/V: 复制/粘贴</li>
-              <li>Delete: 删除</li>
-            </ul>
-          </div>
-        </>
-      ) : activeTab === 'templates' ? (
+      {activeTab === 'templates' ? (
         <>
           {/* 模板库 */}
           <div className="space-y-4">
@@ -545,31 +370,6 @@ const ComponentLibrary = () => {
                   className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
                 >
                   <div className="text-xs font-medium">语言能力</div>
-                </button>
-              </div>
-            </div>
-
-            {/* 布局 */}
-            <div>
-              <h4 className="text-xs font-semibold text-gray-700 mb-2">布局</h4>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => addTemplate('twoColumnLayout1')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
-                >
-                  <div className="text-xs font-medium">左深色</div>
-                </button>
-                <button
-                  onClick={() => addTemplate('twoColumnLayout2')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
-                >
-                  <div className="text-xs font-medium">左浅色</div>
-                </button>
-                <button
-                  onClick={() => addTemplate('twoColumnLayout3')}
-                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
-                >
-                  <div className="text-xs font-medium">右深色</div>
                 </button>
               </div>
             </div>
