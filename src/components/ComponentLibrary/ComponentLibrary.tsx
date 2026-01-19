@@ -52,7 +52,28 @@ const ComponentLibrary = () => {
   const addTemplate = (templateKey: keyof typeof TEMPLATES) => {
     const template = TEMPLATES[templateKey]
     const newComponents = template.create()
+    
+    // 添加所有组件
     newComponents.forEach((comp) => addComponent(comp))
+    
+    // 自动创建组
+    if (newComponents.length >= 2) {
+      // 等待组件添加完成后创建组
+      setTimeout(() => {
+        const store = useCanvasStore.getState()
+        const componentIds = newComponents.map((c) => c.id)
+        
+        // 选中这些组件
+        store.clearSelection()
+        componentIds.forEach((id) => store.selectComponent(id, true))
+        
+        // 创建组
+        store.createGroup(template.name)
+        
+        // 取消选择
+        store.clearSelection()
+      }, 50)
+    }
   }
 
   return (
