@@ -327,6 +327,90 @@ export const createSkillTags3 = (): CanvasComponent[] => {
   return components
 }
 
+// 样式4: 逗号分隔式
+export const createSkillTags4 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const startX = 50
+  const startY = 350
+  
+  const label = createTextComponent(startX, startY, '技能：')
+  label.fontSize = 14
+  label.color = '#1f2937'
+  label.fontWeight = 'bold'
+  components.push(label)
+  
+  const skills = createTextComponent(startX + 50, startY, 'React, Vue, TypeScript, Node.js, Python, Docker, MySQL, Git')
+  skills.fontSize = 14
+  skills.color = '#4b5563'
+  skills.fontWeight = 'normal'
+  components.push(skills)
+  
+  return components
+}
+
+// 样式5: 竖线分隔式
+export const createSkillTags5 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const startX = 50
+  const startY = 350
+  
+  const skills = createTextComponent(startX, startY, 'React  |  Vue  |  TypeScript  |  Node.js  |  Python  |  Docker')
+  skills.fontSize = 14
+  skills.color = '#1f2937'
+  skills.fontWeight = 'normal'
+  components.push(skills)
+  
+  return components
+}
+
+// 样式6: 项目符号列表式
+export const createSkillTags6 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const startX = 50
+  const startY = 350
+  
+  const line1 = createTextComponent(startX, startY, '• React  • Vue  • TypeScript  • Node.js')
+  line1.fontSize = 14
+  line1.color = '#1f2937'
+  line1.fontWeight = 'normal'
+  components.push(line1)
+  
+  const line2 = createTextComponent(startX, startY + 25, '• Python  • Docker  • MySQL  • Git')
+  line2.fontSize = 14
+  line2.color = '#1f2937'
+  line2.fontWeight = 'normal'
+  components.push(line2)
+  
+  return components
+}
+
+// 样式7: 多行列表式
+export const createSkillTags7 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const startX = 50
+  const startY = 350
+  
+  const line1 = createTextComponent(startX, startY, '• React、Vue、Angular 等前端框架')
+  line1.fontSize = 14
+  line1.color = '#1f2937'
+  line1.fontWeight = 'normal'
+  components.push(line1)
+  
+  const line2 = createTextComponent(startX, startY + 25, '• TypeScript、JavaScript、Python 等编程语言')
+  line2.fontSize = 14
+  line2.color = '#1f2937'
+  line2.fontWeight = 'normal'
+  components.push(line2)
+  
+  const line3 = createTextComponent(startX, startY + 50, '• Docker、Kubernetes 等容器技术')
+  line3.fontSize = 14
+  line3.color = '#1f2937'
+  line3.fontWeight = 'normal'
+  components.push(line3)
+  
+  return components
+}
+
 // ==================== 工作经历模板 ====================
 
 // 样式1: 卡片式
@@ -1188,6 +1272,10 @@ export const TEMPLATES = {
   skillTags1: { name: '技能标签 - 扁平', create: createSkillTags1 },
   skillTags2: { name: '技能标签 - 胶囊', create: createSkillTags2 },
   skillTags3: { name: '技能标签 - 进度条', create: createSkillTags3 },
+  skillTags4: { name: '技能标签 - 逗号分隔', create: createSkillTags4 },
+  skillTags5: { name: '技能标签 - 竖线分隔', create: createSkillTags5 },
+  skillTags6: { name: '技能标签 - 项目符号', create: createSkillTags6 },
+  skillTags7: { name: '技能标签 - 多行列表', create: createSkillTags7 },
   
   // 工作经历
   workExperience1: { name: '工作经历 - 卡片', create: createWorkExperience1 },

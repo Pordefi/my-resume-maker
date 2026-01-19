@@ -345,6 +345,46 @@ const ComponentLibrary = () => {
                   </svg>
                   <div className="text-xs font-medium">进度条</div>
                 </button>
+                <button
+                  onClick={() => addTemplate('skillTags4')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <text x="2" y="10" fontSize="8" fill="#1f2937">技能：</text>
+                    <text x="2" y="17" fontSize="6" fill="#6b7280">A, B, C, D</text>
+                  </svg>
+                  <div className="text-xs font-medium">逗号</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('skillTags5')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <text x="2" y="14" fontSize="7" fill="#1f2937">A | B | C | D</text>
+                  </svg>
+                  <div className="text-xs font-medium">竖线</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('skillTags6')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <text x="2" y="10" fontSize="7" fill="#1f2937">• A • B • C</text>
+                    <text x="2" y="17" fontSize="7" fill="#1f2937">• D • E • F</text>
+                  </svg>
+                  <div className="text-xs font-medium">符号</div>
+                </button>
+                <button
+                  onClick={() => addTemplate('skillTags7')}
+                  className="p-2 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1"
+                >
+                  <svg width="40" height="24" viewBox="0 0 40 24" className="mb-1">
+                    <text x="2" y="8" fontSize="6" fill="#1f2937">• 前端框架</text>
+                    <text x="2" y="14" fontSize="6" fill="#1f2937">• 编程语言</text>
+                    <text x="2" y="20" fontSize="6" fill="#1f2937">• 容器技术</text>
+                  </svg>
+                  <div className="text-xs font-medium">列表</div>
+                </button>
               </div>
             </div>
 
