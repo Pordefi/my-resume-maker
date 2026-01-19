@@ -184,39 +184,114 @@ export const COLOR_THEMES: ColorTheme[] = [
   },
 ]
 
-// 颜色分类函数 - 判断颜色属于哪个类别
+// 将hex颜色转换为HSL
+const hexToHSL = (hex: string): { h: number; s: number; l: number } => {
+  // 移除#号
+  hex = hex.replace('#', '')
+  
+  // 转换为RGB
+  const r = parseInt(hex.substring(0, 2), 16) / 255
+  const g = parseInt(hex.substring(2, 4), 16) / 255
+  const b = parseInt(hex.substring(4, 6), 16) / 255
+  
+  const max = Math.max(r, g, b)
+  const min = Math.min(r, g, b)
+  let h = 0
+  let s = 0
+  const l = (max + min) / 2
+  
+  if (max !== min) {
+    const d = max - min
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+    
+    switch (max) {
+      case r:
+        h = ((g - b) / d + (g < b ? 6 : 0)) / 6
+        break
+      case g:
+        h = ((b - r) / d + 2) / 6
+        break
+      case b:
+        h = ((r - g) / d + 4) / 6
+        break
+    }
+  }
+  
+  return {
+    h: Math.round(h * 360),
+    s: Math.round(s * 100),
+    l: Math.round(l * 100),
+  }
+}
+
+// 颜色分类函数 - 基于HSL值智能判断
 export const classifyColor = (color: string): 'primary' | 'secondary' | 'accent' | 'heading' | 'body' | 'muted' | 'border' | 'background' | 'unknown' => {
   const c = color.toLowerCase()
   
-  // 主色调（蓝色、绿色、紫色等鲜艳颜色）
-  const primaryColors = ['#3b82f6', '#2563eb', '#1d4ed8', '#10b981', '#059669', '#8b5cf6', '#7c3aed', '#ef4444', '#dc2626', '#f97316', '#ea580c', '#14b8a6', '#0d9488']
-  if (primaryColors.some(pc => c === pc)) return 'primary'
+  // 特殊颜色处理
+  if (c === '#ffffff' || c === '#fff') return 'background'
+  if (c === '#000000' || c === '#000') return 'heading'
   
-  // 次要色（较浅的主色调）
-  const secondaryColors = ['#60a5fa', '#93c5fd', '#34d399', '#6ee7b7', '#a78bfa', '#c4b5fd', '#f87171', '#fca5a5', '#fb923c', '#fdba74', '#2dd4bf', '#5eead4']
-  if (secondaryColors.some(sc => c === sc)) return 'secondary'
-  
-  // 标题色（深色）
-  const headingColors = ['#1e40af', '#1e3a8a', '#065f46', '#064e3b', '#5b21b6', '#4c1d95', '#991b1b', '#7f1d1d', '#9a3412', '#7c2d12', '#115e59', '#134e4a', '#111827', '#000000']
-  if (headingColors.some(hc => c === hc)) return 'heading'
-  
-  // 正文色（中等深度）
-  const bodyColors = ['#1f2937', '#374151', '#4b5563']
-  if (bodyColors.some(bc => c === bc)) return 'body'
-  
-  // 次要文字色（灰色）
-  const mutedColors = ['#6b7280', '#9ca3af', '#d1d5db']
-  if (mutedColors.some(mc => c === mc)) return 'muted'
-  
-  // 边框/分割线色
-  const borderColors = ['#d1d5db', '#e5e7eb', '#f3f4f6']
-  if (borderColors.some(bc => c === bc)) return 'border'
-  
-  // 背景色
-  const backgroundColors = ['#ffffff', '#f9fafb', '#f3f4f6', '#f0fdf4', '#faf5ff', '#fef2f2', '#fff7ed', '#f0fdfa']
-  if (backgroundColors.some(bg => c === bg)) return 'background'
-  
-  return 'unknown'
+  try {
+    const { s, l } = hexToHSL(c)
+    
+    // 背景色：高亮度（>95%）或极低饱和度且高亮度（>90%）
+    if (l > 95 || (s < 10 && l > 90)) {
+      return 'background'
+    }
+    
+    // 边框/分割线：低饱和度（<15%）且中高亮度（70-90%）
+    if (s < 15 && l >= 70 && l <= 90) {
+      return 'border'
+    }
+    
+    // 次要文字色（灰色）：低饱和度（<15%）且中等亮度（40-70%）
+    if (s < 15 && l >= 40 && l < 70) {
+      return 'muted'
+    }
+    
+    // 正文色：低饱和度（<20%）且较低亮度（20-40%）
+    if (s < 20 && l >= 20 && l < 40) {
+      return 'body'
+    }
+    
+    // 标题色：低饱和度（<30%）且低亮度（<20%）或高饱和度但低亮度（<30%）
+    if ((s < 30 && l < 20) || (s >= 30 && l < 30)) {
+      return 'heading'
+    }
+    
+    // 主色调：高饱和度（>40%）且中等亮度（40-60%）
+    if (s > 40 && l >= 40 && l <= 60) {
+      return 'primary'
+    }
+    
+    // 次要色：高饱和度（>40%）且较高亮度（60-80%）
+    if (s > 40 && l > 60 && l <= 80) {
+      return 'secondary'
+    }
+    
+    // 强调色：高饱和度（>50%）且较低亮度（30-40%）
+    if (s > 50 && l >= 30 && l < 40) {
+      return 'accent'
+    }
+    
+    // 默认根据亮度和饱和度判断
+    if (s > 30) {
+      // 有颜色的
+      if (l < 40) return 'accent'
+      if (l < 60) return 'primary'
+      return 'secondary'
+    } else {
+      // 灰色系
+      if (l < 30) return 'heading'
+      if (l < 50) return 'body'
+      if (l < 80) return 'muted'
+      return 'border'
+    }
+  } catch (error) {
+    console.warn('颜色分类失败:', color, error)
+    return 'unknown'
+  }
 }
 
 // 应用配色方案到颜色

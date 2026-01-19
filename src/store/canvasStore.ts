@@ -879,6 +879,15 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
           } as CanvasComponent
         }
         
+        // 处理图标组件
+        if (component.type === ComponentType.ICON) {
+          const iconComp = component as any
+          return {
+            ...iconComp,
+            color: applyThemeToColor(iconComp.color, theme),
+          } as CanvasComponent
+        }
+        
         return component
       })
       
