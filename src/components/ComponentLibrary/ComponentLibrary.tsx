@@ -73,32 +73,36 @@ const ComponentLibrary = () => {
       const pages = template.create()
       const store = useCanvasStore.getState()
       
-      // 1. 先保存当前页面状态
-      store.switchPage(store.currentPageId)
-      
-      // 2. 删除所有页面（除了第一页）
+      // 1. 删除所有页面（除了第一页）
       const allPages = [...store.pages]
       for (let i = allPages.length - 1; i > 0; i--) {
         store.deletePage(allPages[i].id)
       }
       
-      // 3. 清空第一页
+      // 2. 切换到第一页并清空
+      const firstPageId = store.pages[0].id
+      store.switchPage(firstPageId)
       clearCanvas()
       
-      // 4. 添加所有页面的内容
-      pages.forEach((pageData, index) => {
-        if (index === 0) {
-          // 第一页：直接添加到当前页面
-          pageData.components.forEach((comp) => addComponent(comp))
-        } else {
-          // 后续页面：先创建新页面，再添加组件
-          store.addPage()
-          pageData.components.forEach((comp) => addComponent(comp))
-        }
-      })
+      // 3. 添加第一页的内容
+      if (pages[0]) {
+        pages[0].components.forEach((comp) => {
+          const newComp = { ...comp, id: `${comp.type}-${Date.now()}-${Math.random()}` }
+          addComponent(newComp)
+        })
+      }
       
-      // 5. 切换回第一页
-      store.switchPage(store.pages[0].id)
+      // 4. 添加后续页面
+      for (let i = 1; i < pages.length; i++) {
+        store.addPage() // 创建新页面并自动切换到新页面
+        pages[i].components.forEach((comp) => {
+          const newComp = { ...comp, id: `${comp.type}-${Date.now()}-${Math.random()}` }
+          addComponent(newComp)
+        })
+      }
+      
+      // 5. 最后切换回第一页
+      store.switchPage(firstPageId)
     }
   }
 
