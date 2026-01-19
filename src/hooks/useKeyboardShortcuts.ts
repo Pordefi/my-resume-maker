@@ -6,6 +6,8 @@ export const useKeyboardShortcuts = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const store = useCanvasStore.getState()
       const isModKey = e.ctrlKey || e.metaKey
+      const target = e.target as HTMLElement
+      const isEditingText = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA'
 
       if (isModKey && e.key === 'z' && !e.shiftKey) {
         e.preventDefault()
@@ -14,20 +16,31 @@ export const useKeyboardShortcuts = () => {
         e.preventDefault()
         store.redo()
       } else if (isModKey && e.key === 'c') {
-        e.preventDefault()
-        store.copy()
+        // 在文本编辑时允许默认的复制行为
+        if (!isEditingText) {
+          e.preventDefault()
+          store.copy()
+        }
       } else if (isModKey && e.key === 'v') {
-        e.preventDefault()
-        store.paste()
+        // 在文本编辑时允许默认的粘贴行为
+        if (!isEditingText) {
+          e.preventDefault()
+          store.paste()
+        }
       } else if (isModKey && e.key === 'x') {
-        e.preventDefault()
-        store.cut()
+        // 在文本编辑时允许默认的剪切行为
+        if (!isEditingText) {
+          e.preventDefault()
+          store.cut()
+        }
       } else if (isModKey && e.key === 'a') {
-        e.preventDefault()
-        store.selectAll()
+        // 在文本编辑时允许默认的全选行为
+        if (!isEditingText) {
+          e.preventDefault()
+          store.selectAll()
+        }
       } else if (e.key === 'Delete' || e.key === 'Backspace') {
-        const target = e.target as HTMLElement
-        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
+        if (!isEditingText) {
           e.preventDefault()
           store.deleteSelectedComponents()
         }

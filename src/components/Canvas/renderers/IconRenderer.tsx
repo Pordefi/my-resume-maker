@@ -1,50 +1,41 @@
-import { Text } from 'react-konva'
+import { Path, Group } from 'react-konva'
 import { IconComponent } from '@/types/canvas'
+import { ICON_LIBRARY } from '@/utils/icons'
 
 interface Props {
   component: IconComponent
 }
 
-// 简单的图标渲染器，使用Unicode符号
-const ICON_MAP: Record<string, string> = {
-  star: '★',
-  heart: '♥',
-  circle: '●',
-  square: '■',
-  triangle: '▲',
-  phone: '☎',
-  email: '✉',
-  location: '📍',
-  link: '🔗',
-  check: '✓',
-  user: '👤',
-  briefcase: '💼',
-  graduation: '🎓',
-  award: '🏆',
-  code: '💻',
-  globe: '🌐',
-  github: '🔗',
-  linkedin: '💼',
-  wechat: '💬',
-  home: '🏠',
-  building: '🏢',
-  calendar: '📅',
-  clock: '🕐',
-}
-
 const IconRenderer = ({ component }: Props) => {
-  const icon = ICON_MAP[component.iconName] || '●'
+  const iconDef = ICON_LIBRARY.find(i => i.id === component.iconName)
+  
+  if (!iconDef) {
+    // 如果找不到图标定义，显示一个默认圆形
+    return (
+      <Group>
+        <Path
+          data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
+          fill={component.color}
+          scaleX={component.width / 24}
+          scaleY={component.height / 24}
+        />
+      </Group>
+    )
+  }
+
+  // 从SVG字符串中提取path的d属性
+  const pathMatch = iconDef.svg.match(/d="([^"]+)"/)
+  const pathData = pathMatch ? pathMatch[1] : ''
 
   return (
-    <Text
-      text={icon}
-      fontSize={component.width}
-      fill={component.color}
-      width={component.width}
-      height={component.height}
-      align="center"
-      verticalAlign="middle"
-    />
+    <Group>
+      <Path
+        data={pathData}
+        fill={component.color}
+        scaleX={component.width / 24}
+        scaleY={component.height / 24}
+      />
+    </Group>
   )
 }
 

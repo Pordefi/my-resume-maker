@@ -2,9 +2,12 @@ import { useState } from 'react'
 import { useCanvasStore, setPendingTemplate } from '@/store/canvasStore'
 import { TEMPLATES } from '@/utils/templates'
 import { FULL_TEMPLATES_MULTI_PAGE } from '@/utils/fullTemplates'
+import { ICON_LIBRARY, ICON_CATEGORIES } from '@/utils/icons'
+import { createIconComponent } from '@/utils/componentFactory'
 
 const ComponentLibrary = () => {
-  const [activeTab, setActiveTab] = useState<'templates' | 'full'>('templates')
+  const [activeTab, setActiveTab] = useState<'templates' | 'full' | 'icons'>('templates')
+  const [iconCategory, setIconCategory] = useState('all')
 
   const addTemplate = (templateKey: keyof typeof TEMPLATES) => {
     const template = TEMPLATES[templateKey]
@@ -49,6 +52,23 @@ const ComponentLibrary = () => {
     }
   }
 
+  const addIcon = (iconId: string) => {
+    const icon = ICON_LIBRARY.find(i => i.id === iconId)
+    if (!icon) return
+    
+    // 创建图标组件并使用拖放模式
+    const iconComponent = createIconComponent(100, 100, iconId)
+    iconComponent.width = 32
+    iconComponent.height = 32
+    iconComponent.color = '#3b82f6'
+    
+    setPendingTemplate([iconComponent])
+  }
+
+  const filteredIcons = iconCategory === 'all' 
+    ? ICON_LIBRARY 
+    : ICON_LIBRARY.filter(icon => icon.category === iconCategory)
+
   return (
     <div className="w-64 bg-white border-r border-gray-200 p-4 overflow-y-auto h-full">
       <h2 className="text-lg font-semibold mb-4">组件库</h2>
@@ -66,6 +86,16 @@ const ComponentLibrary = () => {
           模板
         </button>
         <button
+          onClick={() => setActiveTab('icons')}
+          className={`flex-1 pb-2 text-xs font-medium ${
+            activeTab === 'icons'
+              ? 'border-b-2 border-blue-500 text-blue-600'
+              : 'text-gray-600'
+          }`}
+        >
+          图标
+        </button>
+        <button
           onClick={() => setActiveTab('full')}
           className={`flex-1 pb-2 text-xs font-medium ${
             activeTab === 'full'
@@ -77,7 +107,53 @@ const ComponentLibrary = () => {
         </button>
       </div>
 
-      {activeTab === 'templates' ? (
+      {activeTab === 'icons' ? (
+        <>
+          {/* 图标库 */}
+          <div className="space-y-4">
+            {/* 分类筛选 */}
+            <div className="flex flex-wrap gap-1 mb-3">
+              {ICON_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => setIconCategory(cat.id)}
+                  className={`px-2 py-1 text-xs rounded ${
+                    iconCategory === cat.id
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+
+            {/* 图标网格 */}
+            <div className="grid grid-cols-4 gap-2">
+              {filteredIcons.map(icon => (
+                <button
+                  key={icon.id}
+                  onClick={() => addIcon(icon.id)}
+                  className="p-3 border border-gray-300 rounded hover:border-blue-500 hover:bg-blue-50 transition-colors flex flex-col items-center gap-1 group"
+                  title={icon.name}
+                >
+                  <div 
+                    className="w-8 h-8 text-gray-700 group-hover:text-blue-600 transition-colors"
+                    dangerouslySetInnerHTML={{ __html: icon.svg }}
+                  />
+                  <div className="text-[10px] text-gray-600 text-center leading-tight">{icon.name}</div>
+                </button>
+              ))}
+            </div>
+
+            {filteredIcons.length === 0 && (
+              <div className="text-center py-8 text-gray-400 text-sm">
+                该分类暂无图标
+              </div>
+            )}
+          </div>
+        </>
+      ) : activeTab === 'templates' ? (
         <>
           {/* 模板库 */}
           <div className="space-y-4">
