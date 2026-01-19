@@ -62,37 +62,37 @@ const ComponentLibrary = () => {
     const template = TEMPLATES[templateKey]
     const newComponents = template.create()
     
-    // 计算当前画布中所有组件的最大Y坐标
+    // 获取当前页面的所有组件
     const store = useCanvasStore.getState()
-    const allComponents = store.pages[store.currentPageIndex]?.components || []
+    const currentPage = store.pages.find(p => p.id === store.currentPageId)
+    const allComponents = currentPage?.components || []
     
     let maxY = 50 // 默认起始位置
     
     if (allComponents.length > 0) {
       // 找到所有组件的最大底部位置
       allComponents.forEach((comp) => {
-        const componentBottom = comp.y + (comp.height || 50)
+        const height = comp.height || 50
+        const componentBottom = comp.y + height
         if (componentBottom > maxY) {
           maxY = componentBottom
         }
       })
       // 在最下方留出间距
-      maxY += 50
+      maxY += 60
     }
     
-    // 计算模板的原始起始Y坐标（最小Y值）
+    // 计算模板的原始起始Y坐标
     const templateMinY = Math.min(...newComponents.map(c => c.y))
     
-    // 计算需要的偏移量
+    // 计算偏移量
     const offsetY = maxY - templateMinY
     
-    // 创建新的组件数组，调整Y坐标
+    // 调整所有组件的Y坐标并重新生成ID
     const adjustedComponents = newComponents.map(comp => {
-      // 创建新对象，避免修改原对象
       const newComp = { ...comp }
       newComp.y = comp.y + offsetY
-      // 重新生成ID确保唯一性
-      newComp.id = `${comp.type}-${Date.now()}-${Math.random()}`
+      newComp.id = `${comp.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
       return newComp
     })
     
@@ -102,7 +102,7 @@ const ComponentLibrary = () => {
     const maxX = Math.max(...adjustedComponents.map(c => c.x + (c.width || 0)))
     const maxYComp = Math.max(...adjustedComponents.map(c => c.y + (c.height || 0)))
     
-    const padding = 10 // 边框内边距
+    const padding = 15
     const bgWidth = maxX - minX + padding * 2
     const bgHeight = maxYComp - minY + padding * 2
     
@@ -114,11 +114,11 @@ const ComponentLibrary = () => {
     )
     background.width = bgWidth
     background.height = bgHeight
-    background.fill = 'transparent'
+    background.fill = 'rgba(255, 255, 255, 0.01)' // 几乎透明但不是完全透明
     background.stroke = 'transparent'
     background.strokeWidth = 0
-    background.id = `bg-${Date.now()}-${Math.random()}`
-    background.zIndex = -1 // 放到最底层
+    background.id = `bg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    background.zIndex = -1
     
     // 将背景添加到组件数组的开头
     const componentsWithBg = [background, ...adjustedComponents]
@@ -128,19 +128,13 @@ const ComponentLibrary = () => {
     
     // 自动创建组
     if (componentsWithBg.length >= 2) {
-      // 等待组件添加完成后创建组
       setTimeout(() => {
         const store = useCanvasStore.getState()
         const componentIds = componentsWithBg.map((c) => c.id)
         
-        // 选中这些组件
         store.clearSelection()
         componentIds.forEach((id) => store.selectComponent(id, true))
-        
-        // 创建组
         store.createGroup(template.name)
-        
-        // 取消选择
         store.clearSelection()
       }, 50)
     }

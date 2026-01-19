@@ -60,6 +60,10 @@ interface CanvasStore extends CanvasState {
   loadGuideLineLayout: (layoutId: string) => void
   toggleShowGuides: () => void
   
+  // 自定义组件操作
+  saveAsCustomComponent: (name: string) => void
+  deleteCustomComponent: (id: string) => void
+  
   // 批量操作
   alignComponents: (type: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') => void
   distributeComponents: (type: 'horizontal' | 'vertical') => void
