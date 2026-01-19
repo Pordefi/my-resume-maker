@@ -100,8 +100,8 @@ export const createContactInfo1 = (): CanvasComponent[] => {
   const contacts = [
     { icon: 'phone', text: '138-0000-0000' },
     { icon: 'email', text: 'example@email.com' },
-    { icon: 'location', text: '北京市朝阳区' },
-    { icon: 'link', text: 'github.com/username' },
+    { icon: 'home', text: '北京市朝阳区' },
+    { icon: 'globe', text: 'github.com/username' },
   ]
   
   contacts.forEach((contact, index) => {
@@ -129,8 +129,8 @@ export const createContactInfo2 = (): CanvasComponent[] => {
   const contacts = [
     { icon: 'phone', label: '电话', text: '138-0000-0000' },
     { icon: 'email', label: '邮箱', text: 'example@email.com' },
-    { icon: 'location', label: '地址', text: '北京市朝阳区' },
-    { icon: 'link', label: '网站', text: 'github.com/username' },
+    { icon: 'home', label: '地址', text: '北京市朝阳区' },
+    { icon: 'globe', label: '网站', text: 'github.com/username' },
   ]
   
   contacts.forEach((contact, index) => {

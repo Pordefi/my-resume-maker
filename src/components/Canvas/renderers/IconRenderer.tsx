@@ -17,6 +17,19 @@ const ICON_MAP: Record<string, string> = {
   location: '📍',
   link: '🔗',
   check: '✓',
+  user: '👤',
+  briefcase: '💼',
+  graduation: '🎓',
+  award: '🏆',
+  code: '💻',
+  globe: '🌐',
+  github: '🔗',
+  linkedin: '💼',
+  wechat: '💬',
+  home: '🏠',
+  building: '🏢',
+  calendar: '📅',
+  clock: '🕐',
 }
 
 const IconRenderer = ({ component }: Props) => {
