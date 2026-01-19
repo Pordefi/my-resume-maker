@@ -180,9 +180,11 @@ const ComponentLibrary = () => {
               
               <button
                 onClick={() => {
+                  const { canvasWidth } = useCanvasStore.getState()
+                  const dividerWidth = Math.floor(canvasWidth * 0.8)
                   const divider = createLineComponent(100, 100, true)
-                  divider.width = 300
-                  divider.points = [0, 0, 300, 0]
+                  divider.width = dividerWidth
+                  divider.points = [0, 0, dividerWidth, 0]
                   divider.stroke = '#e5e7eb'
                   divider.strokeWidth = 1
                   addComponent(divider)
@@ -195,9 +197,11 @@ const ComponentLibrary = () => {
               
               <button
                 onClick={() => {
+                  const { canvasWidth } = useCanvasStore.getState()
+                  const dividerWidth = Math.floor(canvasWidth * 0.8)
                   const divider = createLineComponent(100, 100, true)
-                  divider.width = 300
-                  divider.points = [0, 0, 300, 0]
+                  divider.width = dividerWidth
+                  divider.points = [0, 0, dividerWidth, 0]
                   divider.stroke = '#3b82f6'
                   divider.strokeWidth = 2
                   addComponent(divider)
@@ -210,9 +214,11 @@ const ComponentLibrary = () => {
               
               <button
                 onClick={() => {
+                  const { canvasWidth } = useCanvasStore.getState()
+                  const dividerWidth = Math.floor(canvasWidth * 0.8)
                   const divider = createLineComponent(100, 100, true)
-                  divider.width = 300
-                  divider.points = [0, 0, 300, 0]
+                  divider.width = dividerWidth
+                  divider.points = [0, 0, dividerWidth, 0]
                   divider.stroke = '#d1d5db'
                   divider.strokeWidth = 1
                   divider.dash = [5, 5]
