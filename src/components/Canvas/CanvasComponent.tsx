@@ -73,6 +73,17 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
     }
   }
 
+  // 阴影配置
+  const shadowConfig = component.shadow?.enabled
+    ? {
+        shadowColor: component.shadow.color,
+        shadowBlur: component.shadow.blur,
+        shadowOffsetX: component.shadow.offsetX,
+        shadowOffsetY: component.shadow.offsetY,
+        shadowOpacity: component.shadow.opacity,
+      }
+    : {}
+
   return (
     <>
       <Group
@@ -87,6 +98,7 @@ const CanvasComponent = ({ component, isSelected }: Props) => {
         onTransformEnd={handleTransformEnd}
         onClick={handleClick}
         onTap={handleClick}
+        {...shadowConfig}
       >
         {renderComponent()}
       </Group>

@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { Stage, Layer, Rect, Line } from 'react-konva'
 import { useCanvasStore } from '@/store/canvasStore'
-import { CANVAS_CONFIG } from '@/types/canvas'
+import { CANVAS_CONFIGS } from '@/types/canvas'
 import CanvasComponent from './CanvasComponent'
 import SelectionBox from './SelectionBox'
 
@@ -13,7 +13,13 @@ const Canvas = () => {
     zoom,
     showGrid,
     clearSelection,
+    canvasSize,
+    canvasWidth,
+    canvasHeight,
+    canvasBackgroundColor,
   } = useCanvasStore()
+
+  const gridSize = CANVAS_CONFIGS[canvasSize].gridSize
 
   // 键盘快捷键
   useEffect(() => {
@@ -72,14 +78,13 @@ const Canvas = () => {
     if (!showGrid) return null
 
     const lines = []
-    const { width, height, gridSize } = CANVAS_CONFIG
 
     // 垂直线
-    for (let i = 0; i <= width; i += gridSize) {
+    for (let i = 0; i <= canvasWidth; i += gridSize) {
       lines.push(
         <Line
           key={`v-${i}`}
-          points={[i, 0, i, height]}
+          points={[i, 0, i, canvasHeight]}
           stroke="#e5e7eb"
           strokeWidth={1}
           listening={false}
@@ -88,11 +93,11 @@ const Canvas = () => {
     }
 
     // 水平线
-    for (let i = 0; i <= height; i += gridSize) {
+    for (let i = 0; i <= canvasHeight; i += gridSize) {
       lines.push(
         <Line
           key={`h-${i}`}
-          points={[0, i, width, i]}
+          points={[0, i, canvasWidth, i]}
           stroke="#e5e7eb"
           strokeWidth={1}
           listening={false}
@@ -115,14 +120,14 @@ const Canvas = () => {
       <div
         className="mx-auto shadow-2xl"
         style={{
-          width: CANVAS_CONFIG.width * zoom,
-          height: CANVAS_CONFIG.height * zoom,
+          width: canvasWidth * zoom,
+          height: canvasHeight * zoom,
         }}
       >
         <Stage
           ref={stageRef}
-          width={CANVAS_CONFIG.width}
-          height={CANVAS_CONFIG.height}
+          width={canvasWidth}
+          height={canvasHeight}
           scaleX={zoom}
           scaleY={zoom}
           onClick={handleStageClick}
@@ -133,9 +138,9 @@ const Canvas = () => {
             <Rect
               x={0}
               y={0}
-              width={CANVAS_CONFIG.width}
-              height={CANVAS_CONFIG.height}
-              fill={CANVAS_CONFIG.backgroundColor}
+              width={canvasWidth}
+              height={canvasHeight}
+              fill={canvasBackgroundColor}
             />
 
             {/* 网格 */}

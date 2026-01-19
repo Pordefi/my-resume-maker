@@ -1,10 +1,26 @@
+// 画布尺寸类型
+export enum CanvasSize {
+  A4 = 'a4',
+  INFINITE = 'infinite',
+}
+
 // 画布配置
-export const CANVAS_CONFIG = {
-  width: 794, // A4宽度 210mm 转像素 (210mm * 3.7795px/mm)
-  height: 1123, // A4高度 297mm 转像素
-  backgroundColor: '#ffffff',
-  gridSize: 10,
+export const CANVAS_CONFIGS = {
+  [CanvasSize.A4]: {
+    width: 794, // A4宽度 210mm 转像素 (210mm * 3.7795px/mm)
+    height: 1123, // A4高度 297mm 转像素
+    backgroundColor: '#ffffff',
+    gridSize: 10,
+  },
+  [CanvasSize.INFINITE]: {
+    width: 3000,
+    height: 3000,
+    backgroundColor: '#ffffff',
+    gridSize: 20,
+  },
 } as const
+
+export const CANVAS_CONFIG = CANVAS_CONFIGS[CanvasSize.A4]
 
 // 组件类型
 export enum ComponentType {
@@ -44,6 +60,15 @@ export interface BaseComponent {
   zIndex: number
   locked: boolean
   visible: boolean
+  // 通用样式
+  shadow?: {
+    enabled: boolean
+    color: string
+    blur: number
+    offsetX: number
+    offsetY: number
+    opacity: number
+  }
 }
 
 // 文本组件
@@ -77,6 +102,13 @@ export interface ShapeComponent extends BaseComponent {
   strokeWidth: number
   opacity: number
   borderRadius: number
+  // 支持内嵌文本
+  text?: string
+  fontSize?: number
+  fontFamily?: string
+  fontWeight?: 'normal' | 'bold'
+  textColor?: string
+  textAlign?: 'left' | 'center' | 'right'
 }
 
 // 线条组件
@@ -113,6 +145,10 @@ export interface CanvasState {
   zoom: number
   showGrid: boolean
   showRuler: boolean
+  canvasSize: CanvasSize
+  canvasWidth: number
+  canvasHeight: number
+  canvasBackgroundColor: string
 }
 
 // 模板

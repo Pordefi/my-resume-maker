@@ -60,7 +60,8 @@ export const createImageComponent = (
 export const createShapeComponent = (
   x: number,
   y: number,
-  shapeType: ShapeType = ShapeType.RECTANGLE
+  shapeType: ShapeType = ShapeType.RECTANGLE,
+  text?: string
 ): ShapeComponent => ({
   id: generateId('shape'),
   type: ComponentType.SHAPE,
@@ -78,6 +79,12 @@ export const createShapeComponent = (
   strokeWidth: 2,
   opacity: 1,
   borderRadius: 0,
+  text: text || '',
+  fontSize: 16,
+  fontFamily: 'Arial, sans-serif',
+  fontWeight: 'normal',
+  textColor: '#ffffff',
+  textAlign: 'center',
 })
 
 export const createLineComponent = (

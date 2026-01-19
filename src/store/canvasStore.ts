@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { CanvasComponent, CanvasState } from '@/types/canvas'
+import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS } from '@/types/canvas'
 
 interface CanvasStore extends CanvasState {
   // 组件操作
@@ -33,6 +33,8 @@ interface CanvasStore extends CanvasState {
   setZoom: (zoom: number) => void
   toggleGrid: () => void
   toggleRuler: () => void
+  setCanvasSize: (size: CanvasSize) => void
+  setCanvasBackgroundColor: (color: string) => void
   
   // 批量操作
   alignComponents: (type: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') => void
@@ -52,6 +54,10 @@ const initialState: CanvasState = {
   zoom: 1,
   showGrid: true,
   showRuler: true,
+  canvasSize: CanvasSize.A4,
+  canvasWidth: CANVAS_CONFIGS[CanvasSize.A4].width,
+  canvasHeight: CANVAS_CONFIGS[CanvasSize.A4].height,
+  canvasBackgroundColor: '#ffffff',
 }
 
 export const useCanvasStore = create<CanvasStore>((set, get) => ({
@@ -243,6 +249,17 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   toggleGrid: () => set((state) => ({ showGrid: !state.showGrid })),
 
   toggleRuler: () => set((state) => ({ showRuler: !state.showRuler })),
+
+  setCanvasSize: (size) => {
+    const config = CANVAS_CONFIGS[size]
+    set({
+      canvasSize: size,
+      canvasWidth: config.width,
+      canvasHeight: config.height,
+    })
+  },
+
+  setCanvasBackgroundColor: (color) => set({ canvasBackgroundColor: color }),
 
   alignComponents: (type) => {
     const { components, selectedIds } = get()

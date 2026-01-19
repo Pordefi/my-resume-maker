@@ -13,14 +13,18 @@ import {
   AlignCenter,
   AlignRight,
   AlignVerticalJustifyCenter,
+  Maximize,
+  FileText,
 } from 'lucide-react'
 import { useCanvasStore } from '@/store/canvasStore'
 import { exportToPDF, exportToImage } from '@/utils/exportPDF'
 import { exportToJSON, importFromJSON } from '@/utils/storage'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import { CanvasSize } from '@/types/canvas'
 
 const Toolbar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [showCanvasSettings, setShowCanvasSettings] = useState(false)
   const {
     undo,
     redo,
@@ -37,6 +41,10 @@ const Toolbar = () => {
     distributeComponents,
     components,
     loadTemplate,
+    canvasSize,
+    setCanvasSize,
+    canvasBackgroundColor,
+    setCanvasBackgroundColor,
   } = useCanvasStore()
 
   const handleExportPDF = async () => {
@@ -88,7 +96,82 @@ const Toolbar = () => {
   }
 
   return (
-    <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center gap-2 flex-wrap">
+    <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center gap-2 flex-wrap relative">
+      {/* 画布设置 */}
+      <div className="flex gap-1 border-r pr-2">
+        <button
+          onClick={() => setShowCanvasSettings(!showCanvasSettings)}
+          className={`p-2 hover:bg-gray-100 rounded ${
+            showCanvasSettings ? 'bg-blue-50 text-blue-600' : ''
+          }`}
+          title="画布设置"
+        >
+          <Maximize size={18} />
+        </button>
+      </div>
+
+      {/* 画布设置面板 */}
+      {showCanvasSettings && (
+        <div className="absolute top-12 left-4 bg-white border rounded-lg shadow-lg p-4 z-50 w-64">
+          <h3 className="text-sm font-semibold mb-3">画布设置</h3>
+          
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">画布尺寸</label>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCanvasSize(CanvasSize.A4)}
+                  className={`flex-1 px-3 py-2 border rounded text-sm flex items-center justify-center gap-1 ${
+                    canvasSize === CanvasSize.A4
+                      ? 'bg-blue-500 text-white'
+                      : 'hover:bg-gray-50'
+                  }`}
+                >
+                  <FileText size={14} />
+                  A4
+                </button>
+                <button
+                  onClick={() => setCanvasSize(CanvasSize.INFINITE)}
+                  className={`flex-1 px-3 py-2 border rounded text-sm flex items-center justify-center gap-1 ${
+                    canvasSize === CanvasSize.INFINITE
+                      ? 'bg-blue-500 text-white'
+                      : 'hover:bg-gray-50'
+                  }`}
+                >
+                  <Maximize size={14} />
+                  无限
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs text-gray-600 mb-1">背景颜色</label>
+              <div className="flex gap-2">
+                <input
+                  type="color"
+                  value={canvasBackgroundColor}
+                  onChange={(e) => setCanvasBackgroundColor(e.target.value)}
+                  className="w-12 h-8 border rounded cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={canvasBackgroundColor}
+                  onChange={(e) => setCanvasBackgroundColor(e.target.value)}
+                  className="flex-1 px-2 py-1 border rounded text-sm font-mono"
+                />
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setShowCanvasSettings(false)}
+            className="mt-3 w-full px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm"
+          >
+            关闭
+          </button>
+        </div>
+      )}
+
       {/* 历史操作 */}
       <div className="flex gap-1 border-r pr-2">
         <button

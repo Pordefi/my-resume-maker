@@ -27,6 +27,26 @@ const TextProperties = ({ component }: Props) => {
         />
       </div>
 
+      {/* 字体 */}
+      <div>
+        <label className="block text-xs text-gray-600 mb-1">字体</label>
+        <select
+          value={component.fontFamily}
+          onChange={(e) => handleChange('fontFamily', e.target.value)}
+          className="w-full px-2 py-1 border rounded text-sm"
+        >
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="'Times New Roman', serif">Times New Roman</option>
+          <option value="'Courier New', monospace">Courier New</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+          <option value="'Microsoft YaHei', sans-serif">微软雅黑</option>
+          <option value="'SimSun', serif">宋体</option>
+          <option value="'SimHei', sans-serif">黑体</option>
+          <option value="'KaiTi', serif">楷体</option>
+        </select>
+      </div>
+
       {/* 字体大小 */}
       <div>
         <label className="block text-xs text-gray-600 mb-1">字体大小</label>

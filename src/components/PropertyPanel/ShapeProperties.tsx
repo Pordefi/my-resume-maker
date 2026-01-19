@@ -109,6 +109,87 @@ const ShapeProperties = ({ component }: Props) => {
           />
         </div>
       )}
+
+      {/* 内嵌文本 */}
+      <div className="mt-4 pt-4 border-t">
+        <h4 className="text-xs font-medium text-gray-700 mb-2">内嵌文本</h4>
+        
+        <div>
+          <label className="block text-xs text-gray-600 mb-1">文本内容</label>
+          <textarea
+            value={component.text || ''}
+            onChange={(e) => handleChange('text', e.target.value)}
+            className="w-full px-2 py-1 border rounded text-sm"
+            rows={2}
+            placeholder="输入文本..."
+          />
+        </div>
+
+        {component.text && (
+          <>
+            <div className="mt-2">
+              <label className="block text-xs text-gray-600 mb-1">字体大小</label>
+              <input
+                type="number"
+                value={component.fontSize || 16}
+                onChange={(e) => handleChange('fontSize', Number(e.target.value))}
+                className="w-full px-2 py-1 border rounded text-sm"
+                min={8}
+                max={100}
+              />
+            </div>
+
+            <div className="mt-2">
+              <label className="block text-xs text-gray-600 mb-1">文本颜色</label>
+              <div className="flex gap-2">
+                <input
+                  type="color"
+                  value={component.textColor || '#000000'}
+                  onChange={(e) => handleChange('textColor', e.target.value)}
+                  className="w-12 h-8 border rounded cursor-pointer"
+                />
+                <input
+                  type="text"
+                  value={component.textColor || '#000000'}
+                  onChange={(e) => handleChange('textColor', e.target.value)}
+                  className="flex-1 px-2 py-1 border rounded text-sm font-mono"
+                />
+              </div>
+            </div>
+
+            <div className="mt-2">
+              <label className="block text-xs text-gray-600 mb-1">对齐</label>
+              <div className="flex gap-1">
+                {(['left', 'center', 'right'] as const).map((align) => (
+                  <button
+                    key={align}
+                    onClick={() => handleChange('textAlign', align)}
+                    className={`flex-1 px-2 py-1 border rounded text-sm ${
+                      (component.textAlign || 'center') === align
+                        ? 'bg-blue-500 text-white'
+                        : 'hover:bg-gray-50'
+                    }`}
+                  >
+                    {align === 'left' ? '左' : align === 'center' ? '中' : '右'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-2">
+              <label className="block text-xs text-gray-600 mb-1">粗细</label>
+              <select
+                value={component.fontWeight || 'normal'}
+                onChange={(e) => handleChange('fontWeight', e.target.value)}
+                className="w-full px-2 py-1 border rounded text-sm"
+              >
+                <option value="normal">正常</option>
+                <option value="bold">粗体</option>
+              </select>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   )
 }

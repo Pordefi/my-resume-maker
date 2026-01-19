@@ -5,6 +5,7 @@ import ImageProperties from './ImageProperties'
 import ShapeProperties from './ShapeProperties'
 import LineProperties from './LineProperties'
 import CommonProperties from './CommonProperties'
+import ShadowProperties from './ShadowProperties'
 
 const PropertyPanel = () => {
   const { components, selectedIds } = useCanvasStore()
@@ -52,6 +53,13 @@ const PropertyPanel = () => {
           <LineProperties component={component} />
         )}
       </div>
+
+      {/* 阴影设置 */}
+      {component.type !== ComponentType.LINE && (
+        <div className="mt-4 pt-4 border-t">
+          <ShadowProperties component={component} />
+        </div>
+      )}
     </div>
   )
 }
