@@ -471,44 +471,120 @@ export const createWorkExperience3 = (): CanvasComponent[] => {
 
 // ==================== 双栏布局模板 ====================
 
-// 样式1: 左侧深色
+// ==================== 简历布局框架 ====================
+
+// 布局1: 单栏标准布局
 export const createTwoColumnLayout1 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   
-  const leftBg = createShapeComponent(0, 0, ShapeType.RECTANGLE)
-  leftBg.width = 280
-  leftBg.height = 1123
-  leftBg.fill = '#1f2937'
-  leftBg.stroke = 'transparent'
-  components.push(leftBg)
+  // 顶部个人信息区域背景
+  const headerBg = createShapeComponent(0, 0, ShapeType.RECTANGLE)
+  headerBg.width = 794
+  headerBg.height = 120
+  headerBg.fill = '#f9fafb'
+  headerBg.stroke = '#e5e7eb'
+  headerBg.strokeWidth = 1
+  components.push(headerBg)
+  
+  // 标题提示
+  const headerText = createTextComponent(397, 50, '个人信息区域')
+  headerText.fontSize = 14
+  headerText.color = '#9ca3af'
+  components.push(headerText)
+  
+  // 内容区域分割线
+  const divider1 = createLineComponent(0, 140, true)
+  divider1.width = 794
+  divider1.points = [0, 0, 794, 0]
+  divider1.stroke = '#d1d5db'
+  divider1.strokeWidth = 2
+  components.push(divider1)
+  
+  // 内容区域提示
+  const contentText = createTextComponent(397, 180, '主要内容区域')
+  contentText.fontSize = 14
+  contentText.color = '#9ca3af'
+  components.push(contentText)
   
   return components
 }
 
-// 样式2: 左侧浅色
+// 布局2: 左窄右宽布局（左侧放联系方式/技能）
 export const createTwoColumnLayout2 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   
+  // 左侧栏背景
   const leftBg = createShapeComponent(0, 0, ShapeType.RECTANGLE)
-  leftBg.width = 280
+  leftBg.width = 240
   leftBg.height = 1123
   leftBg.fill = '#f3f4f6'
-  leftBg.stroke = 'transparent'
+  leftBg.stroke = '#e5e7eb'
+  leftBg.strokeWidth = 1
   components.push(leftBg)
+  
+  // 左侧标题
+  const leftTitle = createTextComponent(120, 30, '个人信息')
+  leftTitle.fontSize = 12
+  leftTitle.color = '#6b7280'
+  components.push(leftTitle)
+  
+  // 右侧内容区域
+  const rightBg = createShapeComponent(240, 0, ShapeType.RECTANGLE)
+  rightBg.width = 554
+  rightBg.height = 1123
+  rightBg.fill = '#ffffff'
+  rightBg.stroke = '#e5e7eb'
+  rightBg.strokeWidth = 1
+  components.push(rightBg)
+  
+  // 右侧标题
+  const rightTitle = createTextComponent(517, 30, '工作经历/项目经验')
+  rightTitle.fontSize = 12
+  rightTitle.color = '#6b7280'
+  components.push(rightTitle)
   
   return components
 }
 
-// 样式3: 右侧深色
+// 布局3: 上下分区布局（上部个人信息，下部详细内容）
 export const createTwoColumnLayout3 = (): CanvasComponent[] => {
   const components: CanvasComponent[] = []
   
-  const rightBg = createShapeComponent(514, 0, ShapeType.RECTANGLE)
-  rightBg.width = 280
-  rightBg.height = 1123
-  rightBg.fill = '#1f2937'
-  rightBg.stroke = 'transparent'
-  components.push(rightBg)
+  // 顶部区域背景
+  const topBg = createShapeComponent(0, 0, ShapeType.RECTANGLE)
+  topBg.width = 794
+  topBg.height = 200
+  topBg.fill = '#1f2937'
+  topBg.stroke = 'transparent'
+  components.push(topBg)
+  
+  // 顶部标题
+  const topTitle = createTextComponent(397, 80, '姓名 / 职位')
+  topTitle.fontSize = 24
+  topTitle.color = '#ffffff'
+  topTitle.fontWeight = 'bold'
+  components.push(topTitle)
+  
+  // 联系信息提示
+  const contactHint = createTextComponent(397, 130, '联系方式')
+  contactHint.fontSize = 12
+  contactHint.color = '#d1d5db'
+  components.push(contactHint)
+  
+  // 内容区域背景
+  const contentBg = createShapeComponent(0, 200, ShapeType.RECTANGLE)
+  contentBg.width = 794
+  contentBg.height = 923
+  contentBg.fill = '#ffffff'
+  contentBg.stroke = '#e5e7eb'
+  contentBg.strokeWidth = 1
+  components.push(contentBg)
+  
+  // 内容区域提示
+  const contentHint = createTextComponent(397, 250, '详细内容区域')
+  contentHint.fontSize = 14
+  contentHint.color = '#9ca3af'
+  components.push(contentHint)
   
   return components
 }
@@ -1134,10 +1210,10 @@ export const TEMPLATES = {
   // 语言能力
   languages1: { name: '语言能力', create: createLanguages1 },
   
-  // 双栏布局
-  twoColumnLayout1: { name: '双栏 - 左深色', create: createTwoColumnLayout1 },
-  twoColumnLayout2: { name: '双栏 - 左浅色', create: createTwoColumnLayout2 },
-  twoColumnLayout3: { name: '双栏 - 右深色', create: createTwoColumnLayout3 },
+  // 简历布局框架
+  twoColumnLayout1: { name: '单栏标准', create: createTwoColumnLayout1 },
+  twoColumnLayout2: { name: '左窄右宽', create: createTwoColumnLayout2 },
+  twoColumnLayout3: { name: '上下分区', create: createTwoColumnLayout3 },
   
   // 整体边框
   pageBorder1: { name: '页面边框 - 简洁', create: createPageBorder1 },
