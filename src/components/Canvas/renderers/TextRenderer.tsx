@@ -82,7 +82,30 @@ const TextRenderer = ({ component }: Props) => {
     }
 
     textarea.addEventListener('blur', () => {
-      updateComponent(component.id, { text: textarea.value })
+      const newText = textarea.value
+      
+      // 计算新文本需要的高度
+      const avgCharWidth = component.fontSize * 0.8
+      const charsPerLine = Math.floor(component.width / avgCharWidth)
+      
+      let totalChars = 0
+      for (const char of newText) {
+        if (/[\u4e00-\u9fa5]/.test(char)) {
+          totalChars += 1
+        } else if (char === '\n') {
+          totalChars += charsPerLine
+        } else {
+          totalChars += 0.6
+        }
+      }
+      
+      const actualLines = charsPerLine > 0 ? Math.ceil(totalChars / charsPerLine) : 1
+      const newHeight = Math.max(actualLines * component.fontSize * component.lineHeight + 20, component.fontSize * 2)
+      
+      updateComponent(component.id, { 
+        text: newText,
+        height: newHeight
+      })
       removeTextarea()
     })
 
@@ -103,7 +126,30 @@ const TextRenderer = ({ component }: Props) => {
         removeTextarea()
       }
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-        updateComponent(component.id, { text: textarea.value })
+        const newText = textarea.value
+        
+        // 计算新文本需要的高度
+        const avgCharWidth = component.fontSize * 0.8
+        const charsPerLine = Math.floor(component.width / avgCharWidth)
+        
+        let totalChars = 0
+        for (const char of newText) {
+          if (/[\u4e00-\u9fa5]/.test(char)) {
+            totalChars += 1
+          } else if (char === '\n') {
+            totalChars += charsPerLine
+          } else {
+            totalChars += 0.6
+          }
+        }
+        
+        const actualLines = charsPerLine > 0 ? Math.ceil(totalChars / charsPerLine) : 1
+        const newHeight = Math.max(actualLines * component.fontSize * component.lineHeight + 20, component.fontSize * 2)
+        
+        updateComponent(component.id, { 
+          text: newText,
+          height: newHeight
+        })
         removeTextarea()
       }
     })
