@@ -6,6 +6,7 @@ import {
   Save,
   Trash2,
   Copy,
+  Clipboard,
   Grid,
   ZoomIn,
   ZoomOut,
@@ -25,6 +26,7 @@ import {
   Square,
   Minus,
   Circle,
+  X,
 } from 'lucide-react'
 import { useCanvasStore, setPendingComponent } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
@@ -420,26 +422,37 @@ const Toolbar = () => {
       <div className="flex gap-1 border-r pr-2">
         <button
           onClick={copy}
-          className="p-2 hover:bg-gray-100 rounded"
-          title="复制 (Ctrl+C)"
+          className={`px-3 py-2 rounded text-sm font-medium flex items-center gap-1 ${
+            selectedIds.length === 0
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              : 'bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200'
+          }`}
+          title="复制选中组件 (Ctrl+C)"
           disabled={selectedIds.length === 0}
         >
-          <Copy size={18} />
+          <Copy size={16} />
+          复制
         </button>
         <button
           onClick={paste}
-          className="p-2 hover:bg-gray-100 rounded"
+          className="px-3 py-2 bg-green-50 text-green-600 hover:bg-green-100 rounded text-sm font-medium flex items-center gap-1 border border-green-200"
           title="粘贴 (Ctrl+V)"
         >
-          <Save size={18} />
+          <Clipboard size={16} />
+          粘贴
         </button>
         <button
           onClick={deleteSelectedComponents}
-          className="p-2 hover:bg-gray-100 rounded text-red-600"
-          title="删除 (Delete)"
+          className={`px-3 py-2 rounded text-sm font-medium flex items-center gap-1 ${
+            selectedIds.length === 0
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              : 'bg-orange-50 text-orange-600 hover:bg-orange-100 border border-orange-200'
+          }`}
+          title="删除选中组件 (Delete)"
           disabled={selectedIds.length === 0}
         >
-          <Trash2 size={18} />
+          <Trash2 size={16} />
+          删除
         </button>
       </div>
 
@@ -623,13 +636,14 @@ const Toolbar = () => {
         </button>
       </div>
 
-      {/* 清空 */}
+      {/* 清空画布 */}
       <button
         onClick={handleClearCanvas}
-        className="p-2 hover:bg-gray-100 rounded text-red-600"
-        title="清空画布"
+        className="px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded text-sm font-medium flex items-center gap-1 border-2 border-red-300"
+        title="清空当前页面所有内容"
       >
-        <Trash2 size={18} />
+        <X size={16} strokeWidth={2.5} />
+        清空画布
       </button>
 
       {/* 多页面导出对话框 */}
