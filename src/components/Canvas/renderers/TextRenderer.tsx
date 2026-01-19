@@ -87,8 +87,15 @@ const TextRenderer = ({ component }: Props) => {
     })
 
     textarea.addEventListener('keydown', (e) => {
+      const isModKey = e.ctrlKey || e.metaKey
+      
       // 阻止Delete和Backspace事件冒泡到全局，避免删除组件
       if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.stopPropagation()
+      }
+      
+      // 阻止Cmd+C/V/X/A/D事件冒泡，让浏览器处理文本操作
+      if (isModKey && (e.key === 'c' || e.key === 'v' || e.key === 'x' || e.key === 'a' || e.key === 'd')) {
         e.stopPropagation()
       }
       
