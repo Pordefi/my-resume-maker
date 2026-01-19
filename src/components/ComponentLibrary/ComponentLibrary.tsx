@@ -62,49 +62,49 @@ const ComponentLibrary = () => {
     const template = TEMPLATES[templateKey]
     const newComponents = template.create()
     
-    // 获取当前页面的所有组件
+    // 获取store和当前组件列表
     const store = useCanvasStore.getState()
-    const currentPage = store.pages.find(p => p.id === store.currentPageId)
-    const allComponents = currentPage?.components || []
+    const allComponents = store.components || []
     
-    let maxY = 50 // 默认起始位置
+    // 计算新模板应该放置的Y坐标
+    let startY = 50 // 默认起始位置
     
     if (allComponents.length > 0) {
       // 找到所有组件的最大底部位置
+      let maxBottom = 0
       allComponents.forEach((comp) => {
-        const height = comp.height || 50
-        const componentBottom = comp.y + height
-        if (componentBottom > maxY) {
-          maxY = componentBottom
+        const bottom = comp.y + (comp.height || 0)
+        if (bottom > maxBottom) {
+          maxBottom = bottom
         }
       })
-      // 在最下方留出间距
-      maxY += 60
+      // 新模板从最大底部位置 + 间距开始
+      startY = maxBottom + 40
     }
     
     // 计算模板的原始起始Y坐标
     const templateMinY = Math.min(...newComponents.map(c => c.y))
     
-    // 计算偏移量
-    const offsetY = maxY - templateMinY
+    // 计算Y轴偏移量
+    const offsetY = startY - templateMinY
     
     // 调整所有组件的Y坐标并重新生成ID
     const adjustedComponents = newComponents.map(comp => {
       const newComp = { ...comp }
       newComp.y = comp.y + offsetY
+      // 生成唯一ID
       newComp.id = `${comp.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
       return newComp
     })
     
-    // 计算组的边界框
+    // 计算调整后组件的边界框
     const minX = Math.min(...adjustedComponents.map(c => c.x))
     const minY = Math.min(...adjustedComponents.map(c => c.y))
     const maxX = Math.max(...adjustedComponents.map(c => c.x + (c.width || 0)))
-    const maxYComp = Math.max(...adjustedComponents.map(c => c.y + (c.height || 0)))
+    const maxY = Math.max(...adjustedComponents.map(c => c.y + (c.height || 0)))
     
-    const padding = 15
-    const bgWidth = maxX - minX + padding * 2
-    const bgHeight = maxYComp - minY + padding * 2
+    // 设置padding
+    const padding = 20
     
     // 创建隐形背景边框
     const background = createShapeComponent(
@@ -112,18 +112,19 @@ const ComponentLibrary = () => {
       minY - padding,
       ShapeType.RECTANGLE
     )
-    background.width = bgWidth
-    background.height = bgHeight
-    background.fill = 'rgba(255, 255, 255, 0.01)' // 几乎透明但不是完全透明
+    background.width = (maxX - minX) + (padding * 2)
+    background.height = (maxY - minY) + (padding * 2)
+    background.fill = '#ffffff'
+    background.opacity = 0.01
     background.stroke = 'transparent'
     background.strokeWidth = 0
     background.id = `bg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     background.zIndex = -1
     
-    // 将背景添加到组件数组的开头
+    // 将背景边框放在最前面
     const componentsWithBg = [background, ...adjustedComponents]
     
-    // 添加所有组件
+    // 添加所有组件到画布
     componentsWithBg.forEach((comp) => addComponent(comp))
     
     // 自动创建组
