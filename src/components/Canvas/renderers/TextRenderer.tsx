@@ -1,5 +1,5 @@
 import { Text, Group } from 'react-konva'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { TextComponent } from '@/types/canvas'
 import { useCanvasStore } from '@/store/canvasStore'
 
@@ -9,10 +9,20 @@ interface Props {
 
 const TextRenderer = ({ component }: Props) => {
   const textRef = useRef<any>(null)
-  const [, setIsEditing] = useState(false)
-  const { updateComponent } = useCanvasStore()
+  const [isEditing, setIsEditing] = useState(false)
+  const { updateComponent, selectedIds } = useCanvasStore()
+  const isSelected = selectedIds.includes(component.id)
+
+  // 当组件被选中且用户再次点击时，进入编辑模式
+  useEffect(() => {
+    if (!isSelected && isEditing) {
+      setIsEditing(false)
+    }
+  }, [isSelected, isEditing])
 
   const handleDblClick = () => {
+    if (!isSelected) return
+    
     setIsEditing(true)
     
     // 创建临时输入框
@@ -34,13 +44,14 @@ const TextRenderer = ({ component }: Props) => {
     textarea.style.top = areaPosition.y + 'px'
     textarea.style.left = areaPosition.x + 'px'
     textarea.style.width = component.width + 'px'
-    textarea.style.height = component.height + 'px'
+    textarea.style.minHeight = component.height + 'px'
     textarea.style.fontSize = component.fontSize + 'px'
     textarea.style.fontFamily = component.fontFamily
     textarea.style.color = component.color
     textarea.style.textAlign = component.textAlign
     textarea.style.border = '2px solid #0ea5e9'
-    textarea.style.padding = '0'
+    textarea.style.borderRadius = '4px'
+    textarea.style.padding = '4px'
     textarea.style.margin = '0'
     textarea.style.overflow = 'hidden'
     textarea.style.background = 'white'
@@ -49,12 +60,23 @@ const TextRenderer = ({ component }: Props) => {
     textarea.style.lineHeight = component.lineHeight.toString()
     textarea.style.fontWeight = component.fontWeight
     textarea.style.fontStyle = component.fontStyle
-    textarea.style.zIndex = '1000'
+    textarea.style.zIndex = '10000'
+    textarea.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)'
+
+    // 自动调整高度
+    const adjustHeight = () => {
+      textarea.style.height = 'auto'
+      textarea.style.height = textarea.scrollHeight + 'px'
+    }
+    
+    textarea.addEventListener('input', adjustHeight)
+    adjustHeight()
 
     textarea.focus()
     textarea.select()
 
     const removeTextarea = () => {
+      textarea.removeEventListener('input', adjustHeight)
       textarea.parentNode?.removeChild(textarea)
       setIsEditing(false)
     }

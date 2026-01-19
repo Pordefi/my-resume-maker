@@ -211,19 +211,8 @@ const Canvas = () => {
         
         const componentsWithBg = [background, ...adjustedComponents]
         
-        // 添加所有组件
+        // 添加所有组件（不再自动成组）
         componentsWithBg.forEach((comp) => addComponent(comp))
-        
-        // 自动创建组
-        setTimeout(() => {
-          const store = useCanvasStore.getState()
-          const componentIds = componentsWithBg.map((c) => c.id)
-          
-          store.clearSelection()
-          componentIds.forEach((id) => store.selectComponent(id, true))
-          store.createGroup()
-          store.clearSelection()
-        }, 50)
         
         setPendingTemplate(null)
         setPendingComponentPreview(null)
