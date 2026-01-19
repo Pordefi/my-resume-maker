@@ -8,6 +8,7 @@ import CommonProperties from './CommonProperties'
 import ShadowProperties from './ShadowProperties'
 import CanvasBackgroundProperties from './CanvasBackgroundProperties'
 import GroupProperties from './GroupProperties'
+import GuideLinePanel from '../GuideLinePanel/GuideLinePanel'
 
 const PropertyPanel = () => {
   const { components, selectedIds, groups } = useCanvasStore()
@@ -16,6 +17,7 @@ const PropertyPanel = () => {
     return (
       <div className="w-80 bg-white border-l border-gray-200 overflow-y-auto h-full">
         <CanvasBackgroundProperties />
+        <GuideLinePanel />
         <div className="p-4 text-center text-gray-500">
           <p>未选择组件</p>
           <p className="text-sm mt-2">点击画布上的组件进行编辑</p>

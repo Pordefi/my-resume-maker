@@ -16,6 +16,7 @@ import {
   Maximize,
   FileText,
   Users,
+  Ruler,
 } from 'lucide-react'
 import { useCanvasStore } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
@@ -48,17 +49,32 @@ const Toolbar = () => {
     setCanvasSize,
     canvasBackgroundColor,
     setCanvasBackgroundColor,
+    showGuides,
+    toggleShowGuides,
   } = useCanvasStore()
 
   const handleExportPDF = async () => {
-    const { pages, currentPageId } = useCanvasStore.getState()
+    const { pages, currentPageId, showGuides: currentShowGuides } = useCanvasStore.getState()
+    
+    // 辅助线控制函数
+    const hideGuides = () => {
+      if (currentShowGuides) {
+        useCanvasStore.getState().toggleShowGuides()
+      }
+    }
+    
+    const restoreGuides = () => {
+      if (currentShowGuides) {
+        useCanvasStore.getState().toggleShowGuides()
+      }
+    }
     
     if (pages.length === 1) {
       // 单页面直接导出
       const canvas = document.querySelector('.konvajs-content') as HTMLElement
       if (canvas) {
         try {
-          await exportToPDF(canvas)
+          await exportToPDF(canvas, 'resume.pdf', hideGuides, restoreGuides)
         } catch (error) {
           alert('导出PDF失败')
         }
@@ -76,7 +92,20 @@ const Toolbar = () => {
     }
 
     try {
-      const { pages, switchPage, currentPageId: originalPageId } = useCanvasStore.getState()
+      const { pages, switchPage, currentPageId: originalPageId, showGuides: currentShowGuides } = useCanvasStore.getState()
+      
+      // 辅助线控制函数
+      const hideGuides = () => {
+        if (currentShowGuides) {
+          useCanvasStore.getState().toggleShowGuides()
+        }
+      }
+      
+      const restoreGuides = () => {
+        if (currentShowGuides) {
+          useCanvasStore.getState().toggleShowGuides()
+        }
+      }
       
       // 临时渲染函数
       const renderPage = async (page: Page): Promise<HTMLElement> => {
@@ -92,7 +121,7 @@ const Toolbar = () => {
         return canvas
       }
 
-      await exportMultiPageToPDF(pages, selectedPageIds, renderPage)
+      await exportMultiPageToPDF(pages, selectedPageIds, renderPage, 'resume.pdf', hideGuides, restoreGuides)
       
       // 恢复原页面
       switchPage(originalPageId)
@@ -104,10 +133,25 @@ const Toolbar = () => {
   }
 
   const handleExportImage = async () => {
+    const { showGuides: currentShowGuides } = useCanvasStore.getState()
+    
+    // 辅助线控制函数
+    const hideGuides = () => {
+      if (currentShowGuides) {
+        useCanvasStore.getState().toggleShowGuides()
+      }
+    }
+    
+    const restoreGuides = () => {
+      if (currentShowGuides) {
+        useCanvasStore.getState().toggleShowGuides()
+      }
+    }
+    
     const canvas = document.querySelector('.konvajs-content') as HTMLElement
     if (canvas) {
       try {
-        await exportToImage(canvas)
+        await exportToImage(canvas, 'resume.png', hideGuides, restoreGuides)
       } catch (error) {
         alert('导出图片失败')
       }
@@ -347,6 +391,15 @@ const Toolbar = () => {
           title="显示网格"
         >
           <Grid size={18} />
+        </button>
+        <button
+          onClick={() => useCanvasStore.getState().toggleShowGuides()}
+          className={`p-2 hover:bg-gray-100 rounded ${
+            useCanvasStore.getState().showGuides ? 'bg-green-50 text-green-600' : ''
+          }`}
+          title="显示辅助线"
+        >
+          <Ruler size={18} />
         </button>
       </div>
 

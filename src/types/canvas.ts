@@ -144,6 +144,88 @@ export interface Page {
   backgroundColor: string
 }
 
+// 辅助线类型
+export enum GuideLineType {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal',
+}
+
+// 辅助线
+export interface GuideLine {
+  id: string
+  type: GuideLineType
+  position: number // x坐标（垂直线）或y坐标（水平线）
+  color: string
+  visible: boolean
+}
+
+// 辅助线布局模板
+export interface GuideLineLayout {
+  id: string
+  name: string
+  description: string
+  guides: Omit<GuideLine, 'id'>[]
+}
+
+// 预设辅助线布局
+export const GUIDE_LINE_LAYOUTS: GuideLineLayout[] = [
+  {
+    id: 'standard',
+    name: '标准布局',
+    description: '左右边距50px，上下边距40px',
+    guides: [
+      { type: GuideLineType.VERTICAL, position: 50, color: '#ef4444', visible: true },
+      { type: GuideLineType.VERTICAL, position: 744, color: '#ef4444', visible: true },
+      { type: GuideLineType.HORIZONTAL, position: 40, color: '#ef4444', visible: true },
+      { type: GuideLineType.HORIZONTAL, position: 1083, color: '#ef4444', visible: true },
+    ],
+  },
+  {
+    id: 'twoColumn',
+    name: '双栏布局',
+    description: '左栏280px，右栏剩余',
+    guides: [
+      { type: GuideLineType.VERTICAL, position: 50, color: '#ef4444', visible: true },
+      { type: GuideLineType.VERTICAL, position: 280, color: '#3b82f6', visible: true },
+      { type: GuideLineType.VERTICAL, position: 744, color: '#ef4444', visible: true },
+      { type: GuideLineType.HORIZONTAL, position: 40, color: '#ef4444', visible: true },
+    ],
+  },
+  {
+    id: 'threeColumn',
+    name: '三栏布局',
+    description: '三等分布局',
+    guides: [
+      { type: GuideLineType.VERTICAL, position: 50, color: '#ef4444', visible: true },
+      { type: GuideLineType.VERTICAL, position: 281, color: '#3b82f6', visible: true },
+      { type: GuideLineType.VERTICAL, position: 513, color: '#3b82f6', visible: true },
+      { type: GuideLineType.VERTICAL, position: 744, color: '#ef4444', visible: true },
+    ],
+  },
+  {
+    id: 'center',
+    name: '居中对齐',
+    description: '中心线辅助',
+    guides: [
+      { type: GuideLineType.VERTICAL, position: 397, color: '#10b981', visible: true },
+      { type: GuideLineType.HORIZONTAL, position: 561.5, color: '#10b981', visible: true },
+    ],
+  },
+  {
+    id: 'grid',
+    name: '网格布局',
+    description: '四等分网格',
+    guides: [
+      { type: GuideLineType.VERTICAL, position: 198.5, color: '#8b5cf6', visible: true },
+      { type: GuideLineType.VERTICAL, position: 397, color: '#8b5cf6', visible: true },
+      { type: GuideLineType.VERTICAL, position: 595.5, color: '#8b5cf6', visible: true },
+      { type: GuideLineType.HORIZONTAL, position: 280.75, color: '#8b5cf6', visible: true },
+      { type: GuideLineType.HORIZONTAL, position: 561.5, color: '#8b5cf6', visible: true },
+      { type: GuideLineType.HORIZONTAL, position: 842.25, color: '#8b5cf6', visible: true },
+    ],
+  },
+]
+
 // 组件组
 export interface ComponentGroup {
   id: string
@@ -159,6 +241,8 @@ export interface CanvasState {
   currentPageId: string
   components: CanvasComponent[]
   groups: ComponentGroup[]
+  guides: GuideLine[]
+  showGuides: boolean
   selectedIds: string[]
   clipboard: CanvasComponent[]
   history: CanvasComponent[][]

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS, Page, ComponentGroup } from '@/types/canvas'
+import { CanvasComponent, CanvasState, CanvasSize, CANVAS_CONFIGS, Page, ComponentGroup, GuideLine, GUIDE_LINE_LAYOUTS } from '@/types/canvas'
 
 interface CanvasStore extends CanvasState {
   // 页面操作
@@ -51,6 +51,14 @@ interface CanvasStore extends CanvasState {
   setCanvasSize: (size: CanvasSize) => void
   setCanvasBackgroundColor: (color: string) => void
   
+  // 辅助线操作
+  addGuideLine: (guide: Omit<GuideLine, 'id'>) => void
+  removeGuideLine: (id: string) => void
+  toggleGuideLineVisibility: (id: string) => void
+  clearGuideLines: () => void
+  loadGuideLineLayout: (layoutId: string) => void
+  toggleShowGuides: () => void
+  
   // 批量操作
   alignComponents: (type: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom') => void
   distributeComponents: (type: 'horizontal' | 'vertical') => void
@@ -72,6 +80,8 @@ const initialState: CanvasState = {
   currentPageId: '',
   components: [],
   groups: [],
+  guides: [],
+  showGuides: true,
   selectedIds: [],
   clipboard: [],
   history: [[]],
@@ -688,6 +698,53 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       clipboard: [],
     })
     get().saveHistory()
+  },
+
+  // 辅助线操作
+  addGuideLine: (guide) => {
+    set((state) => ({
+      guides: [
+        ...state.guides,
+        {
+          ...guide,
+          id: `guide-${Date.now()}-${Math.random()}`,
+        },
+      ],
+    }))
+  },
+
+  removeGuideLine: (id) => {
+    set((state) => ({
+      guides: state.guides.filter((g) => g.id !== id),
+    }))
+  },
+
+  toggleGuideLineVisibility: (id) => {
+    set((state) => ({
+      guides: state.guides.map((g) =>
+        g.id === id ? { ...g, visible: !g.visible } : g
+      ),
+    }))
+  },
+
+  clearGuideLines: () => {
+    set({ guides: [] })
+  },
+
+  loadGuideLineLayout: (layoutId) => {
+    const layout = GUIDE_LINE_LAYOUTS.find((l) => l.id === layoutId)
+    if (!layout) return
+
+    const newGuides = layout.guides.map((guide) => ({
+      ...guide,
+      id: `guide-${Date.now()}-${Math.random()}`,
+    }))
+
+    set({ guides: newGuides })
+  },
+
+  toggleShowGuides: () => {
+    set((state) => ({ showGuides: !state.showGuides }))
   },
 }))
 

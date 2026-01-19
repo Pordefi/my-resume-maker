@@ -27,6 +27,8 @@ const Canvas = () => {
     canvasWidth,
     canvasHeight,
     canvasBackgroundColor,
+    guides,
+    showGuides,
   } = useCanvasStore()
 
   const gridSize = CANVAS_CONFIGS[canvasSize].gridSize
@@ -255,6 +257,26 @@ const Canvas = () => {
 
             {/* 网格 */}
             {renderGrid()}
+
+            {/* 辅助线 */}
+            {showGuides &&
+              guides
+                .filter((g) => g.visible)
+                .map((guide) => (
+                  <Line
+                    key={guide.id}
+                    points={
+                      guide.type === 'vertical'
+                        ? [guide.position, 0, guide.position, canvasHeight]
+                        : [0, guide.position, canvasWidth, guide.position]
+                    }
+                    stroke={guide.color}
+                    strokeWidth={1}
+                    dash={[10, 5]}
+                    listening={false}
+                    opacity={0.6}
+                  />
+                ))}
 
             {/* 组件 */}
             {components
