@@ -880,70 +880,6 @@ export const createLanguages1 = (): CanvasComponent[] => {
   return components
 }
 
-// 所有模板
-export const TEMPLATES = {
-  // 简历头部
-  resumeHeader1: { name: '简历头部 - 居中', create: createResumeHeader1 },
-  resumeHeader2: { name: '简历头部 - 左对齐', create: createResumeHeader2 },
-  resumeHeader3: { name: '简历头部 - 带背景', create: createResumeHeader3 },
-  
-  // 联系信息
-  contactInfo1: { name: '联系信息 - 横向', create: createContactInfo1 },
-  contactInfo2: { name: '联系信息 - 纵向', create: createContactInfo2 },
-  contactInfo3: { name: '联系信息 - 卡片', create: createContactInfo3 },
-  
-  // 个人简介
-  summary1: { name: '个人简介 - 标准', create: createSummary1 },
-  summary2: { name: '个人简介 - 高亮', create: createSummary2 },
-  
-  // 技能标签
-  skillTags1: { name: '技能标签 - 扁平', create: createSkillTags1 },
-  skillTags2: { name: '技能标签 - 胶囊', create: createSkillTags2 },
-  skillTags3: { name: '技能标签 - 进度条', create: createSkillTags3 },
-  
-  // 工作经历
-  workExperience1: { name: '工作经历 - 卡片', create: createWorkExperience1 },
-  workExperience2: { name: '工作经历 - 时间轴', create: createWorkExperience2 },
-  workExperience3: { name: '工作经历 - 列表', create: createWorkExperience3 },
-  
-  // 教育背景
-  education1: { name: '教育背景 - 图标', create: createEducation1 },
-  education2: { name: '教育背景 - 卡片', create: createEducation2 },
-  education3: { name: '教育背景 - 列表', create: createEducation3 },
-  
-  // 项目经验
-  project1: { name: '项目经验 - 标题背景', create: createProject1 },
-  project2: { name: '项目经验 - 卡片', create: createProject2 },
-  project3: { name: '项目经验 - 时间轴', create: createProject3 },
-  
-  // 荣誉奖项
-  awards1: { name: '荣誉奖项', create: createAwards1 },
-  
-  // 语言能力
-  languages1: { name: '语言能力', create: createLanguages1 },
-  
-  // 双栏布局
-  twoColumnLayout1: { name: '双栏 - 左深色', create: createTwoColumnLayout1 },
-  twoColumnLayout2: { name: '双栏 - 左浅色', create: createTwoColumnLayout2 },
-  twoColumnLayout3: { name: '双栏 - 右深色', create: createTwoColumnLayout3 },
-  
-  // 整体边框
-  pageBorder1: { name: '页面边框 - 简洁', create: createPageBorder1 },
-  pageBorder2: { name: '页面边框 - 双线', create: createPageBorder2 },
-  pageBorder3: { name: '页面边框 - 装饰', create: createPageBorder3 },
-  
-  // 页眉
-  header1: { name: '页眉 - 简洁', create: createHeader1 },
-  header2: { name: '页眉 - 带装饰', create: createHeader2 },
-  header3: { name: '页眉 - 极简', create: createHeader3 },
-  
-  // 页脚
-  footer1: { name: '页脚 - 简洁', create: createFooter1 },
-  footer2: { name: '页脚 - 带联系方式', create: createFooter2 },
-  footer3: { name: '页脚 - 极简', create: createFooter3 },
-}
-
-
 // ==================== 整体边框模板 ====================
 
 // 样式1: 简洁边框
@@ -997,29 +933,10 @@ export const createPageBorder3 = (): CanvasComponent[] => {
   border.width = 754
   border.height = 1083
   border.fill = 'transparent'
-  border.stroke = '#3b82f6'
-  border.strokeWidth = 3
-  border.borderRadius = 8
+  border.stroke = '#1f2937'
+  border.strokeWidth = 2
+  border.borderRadius = 0
   components.push(border)
-  
-  // 四角装饰
-  const cornerSize = 20
-  const corners = [
-    { x: 20, y: 20 }, // 左上
-    { x: 754, y: 20 }, // 右上
-    { x: 20, y: 1083 }, // 左下
-    { x: 754, y: 1083 }, // 右下
-  ]
-  
-  corners.forEach((pos) => {
-    const corner = createShapeComponent(pos.x, pos.y, ShapeType.RECTANGLE)
-    corner.width = cornerSize
-    corner.height = cornerSize
-    corner.fill = '#3b82f6'
-    corner.stroke = 'transparent'
-    corner.borderRadius = 0
-    components.push(corner)
-  })
   
   return components
 }
@@ -1090,7 +1007,7 @@ export const createHeader3 = (): CanvasComponent[] => {
   const divider = createLineComponent(50, 45, true)
   divider.width = 694
   divider.points = [0, 0, 694, 0]
-  divider.stroke = '#3b82f6'
+  divider.stroke = '#1f2937'
   divider.strokeWidth = 2
   components.push(divider)
   
@@ -1171,4 +1088,69 @@ export const createFooter3 = (): CanvasComponent[] => {
   components.push(text)
   
   return components
+}
+
+
+// ==================== 导出所有模板 ====================
+
+export const TEMPLATES = {
+  // 简历头部
+  resumeHeader1: { name: '简历头部 - 居中', create: createResumeHeader1 },
+  resumeHeader2: { name: '简历头部 - 左对齐', create: createResumeHeader2 },
+  resumeHeader3: { name: '简历头部 - 带背景', create: createResumeHeader3 },
+  
+  // 联系信息
+  contactInfo1: { name: '联系信息 - 横向', create: createContactInfo1 },
+  contactInfo2: { name: '联系信息 - 纵向', create: createContactInfo2 },
+  contactInfo3: { name: '联系信息 - 卡片', create: createContactInfo3 },
+  
+  // 个人简介
+  summary1: { name: '个人简介 - 标准', create: createSummary1 },
+  summary2: { name: '个人简介 - 高亮', create: createSummary2 },
+  
+  // 技能标签
+  skillTags1: { name: '技能标签 - 扁平', create: createSkillTags1 },
+  skillTags2: { name: '技能标签 - 胶囊', create: createSkillTags2 },
+  skillTags3: { name: '技能标签 - 进度条', create: createSkillTags3 },
+  
+  // 工作经历
+  workExperience1: { name: '工作经历 - 卡片', create: createWorkExperience1 },
+  workExperience2: { name: '工作经历 - 时间轴', create: createWorkExperience2 },
+  workExperience3: { name: '工作经历 - 列表', create: createWorkExperience3 },
+  
+  // 教育背景
+  education1: { name: '教育背景 - 图标', create: createEducation1 },
+  education2: { name: '教育背景 - 卡片', create: createEducation2 },
+  education3: { name: '教育背景 - 列表', create: createEducation3 },
+  
+  // 项目经验
+  project1: { name: '项目经验 - 标题背景', create: createProject1 },
+  project2: { name: '项目经验 - 卡片', create: createProject2 },
+  project3: { name: '项目经验 - 时间轴', create: createProject3 },
+  
+  // 荣誉奖项
+  awards1: { name: '荣誉奖项', create: createAwards1 },
+  
+  // 语言能力
+  languages1: { name: '语言能力', create: createLanguages1 },
+  
+  // 双栏布局
+  twoColumnLayout1: { name: '双栏 - 左深色', create: createTwoColumnLayout1 },
+  twoColumnLayout2: { name: '双栏 - 左浅色', create: createTwoColumnLayout2 },
+  twoColumnLayout3: { name: '双栏 - 右深色', create: createTwoColumnLayout3 },
+  
+  // 整体边框
+  pageBorder1: { name: '页面边框 - 简洁', create: createPageBorder1 },
+  pageBorder2: { name: '页面边框 - 双线', create: createPageBorder2 },
+  pageBorder3: { name: '页面边框 - 装饰', create: createPageBorder3 },
+  
+  // 页眉
+  header1: { name: '页眉 - 简洁', create: createHeader1 },
+  header2: { name: '页眉 - 带装饰', create: createHeader2 },
+  header3: { name: '页眉 - 极简', create: createHeader3 },
+  
+  // 页脚
+  footer1: { name: '页脚 - 简洁', create: createFooter1 },
+  footer2: { name: '页脚 - 带联系方式', create: createFooter2 },
+  footer3: { name: '页脚 - 极简', create: createFooter3 },
 }
