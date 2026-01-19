@@ -13,7 +13,7 @@ import { TEMPLATES, FULL_TEMPLATES } from '@/utils/templates'
 
 const ComponentLibrary = () => {
   const { addComponent, clearCanvas } = useCanvasStore()
-  const [activeTab, setActiveTab] = useState<'basic' | 'templates' | 'full'>('basic')
+  const [activeTab, setActiveTab] = useState<'basic' | 'templates' | 'full'>('templates')
 
   const addText = () => {
     addComponent(createTextComponent(100, 100))

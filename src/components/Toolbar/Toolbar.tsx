@@ -20,12 +20,23 @@ import {
   FileText,
   Users,
   Ruler,
+  Type,
+  Image,
+  Square,
+  Minus,
+  Circle,
 } from 'lucide-react'
 import { useCanvasStore } from '@/store/canvasStore'
 import { exportToPDF, exportToImage, exportMultiPageToPDF } from '@/utils/exportPDF'
 import { exportToJSON, importFromJSON, exportFullStateToJSON, importFullStateFromJSON } from '@/utils/storage'
 import { useRef, useState } from 'react'
-import { CanvasSize, Page } from '@/types/canvas'
+import { CanvasSize, Page, ShapeType } from '@/types/canvas'
+import {
+  createTextComponent,
+  createImageComponent,
+  createShapeComponent,
+  createLineComponent,
+} from '@/utils/componentFactory'
 
 const Toolbar = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -54,7 +65,39 @@ const Toolbar = () => {
     setCanvasBackgroundColor,
     showGuides,
     toggleShowGuides,
+    addComponent,
   } = useCanvasStore()
+
+  // 添加基础组件的函数
+  const addText = () => {
+    addComponent(createTextComponent(100, 100))
+  }
+
+  const addImage = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          const src = event.target?.result as string
+          addComponent(createImageComponent(100, 100, src))
+        }
+        reader.readAsDataURL(file)
+      }
+    }
+    input.click()
+  }
+
+  const addShape = (shapeType: ShapeType) => {
+    addComponent(createShapeComponent(100, 100, shapeType))
+  }
+
+  const addLine = () => {
+    addComponent(createLineComponent(100, 100, true))
+  }
 
   const handleExportPDF = async () => {
     const { pages, currentPageId, showGuides: currentShowGuides } = useCanvasStore.getState()
@@ -218,6 +261,45 @@ const Toolbar = () => {
           title="画布设置"
         >
           <Maximize size={18} />
+        </button>
+      </div>
+
+      {/* 基础组件 */}
+      <div className="flex gap-1 border-r pr-2">
+        <button
+          onClick={addText}
+          className="p-2 hover:bg-gray-100 rounded"
+          title="添加文本"
+        >
+          <Type size={18} />
+        </button>
+        <button
+          onClick={addImage}
+          className="p-2 hover:bg-gray-100 rounded"
+          title="添加图片"
+        >
+          <Image size={18} />
+        </button>
+        <button
+          onClick={() => addShape(ShapeType.RECTANGLE)}
+          className="p-2 hover:bg-gray-100 rounded"
+          title="添加矩形"
+        >
+          <Square size={18} />
+        </button>
+        <button
+          onClick={() => addShape(ShapeType.CIRCLE)}
+          className="p-2 hover:bg-gray-100 rounded"
+          title="添加圆形"
+        >
+          <Circle size={18} />
+        </button>
+        <button
+          onClick={addLine}
+          className="p-2 hover:bg-gray-100 rounded"
+          title="添加线条"
+        >
+          <Minus size={18} />
         </button>
       </div>
 
