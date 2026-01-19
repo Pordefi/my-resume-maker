@@ -926,4 +926,249 @@ export const TEMPLATES = {
   twoColumnLayout1: { name: '双栏 - 左深色', create: createTwoColumnLayout1 },
   twoColumnLayout2: { name: '双栏 - 左浅色', create: createTwoColumnLayout2 },
   twoColumnLayout3: { name: '双栏 - 右深色', create: createTwoColumnLayout3 },
+  
+  // 整体边框
+  pageBorder1: { name: '页面边框 - 简洁', create: createPageBorder1 },
+  pageBorder2: { name: '页面边框 - 双线', create: createPageBorder2 },
+  pageBorder3: { name: '页面边框 - 装饰', create: createPageBorder3 },
+  
+  // 页眉
+  header1: { name: '页眉 - 简洁', create: createHeader1 },
+  header2: { name: '页眉 - 带装饰', create: createHeader2 },
+  header3: { name: '页眉 - 极简', create: createHeader3 },
+  
+  // 页脚
+  footer1: { name: '页脚 - 简洁', create: createFooter1 },
+  footer2: { name: '页脚 - 带联系方式', create: createFooter2 },
+  footer3: { name: '页脚 - 极简', create: createFooter3 },
+}
+
+
+// ==================== 整体边框模板 ====================
+
+// 样式1: 简洁边框
+export const createPageBorder1 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const border = createShapeComponent(20, 20, ShapeType.RECTANGLE)
+  border.width = 754
+  border.height = 1083
+  border.fill = 'transparent'
+  border.stroke = '#d1d5db'
+  border.strokeWidth = 2
+  border.borderRadius = 0
+  components.push(border)
+  
+  return components
+}
+
+// 样式2: 双线边框
+export const createPageBorder2 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  // 外边框
+  const outerBorder = createShapeComponent(15, 15, ShapeType.RECTANGLE)
+  outerBorder.width = 764
+  outerBorder.height = 1093
+  outerBorder.fill = 'transparent'
+  outerBorder.stroke = '#6b7280'
+  outerBorder.strokeWidth = 1
+  outerBorder.borderRadius = 0
+  components.push(outerBorder)
+  
+  // 内边框
+  const innerBorder = createShapeComponent(25, 25, ShapeType.RECTANGLE)
+  innerBorder.width = 744
+  innerBorder.height = 1073
+  innerBorder.fill = 'transparent'
+  innerBorder.stroke = '#6b7280'
+  innerBorder.strokeWidth = 1
+  innerBorder.borderRadius = 0
+  components.push(innerBorder)
+  
+  return components
+}
+
+// 样式3: 装饰性边框
+export const createPageBorder3 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const border = createShapeComponent(20, 20, ShapeType.RECTANGLE)
+  border.width = 754
+  border.height = 1083
+  border.fill = 'transparent'
+  border.stroke = '#3b82f6'
+  border.strokeWidth = 3
+  border.borderRadius = 8
+  components.push(border)
+  
+  // 四角装饰
+  const cornerSize = 20
+  const corners = [
+    { x: 20, y: 20 }, // 左上
+    { x: 754, y: 20 }, // 右上
+    { x: 20, y: 1083 }, // 左下
+    { x: 754, y: 1083 }, // 右下
+  ]
+  
+  corners.forEach((pos) => {
+    const corner = createShapeComponent(pos.x, pos.y, ShapeType.RECTANGLE)
+    corner.width = cornerSize
+    corner.height = cornerSize
+    corner.fill = '#3b82f6'
+    corner.stroke = 'transparent'
+    corner.borderRadius = 0
+    components.push(corner)
+  })
+  
+  return components
+}
+
+// ==================== 页眉模板 ====================
+
+// 样式1: 简洁页眉
+export const createHeader1 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const bg = createShapeComponent(0, 0, ShapeType.RECTANGLE)
+  bg.width = 794
+  bg.height = 60
+  bg.fill = '#f3f4f6'
+  bg.stroke = 'transparent'
+  components.push(bg)
+  
+  const title = createTextComponent(50, 20, '个人简历')
+  title.fontSize = 16
+  title.fontWeight = 'bold'
+  title.color = '#1f2937'
+  components.push(title)
+  
+  const divider = createLineComponent(0, 60, true)
+  divider.width = 794
+  divider.points = [0, 0, 794, 0]
+  divider.stroke = '#d1d5db'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  return components
+}
+
+// 样式2: 带装饰页眉
+export const createHeader2 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const bg = createShapeComponent(0, 0, ShapeType.RECTANGLE)
+  bg.width = 794
+  bg.height = 80
+  bg.fill = '#1f2937'
+  bg.stroke = 'transparent'
+  components.push(bg)
+  
+  const title = createTextComponent(50, 25, '个人简历')
+  title.fontSize = 20
+  title.fontWeight = 'bold'
+  title.color = '#ffffff'
+  components.push(title)
+  
+  const subtitle = createTextComponent(50, 50, 'Professional Resume')
+  subtitle.fontSize = 12
+  subtitle.color = '#d1d5db'
+  components.push(subtitle)
+  
+  return components
+}
+
+// 样式3: 极简页眉
+export const createHeader3 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  
+  const title = createTextComponent(50, 20, '简历')
+  title.fontSize = 14
+  title.color = '#6b7280'
+  components.push(title)
+  
+  const divider = createLineComponent(50, 45, true)
+  divider.width = 694
+  divider.points = [0, 0, 694, 0]
+  divider.stroke = '#3b82f6'
+  divider.strokeWidth = 2
+  components.push(divider)
+  
+  return components
+}
+
+// ==================== 页脚模板 ====================
+
+// 样式1: 简洁页脚
+export const createFooter1 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const y = 1063
+  
+  const divider = createLineComponent(0, y, true)
+  divider.width = 794
+  divider.points = [0, 0, 794, 0]
+  divider.stroke = '#d1d5db'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const bg = createShapeComponent(0, y, ShapeType.RECTANGLE)
+  bg.width = 794
+  bg.height = 60
+  bg.fill = '#f3f4f6'
+  bg.stroke = 'transparent'
+  components.push(bg)
+  
+  const pageNum = createTextComponent(370, y + 20, '第 1 页')
+  pageNum.fontSize = 12
+  pageNum.color = '#6b7280'
+  components.push(pageNum)
+  
+  return components
+}
+
+// 样式2: 带联系方式页脚
+export const createFooter2 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const y = 1063
+  
+  const divider = createLineComponent(0, y, true)
+  divider.width = 794
+  divider.points = [0, 0, 794, 0]
+  divider.stroke = '#d1d5db'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const bg = createShapeComponent(0, y, ShapeType.RECTANGLE)
+  bg.width = 794
+  bg.height = 60
+  bg.fill = '#ffffff'
+  bg.stroke = 'transparent'
+  components.push(bg)
+  
+  const contact = createTextComponent(50, y + 20, '📧 email@example.com  |  📱 138-0000-0000  |  🔗 github.com/username')
+  contact.fontSize = 11
+  contact.color = '#6b7280'
+  components.push(contact)
+  
+  return components
+}
+
+// 样式3: 极简页脚
+export const createFooter3 = (): CanvasComponent[] => {
+  const components: CanvasComponent[] = []
+  const y = 1090
+  
+  const divider = createLineComponent(50, y, true)
+  divider.width = 694
+  divider.points = [0, 0, 694, 0]
+  divider.stroke = '#e5e7eb'
+  divider.strokeWidth = 1
+  components.push(divider)
+  
+  const text = createTextComponent(350, y + 15, '- 1 -')
+  text.fontSize = 10
+  text.color = '#9ca3af'
+  components.push(text)
+  
+  return components
 }

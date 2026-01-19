@@ -199,8 +199,6 @@ const Toolbar = () => {
       fileInputRef.current.value = ''
     }
   }
-    }
-  }
 
   const handleClearCanvas = () => {
     if (confirm('确定要清空画布吗？此操作不可撤销。')) {
