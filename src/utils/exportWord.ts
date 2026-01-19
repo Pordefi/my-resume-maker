@@ -5,64 +5,14 @@ import {
   TextRun,
   AlignmentType,
   PageOrientation,
-  Table,
-  TableRow,
-  TableCell,
-  WidthType,
   BorderStyle,
-  HeadingLevel,
-  UnderlineType,
 } from 'docx'
 import { saveAs } from 'file-saver'
 import { Page, CanvasComponent, ComponentType, TextComponent, ShapeComponent, LineComponent } from '@/types/canvas'
 
-// 将像素转换为EMU（English Metric Units）
-const pixelToEMU = (pixel: number): number => {
-  return Math.round(pixel * 9525)
-}
-
-// 将像素转换为DXA（Twips）
-const pixelToDXA = (pixel: number): number => {
-  return Math.round(pixel * 15)
-}
-
 // 将颜色转换为Word格式（去掉#）
 const convertColor = (color: string): string => {
   return color.replace('#', '')
-}
-
-// 将组件转换为Word段落
-const componentToParagraph = (component: CanvasComponent): Paragraph | null => {
-  if (component.type === ComponentType.TEXT) {
-    const textComp = component as TextComponent
-    
-    // 确定对齐方式
-    let alignment = AlignmentType.LEFT
-    if (textComp.align === 'center') alignment = AlignmentType.CENTER
-    if (textComp.align === 'right') alignment = AlignmentType.RIGHT
-    
-    // 创建文本运行
-    const textRun = new TextRun({
-      text: textComp.text,
-      size: textComp.fontSize * 2, // Word使用半点
-      font: textComp.fontFamily,
-      color: convertColor(textComp.color),
-      bold: textComp.fontWeight === 'bold',
-      italics: textComp.fontStyle === 'italic',
-      underline: textComp.textDecoration === 'underline' ? { type: UnderlineType.SINGLE } : undefined,
-    })
-    
-    return new Paragraph({
-      children: [textRun],
-      alignment,
-      spacing: {
-        before: pixelToDXA(textComp.y),
-        after: pixelToDXA(textComp.lineHeight * textComp.fontSize),
-      },
-    })
-  }
-  
-  return null
 }
 
 // 将组件按Y坐标排序并分组
@@ -113,15 +63,12 @@ const pageToWordElements = (page: Page): Paragraph[] => {
         const textComp = component as TextComponent
         
         // 确定对齐方式
-        let alignment = AlignmentType.LEFT
-        if (textComp.align === 'center') alignment = AlignmentType.CENTER
-        if (textComp.align === 'right') alignment = AlignmentType.RIGHT
+        let alignment: typeof AlignmentType.LEFT | typeof AlignmentType.CENTER | typeof AlignmentType.RIGHT = AlignmentType.LEFT
+        if (textComp.textAlign === 'center') alignment = AlignmentType.CENTER
+        if (textComp.textAlign === 'right') alignment = AlignmentType.RIGHT
         
-        // 确定标题级别（根据字体大小）
-        let heading: HeadingLevel | undefined
-        if (textComp.fontSize >= 24) heading = HeadingLevel.HEADING_1
-        else if (textComp.fontSize >= 20) heading = HeadingLevel.HEADING_2
-        else if (textComp.fontSize >= 16) heading = HeadingLevel.HEADING_3
+        // 确定是否为标题（根据字体大小）
+        const isHeading = textComp.fontSize >= 16
         
         // 创建文本运行
         const textRun = new TextRun({
@@ -129,16 +76,14 @@ const pageToWordElements = (page: Page): Paragraph[] => {
           size: textComp.fontSize * 2,
           font: textComp.fontFamily,
           color: convertColor(textComp.color),
-          bold: textComp.fontWeight === 'bold',
+          bold: textComp.fontWeight === 'bold' || isHeading,
           italics: textComp.fontStyle === 'italic',
-          underline: textComp.textDecoration === 'underline' ? { type: UnderlineType.SINGLE } : undefined,
         })
         
         paragraphs.push(
           new Paragraph({
             children: [textRun],
             alignment,
-            heading,
             spacing: {
               before: 100,
               after: 100,

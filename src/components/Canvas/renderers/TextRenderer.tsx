@@ -65,6 +65,11 @@ const TextRenderer = ({ component }: Props) => {
     })
 
     textarea.addEventListener('keydown', (e) => {
+      // 阻止Delete和Backspace事件冒泡到全局，避免删除组件
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        e.stopPropagation()
+      }
+      
       if (e.key === 'Escape') {
         removeTextarea()
       }
